@@ -36,7 +36,7 @@
   "resources": [
     {"id":{"name":"objGameSupervisor","path":"objects/objGameSupervisor/objGameSupervisor.yy",},},
     {"id":{"name":"scrGame","path":"scripts/scrGame/scrGame.yy",},},
-    {"id":{"name":"scrCards","path":"scripts/scrCards/scrCards.yy",},},
+    {"id":{"name":"scrUtils","path":"scripts/scrUtils/scrUtils.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "RoomOrderNodes": [
