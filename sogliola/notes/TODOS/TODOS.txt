@@ -1,1 +1,1 @@
-- lavora ad Actor.Activate per terminare la funzione e mettere effettivamente in atto la effectChain
+- Gestisci cosa accade dopo la option scelta dall'utente

@@ -15,10 +15,13 @@
     {"name":"Sprites","order":1,"path":"folders/Sprites.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
+    {"name":"2DGUI","order":3,"path":"folders/Objects/2DGUI.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"objTest","order":1,"path":"objects/objTest/objTest.yy",},
     {"name":"roomGame","order":1,"path":"rooms/roomGame/roomGame.yy",},
     {"name":"scrGame","order":1,"path":"scripts/scrGame/scrGame.yy",},
+    {"name":"obj2DCard","order":1,"path":"objects/obj2DCard/obj2DCard.yy",},
+    {"name":"sprPesca","order":1,"path":"sprites/sprPesca/sprPesca.yy",},
   ],
 }

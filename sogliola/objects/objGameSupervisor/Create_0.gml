@@ -1,20 +1,38 @@
 
-function Supervisor() : Actor() constructor {
+
+
+global.supervisor = new Supervisor()
+
+// Create the playher and opponent (and their decks)
+global.player = new Player()
+global.opponent = new Player()
+global.ocean = new Ocean()
+
+var newCard
+repeat(20) {
+   newCard = new CardSogliola(global.player)
+   global.player.deck.Add( newCard )
    
+   newCard = new CardSogliola(global.opponent)
+   global.opponent.deck.Add( newCard )
+   
+   newCard = new CardPesca(global.player)
+   global.player.deck.Add( newCard )
+   
+   newCard = new CardPesca(global.opponent)
+   global.opponent.deck.Add( newCard )
 }
 
-global.supervisor = Supervisor()
-player_deck = Deck()
-opponent_deck = Deck()
-repeat(40) {
-   player_deck.Add( Sogliola() )
-   opponent_deck.Add( Sogliola() )
+global.player.deck.Shuffle()
+global.opponent.deck.Shuffle()
+
+// Draw 6 cards
+repeat(6) {
+   global.player.Draw()
+   global.opponent.Draw()
 }
-player_deck.Shuffle()
-opponent_deck.Shuffle()
 
+// Determine whose turn it is, randomly
+global.turnPlayer = global.player //choose(global.player,global.opponent)
 
-global.player = Player(player_deck)
-global.opponent = Player(player_deck)
-
-turnPlayer = choose(user,opponent)
+startTurn = true
