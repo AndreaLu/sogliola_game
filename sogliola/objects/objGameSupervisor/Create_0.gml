@@ -1,6 +1,20 @@
+
+function Supervisor() : Actor() constructor {
+   
+}
+
+global.supervisor = Supervisor()
 player_deck = Deck()
 opponent_deck = Deck()
-user = Player(player_deck)
-opponent = Player(player_deck)
+repeat(40) {
+   player_deck.Add( Sogliola() )
+   opponent_deck.Add( Sogliola() )
+}
+player_deck.Shuffle()
+opponent_deck.Shuffle()
 
-turn = choose(user,opponent)
+
+global.player = Player(player_deck)
+global.opponent = Player(player_deck)
+
+turnPlayer = choose(user,opponent)
