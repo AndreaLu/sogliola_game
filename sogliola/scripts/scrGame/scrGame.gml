@@ -165,8 +165,9 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) 
    }
    static Effect = function() {
    }
-   static Activate = function() {
+   Activate = function() {
       Event( Effect, EventType.ACTION )
+      global.ocean.Add(self)
    }
 }
 function FishEffectCard(_name,_owner, _controller, _location, _sprite, _effectText, _effects)  : FishCard(_name,_owner,_controller,_location,_sprite, _effectText) constructor {
@@ -184,9 +185,11 @@ function CardSogliola(owner) : FishCard(
 function CardPesca(owner) : ActionCard(
    "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte"
 ) constructor {
-   static Activate = function() {
+   _Activate = Activate;
+   Activate = function() {
       controller.Draw()
       controller.Draw()
+      _Activate()
    }
 }
 
