@@ -129,6 +129,9 @@ function Card(_name,_owner,_controller, _location, _sprite) : Actor()  construct
    sprite = _sprite
    global.effectListeners.Add(self)
    
+   guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
+   guiCard.card = self
+   
    static listener = function( eventType, actor, effectIndex ) {}
 }
 function FishCard(_name,_owner, _controller, _location, _sprite, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {

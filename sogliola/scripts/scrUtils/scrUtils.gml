@@ -52,4 +52,8 @@ function ds_list() constructor {
    static Destroy = function() {
       ds_list_destroy(_list)
    }
+   
+   static Index = function(value) {
+      return ds_list_find_index(_list,value)
+   }
 }
