@@ -1,1 +1,3 @@
-- Gestisci cosa accade dopo la option scelta dall'utente
+- implementa carte restanti
+- aggiungi nuove carte
+- implementa condizioni di gameover

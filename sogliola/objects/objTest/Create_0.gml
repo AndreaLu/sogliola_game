@@ -52,3 +52,15 @@ list.foreach( function(el) {
 if count != 320
    show_message("FAIL3")
 
+
+function Class(param) constructor {
+   parameter = param*2
+   Func = function() {
+      show_message(parameter)
+   }
+}
+
+ccc = new Class(12)
+ccc.Func()
+f = ccc.Func
+f()

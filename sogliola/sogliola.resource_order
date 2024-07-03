@@ -1,10 +1,11 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Animation Curves","order":12,"path":"folders/Animation Curves.yy",},
     {"name":"Extensions","order":14,"path":"folders/Extensions.yy",},
     {"name":"Fonts","order":7,"path":"folders/Fonts.yy",},
     {"name":"Notes","order":13,"path":"folders/Notes.yy",},
     {"name":"Objects","order":9,"path":"folders/Objects.yy",},
+    {"name":"2DGUI","order":3,"path":"folders/Objects/2DGUI.yy",},
     {"name":"Particle Systems","order":15,"path":"folders/Particle Systems.yy",},
     {"name":"Paths","order":4,"path":"folders/Paths.yy",},
     {"name":"Rooms","order":10,"path":"folders/Rooms.yy",},
@@ -15,13 +16,16 @@
     {"name":"Sprites","order":1,"path":"folders/Sprites.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"2DGUI","order":3,"path":"folders/Objects/2DGUI.yy",},
   ],
-  "ResourceOrderSettings": [
+  "ResourceOrderSettings":[
+    {"name":"obj2DCard","order":1,"path":"objects/obj2DCard/obj2DCard.yy",},
     {"name":"objTest","order":1,"path":"objects/objTest/objTest.yy",},
     {"name":"roomGame","order":1,"path":"rooms/roomGame/roomGame.yy",},
     {"name":"scrGame","order":1,"path":"scripts/scrGame/scrGame.yy",},
-    {"name":"obj2DCard","order":1,"path":"objects/obj2DCard/obj2DCard.yy",},
     {"name":"sprPesca","order":1,"path":"sprites/sprPesca/sprPesca.yy",},
+    {"name":"sprPioggia","order":5,"path":"sprites/sprPioggia/sprPioggia.yy",},
+    {"name":"sprReSogliola","order":4,"path":"sprites/sprReSogliola/sprReSogliola.yy",},
+    {"name":"sprSogliolaBlob","order":3,"path":"sprites/sprSogliolaBlob/sprSogliolaBlob.yy",},
+    {"name":"sprSogliolaVolante","order":2,"path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},
   ],
 }
