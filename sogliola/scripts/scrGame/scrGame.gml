@@ -10,7 +10,8 @@ effectListeners = new ds_list()
 effectChain = new ds_list()
 effectChainRing = new ds_list()
 options = new ds_list()
-fishPlayed = false                  // true if the player already put a fish in the aquarium
+fishPlayed = 0                  // number of fish the player summoned this turn
+maxFishPlayable = 1               // max number of fish that can be played this turn
 
 enum EventType {
    TURN_BEGIN,    // inizia il turno
@@ -39,6 +40,7 @@ function CardCollection(_owner) constructor {
    }
    static Remove = function(card) {
       _cards.Remove(card)
+      size = _cards.size
    }
 }
 
@@ -134,18 +136,27 @@ function Card(_name,_owner,_controller, _location, _sprite) : Actor()  construct
    
    static listener = function( eventType, actor, effectIndex ) {}
 }
-function FishCard(_name,_owner, _controller, _location, _sprite, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {
-   desc = _desc;
+function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {
+   desc = _desc
+   value = _value
    Summon = function() {
       Event( function() {
          owner.aquarium.Add(self)
-         global.fishPlayed = true
+         global.fishPlayed +=1
       }, EventType.SUMMON )
-
+   }
+   SummonToOpponent = function() {
+      Event( function() {
+         var opponent = owner == global.player ? global.opponent : global.player
+         opponent.aquarium.Add(self)
+         global.fishPlayed +=1
+      }, EventType.SUMMON )
    }
    static listener = function( eventType, actor, effectIndex ) {
       if( eventType == EventType.TURN_MAIN ) {
-         if( location ==  global.turnPlayer.hand && !global.fishPlayed ) {
+         if( location ==  global.turnPlayer.hand &&
+             global.fishPlayed < global.maxFishPlayable && 
+             global.turnPlayer.aquarium.size < 8 ) {
             global.options.Add( ["Summon "+name,Summon] ) 
          }
       }
@@ -170,27 +181,48 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) 
       global.ocean.Add(self)
    }
 }
-function FishEffectCard(_name,_owner, _controller, _location, _sprite, _effectText, _effects)  : FishCard(_name,_owner,_controller,_location,_sprite, _effectText) constructor {
-   effects = _effects
+function FishEffectCard(_name,_owner, _controller, _location, _sprite, _value, _effectText)  : FishCard(_name,_owner,_controller,_location,_sprite, _value, _effectText) constructor {
+   
 }
 
 // -----------------------------------------------------------------------------+
 // Card database                                                                |
 // -----------------------------------------------------------------------------+
 function CardSogliola(owner) : FishCard(
-   "Sogliola", owner, undefined, undefined, sprSogliola,
+   "Sogliola", owner, undefined, undefined, sprSogliola, 5,
    "Ora è piatta; leggende narrano che un tempo non lo fosse. Che pesce nobile!"
 ) constructor {
 }
 function CardPesca(owner) : ActionCard(
    "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte"
 ) constructor {
-   _Activate = Activate;
-   Activate = function() {
+   Effect = function() {
       controller.Draw()
       controller.Draw()
-      _Activate()
    }
 }
-
-
+function CardPioggia(owner) : ActionCard(
+   "Pioggia di Pesci", owner, undefined, undefined, sprPioggia, 
+   "Per questo turno, puoi giocare due carte Sogliola"
+) constructor {
+   Effect = function() {
+      global.maxFishPlayable = 2
+   }
+}
+function CardSogliolaBlob(owner) : FishEffectCard(
+   "Sogliola Blob", owner, undefined, undefined, sprSogliolaBlob, -10,
+   "Può essere giocato in ogni acquario"
+) constructor {
+   // Override the listener
+   static listener = function( eventType, actor, effectIndex ) {
+      if( eventType == EventType.TURN_MAIN ) {
+         if( location ==  global.turnPlayer.hand 
+         && global.fishPlayed < global.maxFishPlayable) {
+            if global.turnPlayer.aquarium.size < 8
+               global.options.Add( ["Summon "+name,Summon] )
+            if global.turnOpponent.aquarium.size < 8
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
+         }
+      }
+   }
+}

@@ -9,17 +9,25 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(20) {
+repeat(10) {
    newCard = new CardSogliola(global.player)
    global.player.deck.Add( newCard )
-   
    newCard = new CardSogliola(global.opponent)
    global.opponent.deck.Add( newCard )
    
    newCard = new CardPesca(global.player)
    global.player.deck.Add( newCard )
-   
    newCard = new CardPesca(global.opponent)
+   global.opponent.deck.Add( newCard )
+   
+   newCard = new CardPioggia(global.player)
+   global.player.deck.Add( newCard )
+   newCard = new CardPioggia(global.opponent)
+   global.opponent.deck.Add( newCard )
+   
+   newCard = new CardSogliolaBlob(global.player)
+   global.player.deck.Add( newCard )
+   newCard = new CardSogliolaBlob(global.opponent)
    global.opponent.deck.Add( newCard )
 }
 
@@ -34,5 +42,6 @@ repeat(6) {
 
 // Determine whose turn it is, randomly
 global.turnPlayer = global.player //choose(global.player,global.opponent)
+global.turnOpponent = global.opponent
 
 startTurn = true

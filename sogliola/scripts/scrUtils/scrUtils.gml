@@ -21,6 +21,9 @@ function ds_list() constructor {
    }
    static RemoveAt = function(pos) {
       if( pos < 0 ) pos = size+pos
+      if( pos >= size ) {
+         return
+      }
       ds_list_delete(_list,pos)
       size -= 1
    }

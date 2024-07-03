@@ -2,7 +2,8 @@
 if startTurn {
    startTurn = false
    // Inizializza tutto per questo turno
-   global.fishPlayed = false
+   global.maxFishPlayable = 1
+   global.fishPlayed = 0
    global.turnPassed = false
    global.choiceMade = false
    
@@ -24,6 +25,7 @@ if global.choiceMade {
       // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
       global.supervisor.Event( undefined, EventType.TURN_MAIN )
    } else {
+      global.turnOpponent = global.turnPlayer
       global.turnPlayer = (global.turnPlayer == global.player) ? global.opponent : global.player;
       startTurn = true
    }
