@@ -27,8 +27,8 @@ switch( card.location ) {
       target_y = room_height-h*hand_scale-20-aquarium_scale*h*2-120-h*hand_scale-10
       break
    default:
-      target_x = -1000
-      target_y = -1000
+      target_x = -w
+      target_y = -h
 }
 
 
