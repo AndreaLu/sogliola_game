@@ -24,6 +24,11 @@ function ds_list() constructor {
       ds_list_delete(_list,pos)
       size -= 1
    }
+   static Remove = function(value) {
+      var pos = ds_list_find_index(_list,value)
+      if pos != -1
+         RemoveAt(pos)
+   }
    static foreach = function(func) {
       for( var i=0; i<size; i++ ) {
          func( _list[|i] )

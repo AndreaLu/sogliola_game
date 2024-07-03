@@ -10,7 +10,7 @@ effectListeners = new ds_list()
 effectChain = new ds_list()
 effectChainRing = new ds_list()
 options = new ds_list()
-fishSummoned = false                  // true if the player already put a fish in the aquarium
+fishPlayed = false                  // true if the player already put a fish in the aquarium
 
 enum EventType {
    TURN_BEGIN,    // inizia il turno
@@ -26,6 +26,9 @@ function CardCollection(_owner) constructor {
    _cards = new ds_list()
    size = 0
    static Add = function(_card) {
+      if !is_undefined(_card.location) {
+         _card.location.Remove(_card)
+      }
       _cards.Add( _card )
       _card.location = self
       _card.controller = owner
@@ -33,6 +36,9 @@ function CardCollection(_owner) constructor {
    }
    static At = function(pos) {
       return _cards.At(pos)
+   }
+   static Remove = function(card) {
+      _cards.Remove(card)
    }
 }
 
@@ -55,13 +61,13 @@ function Deck(owner) : CardCollection(owner) constructor {
 
 
 function location_str( location ) {
-   if is_instanceof(location,global.player.deck)       return "Player deck"
-   if is_instanceof(location,global.opponent.deck)     return "Opponent deck"
-   if is_instanceof(location,global.player.hand)       return "Player hand"
-   if is_instanceof(location,global.opponent.hand)     return "Opponent hand"
-   if is_instanceof(location,global.player.aquarium)   return "Player aquarium"
-   if is_instanceof(location,global.opponent.aquarium) return "Opponent aquarium"
-   if is_instanceof(location,global.ocean)             return "The ocean"
+   if location == global.player.deck        return "Player deck"
+   if location == global.opponent.deck      return "Opponent deck"
+   if location == global.player.hand        return "Player hand"
+   if location == global.opponent.hand      return "Opponent hand"
+   if location == global.player.aquarium    return "Player aquarium"
+   if location == global.opponent.aquarium  return "Opponent aquarium"
+   if location == global.ocean              return "The ocean"
    return "undefined"
 }
 
@@ -127,10 +133,10 @@ function Card(_name,_owner,_controller, _location, _sprite) : Actor()  construct
 }
 function FishCard(_name,_owner, _controller, _location, _sprite, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {
    desc = _desc;
-   static Summon = function() {
+   Summon = function() {
       Event( function() {
          owner.aquarium.Add(self)
-         fishSummoned = true
+         global.fishPlayed = true
       }, EventType.SUMMON )
 
    }
