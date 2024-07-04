@@ -36,6 +36,7 @@
   "name":"sogliola",
   "resources":[
     {"id":{"name":"fntBasic","path":"fonts/fntBasic/fntBasic.yy",},},
+    {"id":{"name":"Manuale Tecnico","path":"notes/Manuale Tecnico/Manuale Tecnico.yy",},},
     {"id":{"name":"TODOS","path":"notes/TODOS/TODOS.yy",},},
     {"id":{"name":"obj2DCard","path":"objects/obj2DCard/obj2DCard.yy",},},
     {"id":{"name":"obj2DGUI","path":"objects/obj2DGUI/obj2DGUI.yy",},},
