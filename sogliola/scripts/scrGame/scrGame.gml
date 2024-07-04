@@ -18,8 +18,10 @@ enum EventType {
    TURN_DRAW,     // pescata di inizio turno
    TURN_MAIN,     // inizia la fase principale del turno
    SUMMON,        // quando un pesce viene posizionato nell'acquario
+   POSTSUMMON,    // dopo che il pesce è stato posizionato
    FREE,          // quando un pesce viene liberato nell'oceano
    ACTION,        // si attiva una Action Card
+   PASSIVE,       // sono effetti continui automatici tipo quello del re sogliola
 }
 
 function CardCollection(_owner) constructor {
@@ -76,8 +78,8 @@ function location_str( location ) {
 function Actor() constructor {
    
    static Event = function( _effect, _EventType ) {
-      
-      global.effectChainRing.Add(  [_effect,_EventType,self] )
+
+      global.effectChainRing.Add(  [_effect,_EventType,self,undefined] )
 
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
@@ -100,8 +102,8 @@ function Actor() constructor {
          var ring = global.effectChain.At(i)
          for( var j=0;j<ring.size; j++) {
             effect = ring.At(j)
-            if !is_undefined( effect[0] )
-               effect[0]()
+            if !is_undefined( effect[0] ) 
+               effect[0](effect[3])
          }
       }
       
@@ -134,16 +136,19 @@ function Card(_name,_owner,_controller, _location, _sprite) : Actor()  construct
    guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
    guiCard.card = self
    
-   static listener = function( eventType, actor, effectIndex ) {}
+   listener = function( eventType, actor, effectIndex ) {}
+   
+   breakpoints = false
 }
 function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {
    desc = _desc
-   value = _value
+   val = _value
    Summon = function() {
       Event( function() {
          owner.aquarium.Add(self)
          global.fishPlayed +=1
-      }, EventType.SUMMON )
+      }, EventType.SUMMON, undefined )
+      Event( undefined, EventType.POSTSUMMON, undefined)
    }
    SummonToOpponent = function() {
       Event( function() {
@@ -151,8 +156,9 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
          opponent.aquarium.Add(self)
          global.fishPlayed +=1
       }, EventType.SUMMON )
+      Event( undefined, EventType.POSTSUMMON, undefined)
    }
-   static listener = function( eventType, actor, effectIndex ) {
+   listener = function( eventType, actor, effectIndex ) {
       if( eventType == EventType.TURN_MAIN ) {
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
@@ -167,7 +173,7 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) 
    /* Cards that inherit from ActionCard must implement the Effect function */
    
    
-   static listener = function( eventType, actor, effectIndex ) {
+   listener = function( eventType, actor, effectIndex ) {
       if( eventType == EventType.TURN_MAIN ) {
          if( location == global.turnPlayer.hand ) {
             global.options.Add( ["Activate "+name,Activate] ) 
@@ -214,7 +220,7 @@ function CardSogliolaBlob(owner) : FishEffectCard(
    "Può essere giocato in ogni acquario"
 ) constructor {
    // Override the listener
-   static listener = function( eventType, actor, effectIndex ) {
+   listener = function( eventType, actor, effectIndex ) {
       if( eventType == EventType.TURN_MAIN ) {
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
@@ -224,5 +230,33 @@ function CardSogliolaBlob(owner) : FishEffectCard(
                global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
          }
       }
+   }
+}
+
+function CardReSogliola(owner) : FishEffectCard(
+   "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
+   "+3 al valore per ogni altra sogliola nell'acquario"
+) constructor {
+   _listener = listener
+   listener = function( eventType, actor, effectIndex ) {
+      _listener( eventType, actor, effectIndex )
+      if( eventType == EventType.POSTSUMMON || eventType == EventType.FREE ) {
+         //if( is_instanceof(location,Aquarium) || actor == self ) { // la carta che sto evocando è questa
+         global.effectChainRing.Add( [ReEvaluate,EventType.PASSIVE,self,[eventType,actor,effectIndex]] )
+         //}
+      }
+   }
+   ReEvaluate = function(srcEvent) {
+      var eventType = srcEvent[0]
+      var srcActor = srcEvent[1]
+      val = 0
+      if breakpoints
+         show_debug_message("cosaimas")
+      controller.aquarium._cards.foreach(function(card,ctx) {
+         if card == ctx return;
+         ctx.val += 3;
+      },self)
+      //if( eventType == EventType.SUMMON && srcActor != self ) val += 3
+      //if( eventType == EventType.FREE ) val -= 3
    }
 }

@@ -9,7 +9,7 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(10) {
+repeat(floor(40/5)) {
    newCard = new CardSogliola(global.player)
    global.player.deck.Add( newCard )
    newCard = new CardSogliola(global.opponent)
@@ -29,6 +29,10 @@ repeat(10) {
    global.player.deck.Add( newCard )
    newCard = new CardSogliolaBlob(global.opponent)
    global.opponent.deck.Add( newCard )
+   
+   global.player.deck.Add( new CardReSogliola(global.player) )
+   global.opponent.deck.Add( new CardReSogliola(global.opponent) )   
+   
 }
 
 global.player.deck.Shuffle()

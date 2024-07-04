@@ -1,0 +1,10 @@
+Tipi di effetti
+---------------
+PASSIVO, un effetto che si attiva con determinate condizioni più volte durante
+il corso del gioco, in maniera automatica (non direttamente attivato dall'utente)
+Questi effetti si considerano attivarsi regolarmente ogni volta, pertanto sono 
+ogni volta soggetti ad eventuali catene.
+
+Re Sogliola
+-----------
+Ha un effetto PASSIVO

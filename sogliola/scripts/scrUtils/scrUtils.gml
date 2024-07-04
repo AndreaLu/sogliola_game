@@ -32,9 +32,9 @@ function ds_list() constructor {
       if pos != -1
          RemoveAt(pos)
    }
-   static foreach = function(func) {
+   static foreach = function(func,ctx=undefined) {
       for( var i=0; i<size; i++ ) {
-         func( _list[|i] )
+         func( _list[|i], ctx)
       }
    }
    static rofeach = function(func) {
