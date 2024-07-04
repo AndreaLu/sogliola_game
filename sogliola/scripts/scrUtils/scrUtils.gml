@@ -60,3 +60,8 @@ function ds_list() constructor {
       return ds_list_find_index(_list,value)
    }
 }
+
+
+function Opponent(player) {
+   return player == global.player ? global.opponent : global.player
+}

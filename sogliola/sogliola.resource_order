@@ -24,9 +24,11 @@
     {"name":"roomGame","order":1,"path":"rooms/roomGame/roomGame.yy",},
     {"name":"scrGame","order":1,"path":"scripts/scrGame/scrGame.yy",},
     {"name":"sprPesca","order":1,"path":"sprites/sprPesca/sprPesca.yy",},
-    {"name":"sprPioggia","order":5,"path":"sprites/sprPioggia/sprPioggia.yy",},
+    {"name":"sprPioggiaDiPesci","order":5,"path":"sprites/sprPioggiaDiPesci/sprPioggiaDiPesci.yy",},
     {"name":"sprReSogliola","order":4,"path":"sprites/sprReSogliola/sprReSogliola.yy",},
     {"name":"sprSogliolaBlob","order":3,"path":"sprites/sprSogliolaBlob/sprSogliolaBlob.yy",},
+    {"name":"sprSogliolaDiavoloNero","order":6,"path":"sprites/sprSogliolaDiavoloNero/sprSogliolaDiavoloNero.yy",},
+    {"name":"sprSogliolaPietra","order":7,"path":"sprites/sprSogliolaPietra/sprSogliolaPietra.yy",},
     {"name":"sprSogliolaVolante","order":2,"path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},
   ],
 }

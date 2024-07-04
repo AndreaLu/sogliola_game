@@ -9,30 +9,24 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(floor(40/5)) {
-   newCard = new CardSogliola(global.player)
-   global.player.deck.Add( newCard )
-   newCard = new CardSogliola(global.opponent)
-   global.opponent.deck.Add( newCard )
+repeat(floor(40/6)) {
+   global.player.deck.Add( new CardSogliola(global.player) )
+   global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
-   newCard = new CardPesca(global.player)
-   global.player.deck.Add( newCard )
-   newCard = new CardPesca(global.opponent)
-   global.opponent.deck.Add( newCard )
+   global.player.deck.Add( new CardPesca(global.player) )
+   global.opponent.deck.Add( new CardPesca(global.opponent) )
    
-   newCard = new CardPioggia(global.player)
-   global.player.deck.Add( newCard )
-   newCard = new CardPioggia(global.opponent)
-   global.opponent.deck.Add( newCard )
+   global.player.deck.Add( new CardPioggia(global.player) )
+   global.opponent.deck.Add( new CardPioggia(global.opponent) )
    
-   newCard = new CardSogliolaBlob(global.player)
-   global.player.deck.Add( newCard )
-   newCard = new CardSogliolaBlob(global.opponent)
-   global.opponent.deck.Add( newCard )
+   global.player.deck.Add( new CardSogliolaBlob(global.player) )
+   global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
    
    global.player.deck.Add( new CardReSogliola(global.player) )
-   global.opponent.deck.Add( new CardReSogliola(global.opponent) )   
+   global.opponent.deck.Add( new CardReSogliola(global.opponent) )
    
+   global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
+   global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
 }
 
 global.player.deck.Shuffle()

@@ -1,6 +1,6 @@
 {
   "$GMSprite":"",
-  "%Name":"sprPesca",
+  "%Name":"sprSogliolaDiavoloNero",
   "bboxMode":0,
   "bbox_bottom":247,
   "bbox_left":0,
@@ -12,16 +12,16 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"6ea6cc9e-8f42-456a-8a4d-854a8982abbf","name":"6ea6cc9e-8f42-456a-8a4d-854a8982abbf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"","%Name":"b8879233-d543-4744-8935-540d770a654f","name":"b8879233-d543-4744-8935-540d770a654f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":248,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"6903f20f-3fdb-4c9b-89da-32670b6e6209","blendMode":0,"displayName":"default","isLocked":false,"name":"6903f20f-3fdb-4c9b-89da-32670b6e6209","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"3739ba3a-3d12-4a2e-a6d3-96709fe7c23b","blendMode":0,"displayName":"default","isLocked":false,"name":"3739ba3a-3d12-4a2e-a6d3-96709fe7c23b","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name":"sprPesca",
+  "name":"sprSogliolaDiavoloNero",
   "nineSlice":null,
   "origin":4,
   "parent":{
@@ -33,7 +33,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"",
-    "%Name":"sprPesca",
+    "%Name":"sprSogliolaDiavoloNero",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -57,7 +57,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"sprPesca",
+    "name":"sprSogliolaDiavoloNero",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"6ea6cc9e-8f42-456a-8a4d-854a8982abbf","path":"sprites/sprPesca/sprPesca.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"db4daa7f-6439-43dd-96b7-ad07bab50ca3","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"b8879233-d543-4744-8935-540d770a654f","path":"sprites/sprSogliolaDiavoloNero/sprSogliolaDiavoloNero.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"3c3eafc3-3c77-4667-b945-cf0ee72b6d3f","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -79,7 +79,7 @@
     "yorigin":124,
   },
   "swatchColours":null,
-  "swfPrecision":2.525,
+  "swfPrecision":0.5,
   "textureGroupId":{
     "name":"Default",
     "path":"texturegroups/Default",

@@ -22,6 +22,7 @@ enum EventType {
    FREE,          // quando un pesce viene liberato nell'oceano
    ACTION,        // si attiva una Action Card
    PASSIVE,       // sono effetti continui automatici tipo quello del re sogliola
+   STEAL,         // effetto che muove una sogliola dall'aquario alla mano avversaria
 }
 
 function CardCollection(_owner) constructor {
@@ -43,6 +44,11 @@ function CardCollection(_owner) constructor {
    static Remove = function(card) {
       _cards.Remove(card)
       size = _cards.size
+   }
+   
+   static Random = function() {
+      if size == 0 return undefined;
+      return _cards.At(irandom(size-1))
    }
 }
 
@@ -77,9 +83,9 @@ function location_str( location ) {
 
 function Actor() constructor {
    
-   static Event = function( _effect, _EventType ) {
+   static Event = function( _effect, _EventType, _args=undefined ) {
 
-      global.effectChainRing.Add(  [_effect,_EventType,self,undefined] )
+      global.effectChainRing.Add(  [_effect,_EventType,self,_args] )
 
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
@@ -122,6 +128,11 @@ function Player() : Actor() constructor {
    static Draw = function() {
       hand.Add( deck.Draw() );
    }
+   static Steal = function(card) {
+      Event( function(card) {
+         Opponent(card.controller).hand.Add( card )
+      }, EventType.STEAL, card )
+   }
 }
 function Supervisor() : Actor() constructor {}
 
@@ -145,15 +156,14 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
    val = _value
    Summon = function() {
       Event( function() {
-         owner.aquarium.Add(self)
+         controller.aquarium.Add(self)
          global.fishPlayed +=1
       }, EventType.SUMMON, undefined )
       Event( undefined, EventType.POSTSUMMON, undefined)
    }
    SummonToOpponent = function() {
       Event( function() {
-         var opponent = owner == global.player ? global.opponent : global.player
-         opponent.aquarium.Add(self)
+         Opponent(controller).aquarium.Add(self)
          global.fishPlayed +=1
       }, EventType.SUMMON )
       Event( undefined, EventType.POSTSUMMON, undefined)
@@ -208,7 +218,7 @@ function CardPesca(owner) : ActionCard(
    }
 }
 function CardPioggia(owner) : ActionCard(
-   "Pioggia di Pesci", owner, undefined, undefined, sprPioggia, 
+   "Pioggia di Pesci", owner, undefined, undefined, sprPioggiaDiPesci, 
    "Per questo turno, puoi giocare due carte Sogliola"
 ) constructor {
    Effect = function() {
@@ -256,7 +266,26 @@ function CardReSogliola(owner) : FishEffectCard(
          if card == ctx return;
          ctx.val += 3;
       },self)
-      //if( eventType == EventType.SUMMON && srcActor != self ) val += 3
-      //if( eventType == EventType.FREE ) val -= 3
+   }
+}
+
+
+function CardSogliolaDiavoloNero(owner) : FishEffectCard(
+   "Sogliola Diavolo Nero", owner, undefined, undefined, sprSogliolaDiavoloNero,3,
+   "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario"
+) constructor {
+      _listener = listener
+   listener = function( eventType, actor, effectIndex ) {
+      _listener( eventType, actor, effectIndex )
+      if( eventType == EventType.SUMMON && actor == self ) {
+         if( Opponent(controller).aquarium.size > 0 ) {
+            global.effectChainRing.Add( [Steal,EventType.STEAL,self,[eventType,actor,effectIndex]] )
+         }
+      }
+   }
+   Steal = function(srcEvent) {
+      var opponent = Opponent(controller)
+      var card = opponent.aquarium.Random()
+      controller.hand.Add(card)
    }
 }
