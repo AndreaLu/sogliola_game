@@ -19,16 +19,16 @@ if  global.options.size > 0 {
    }
 }
 
-value = 0
-global.player.aquarium._cards.foreach( function(card) {
-   obj2DGUI.value += card.value
-})
+val = 0
+global.player.aquarium._cards.foreach( function(card,ctx) {
+   ctx.val += card.val
+},self)
 draw_set_color(c_white)
-draw_text( room_width-200, room_height-300, string(value))
+draw_text( room_width-200, room_height-300, string(val))
 
-value = 0
-global.opponent.aquarium._cards.foreach( function(card) {
-   obj2DGUI.value += card.value
-})
+val = 0
+global.opponent.aquarium._cards.foreach( function(card,ctx) {
+   ctx.val += card.val
+},self)
 
-draw_text( room_width-200, 300, string(value))
+draw_text( room_width-200, 300, string(val))

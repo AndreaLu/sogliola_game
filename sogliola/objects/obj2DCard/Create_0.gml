@@ -9,5 +9,5 @@ scale = 1
 target_scale = 1 
 hand_scale = 0.8
 aquarium_scale = 0.6
-
+marked = false
 draw_set_font(fntBasic)
