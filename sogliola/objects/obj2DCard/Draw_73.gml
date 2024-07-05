@@ -22,7 +22,7 @@ if( mouse_x >= x-w/2*scale && mouse_x <= x+w/2*scale &&
    draw_text_ext(vx,dy,"desc: " + card.desc,20,room_width-vx-30)
    dy += string_height_ext("desc: " + card.desc,20,room_width-vx-30); dy += 20
    if( is_instanceof(card,FishCard) ) {
-      draw_text(vx,dy,"value: " + string(card.val) ); dy += 20
+      draw_text(vx,dy,"value: " + string(card.Val()) ); dy += 20
    }
    
 }

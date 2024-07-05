@@ -9,7 +9,7 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(floor(40/6)) {
+repeat(floor(40/7)) {
    global.player.deck.Add( new CardSogliola(global.player) )
    global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
@@ -27,7 +27,12 @@ repeat(floor(40/6)) {
    
    global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
    global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
+   
+   global.player.deck.Add( new CardSogliolaPietra(global.player) )
+   global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
 }
+
+random_set_seed(20)
 
 global.player.deck.Shuffle()
 global.opponent.deck.Shuffle()
@@ -37,6 +42,15 @@ repeat(6) {
    global.player.Draw()
    global.opponent.Draw()
 }
+
+// Fixed hands (for debug purposes) 
+if( false ) {
+   global.player.hand.Add( new CardReSogliola(global.player) )
+   global.player.hand.Add( new CardReSogliola(global.player) )
+   global.player.hand.Add( new CardPioggia(global.player) )
+   global.opponent.hand.Add( new CardSogliolaPietra(global.opponent) )
+}
+
 
 // Determine whose turn it is, randomly
 global.turnPlayer = global.player //choose(global.player,global.opponent)

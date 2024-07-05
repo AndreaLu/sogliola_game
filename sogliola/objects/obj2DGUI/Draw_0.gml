@@ -21,14 +21,14 @@ if  global.options.size > 0 {
 
 val = 0
 global.player.aquarium._cards.foreach( function(card,ctx) {
-   ctx.val += card.val
+   ctx.val += card.Val()
 },self)
 draw_set_color(c_white)
 draw_text( room_width-200, room_height-300, string(val))
 
 val = 0
 global.opponent.aquarium._cards.foreach( function(card,ctx) {
-   ctx.val += card.val
+   ctx.val += card.Val()
 },self)
 
 draw_text( room_width-200, 300, string(val))

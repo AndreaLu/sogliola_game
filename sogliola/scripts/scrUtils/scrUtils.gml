@@ -11,8 +11,9 @@ function ds_list() constructor {
    }
    static Copy = function() {
       var newList = new ds_list()
-      ds_list_copy(newList._list,_list)
-      newList.size = ds_list_size(newList._list)
+      for( var i=0;i<size;i++) {
+         newList.Add(_list[|i])
+      }
       return newList
    }
    static At = function(pos) {
@@ -64,4 +65,10 @@ function ds_list() constructor {
 
 function Opponent(player) {
    return player == global.player ? global.opponent : global.player
+}
+
+log = ds_list()
+
+function breakpoint() {
+   return
 }
