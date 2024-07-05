@@ -2,6 +2,7 @@
 if startTurn {
    startTurn = false
    // Inizializza tutto per questo turno
+   global.turnPlayer.aquarium.protected = false
    global.maxFishPlayable = 1
    global.fishPlayed = 0
    global.turnPassed = false

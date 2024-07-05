@@ -50,7 +50,7 @@ function CardCollection(_owner) constructor {
 }
 
 function Hand(owner) : CardCollection(owner) constructor {}
-function Aquarium(owner) : CardCollection(owner) constructor {}
+function Aquarium(owner) : CardCollection(owner) constructor { protected = false }
 function Ocean() : CardCollection(undefined) constructor { owner = global.supervisor }
 function Deck(owner) : CardCollection(owner) constructor {
    // Il mazzo è una lista, dove l'indice 0 è la carta in cima
@@ -271,7 +271,7 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
       _listener( event )
       if( is_instanceof(event,EventSummon) && event.src == self ) {
          var opponent = Opponent(controller)
-         if( opponent.aquarium.size > 0 ) {
+         if( opponent.aquarium.size > 0 && !opponent.aquarium.protected ) {
             var target = opponent.aquarium.Random()
             global.effectChainRing.Add( new EventSteal(self,Steal,target) )
          }
@@ -291,7 +291,7 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
                global.options.Add( ["Summon "+name,Summon] )
-            if global.turnOpponent.aquarium.size < 8
+            if global.turnOpponent.aquarium.size < 8 && !global.turnOpponent.aquarium.protected
                global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
          }
       }
@@ -319,6 +319,7 @@ function CardSogliolaVolante(owner) : FishEffectCard(
    _listener = listener
    listener = function( event ) {
       _listener( event )
+      if breakpoints breakpoint()
       if( is_instanceof(location,Aquarium) && is_instanceof(event,EventFree) && event.target == self ) {
          global.effectChainRing.Add( new EventDraw(self,Draw) ) 
       }
@@ -363,31 +364,36 @@ function CardFreeSogliola(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Free '"+target.name+"' own", Free, target] )
+         global.options.Add(["Free '"+target.name+"' own", Activate, target] )
       }
       
       // Check if Sogliola Giullare is in the Aquarium
       var opp = Opponent(controller)
-      var giullare = opp.aquarium._cards.Filter(
-         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
-      ) != undefined
-      for( var i=0;i<opp.aquarium.size;i++;) {
-         var target = opp.aquarium.At(i)
-         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Free '"+target.name+"' opponent", Free, target] )
+      if( !opp.aquarium.protected ) {
+         var giullare = opp.aquarium._cards.Filter(
+            function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+         ) != undefined
+         for( var i=0;i<opp.aquarium.size;i++;) {
+            var target = opp.aquarium.At(i)
+            if( giullare and is_instanceof(target,CardReSogliola) ) continue;
+            global.options.Add(["Free '"+target.name+"' opponent", Activate, target] )
+         }
       }
    }
    
-   Free = function( target ) {
-      StartEvent( new EventFree(self, function(event) {
-         global.ocean.Add(event.target)
-      },target) )
+   Effect = function(event) {
+      global.ocean.Add( event.target )
+   }
+   Activate = function( target ) {
+      StartEvent( new EventFree(self,Effect,target) )
+      global.ocean.Add( self )
    }
 }
 function CardFurto(owner) : ActionCard(
    "Furto", owner, undefined, undefined, sprFurto,
    "Ruba una sogliola da un acquario e aggiungila alla tua mano"
 ) constructor {
+   target = undefined
    /* overload operatore listener di ActionCard */
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
@@ -402,30 +408,42 @@ function CardFurto(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Steal '"+target.name+"' own", Steal, target] )
+         global.options.Add(["Activate Steal on '"+target.name+"' own", Activate, target] )
       }
       
       var opponent = Opponent(controller)
-      giullare = opponent.aquarium._cards.Filter(
-         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
-      ) != undefined
-      for( var i=0;i<opponent.aquarium.size;i++;) {
-         var target = opponent.aquarium.At(i)
-         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Steal '"+target.name+"' opponent", Steal, target] )
+      if( ! opponent.aquarium.protected ) {
+         giullare = opponent.aquarium._cards.Filter(
+            function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+         ) != undefined
+         for( var i=0;i<opponent.aquarium.size;i++;) {
+            var target = opponent.aquarium.At(i)
+            if( giullare and is_instanceof(target,CardReSogliola) ) continue;
+            global.options.Add(["Activate Steal on '"+target.name+"' opponent", Activate, target] )
+         }
       }
    }
    
-   Steal = function( target ) {
-      StartEvent( new EventSteal(self, function(event) {
-         controller.hand.Add(event.target)
-      },target) )
+   
+   Effect = function(event) {
+      controller.hand.Add( event.target )
+   }
+   Activate = function( _target ) {
+      StartEvent( new EventSteal(self,Effect,_target) )
+      global.ocean.Add( self )
    }
 }
-
 function CardSogliolaGiullare(owner) : FishEffectCard(
    "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
    "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato"
 ) constructor {
    
+}
+function CardAcquarioProtetto(owner) : ActionCard(
+   "Acquario Protetto", owner, undefined, undefined, sprAcquarioProtetto,
+   "I pesci nel tuo Acquario sono protetti fino al tuo prossimo turno"
+) constructor {
+   Effect = function() {
+      controller.aquarium.protected = true
+   }
 }

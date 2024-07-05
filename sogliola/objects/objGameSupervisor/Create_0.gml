@@ -9,7 +9,7 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(floor(40/10)) {
+repeat(floor(40/14)) {
    global.player.deck.Add( new CardSogliola(global.player) )
    global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
@@ -48,6 +48,9 @@ repeat(floor(40/10)) {
    
    global.player.deck.Add( new CardSogliolaGiullare(global.player) )
    global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
+   
+   global.player.deck.Add( new CardAcquarioProtetto(global.player) )
+   global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
 }
 
 random_set_seed(18)
@@ -66,6 +69,7 @@ if( true ) {
    global.player.hand.Add( new CardSogliolaGiullare(global.player) )
    global.player.hand.Add( new CardReSogliola(global.player) )
    global.player.hand.Add( new CardPioggia(global.player) )
+   global.player.hand.Add( new CardAcquarioProtetto(global.player) )
    global.opponent.hand.Add( new CardSogliolaPietra(global.opponent) )
    global.opponent.hand.Add( new CardFurto(global.opponent) )
    global.opponent.hand.Add( new CardSogliolaDiavoloNero(global.opponent) )
