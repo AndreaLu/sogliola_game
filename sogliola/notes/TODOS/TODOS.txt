@@ -1,4 +1,3 @@
 - implementa controllo giullare in diavolo nero e sogliola pietra
-- implementa carte restanti
 - aggiungi nuove carte
 - implementa condizioni di gameover

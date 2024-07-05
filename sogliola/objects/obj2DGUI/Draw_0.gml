@@ -7,10 +7,15 @@ if  global.options.size > 0 {
       sel_choice = sel_choice - 1
       if sel_choice == -1 sel_choice = global.options.size-1
    }
-   global.options.rofeachi( function( choice,i) {
+   
+   var dy = 20
+   var j = 0
+   draw_rectangle_color(room_width-400-10,dy-10,room_width-20,dy-10+dy*7, c_black,c_dkgray,c_black,c_dkgray,false)
+   for(var i = max(0,sel_choice-3); i<min(max(0,sel_choice-5)+7,global.options.size); i++ ) {
       draw_set_color( i==sel_choice ? c_fuchsia : c_white )
-      draw_text(room_width-300,20+i*20, ((i==sel_choice) ? "> " : "  " )+ choice[0])
-   })
+      draw_text(room_width-400,dy, ((i==sel_choice) ? "> " : "  " )+  global.options.At(i)[0])
+      dy += 20
+   }
    
    if keyboard_check_pressed(vk_enter) {
       var option = global.options.At(sel_choice)
