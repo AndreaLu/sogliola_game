@@ -1,30 +1,27 @@
 effectListeners = new ds_list()
 // list of listeners:
-// that is instances that implement the following callback:
-// listener( EventType, actor, effectIndex )
-//   EventType: type of the effect that has been activated
-//   actor: actor which activated the effect
-//   effectIndex: index of the effect in the previous scan chain, in case it is affected
-//                by this effect
+// that is instances that implement thel listener(event) callback
 
-effectChain = new ds_list()
-effectChainRing = new ds_list()
+effectChain = new ds_list()      //
+effectChainRing = new ds_list()  // list of effects that triggered simultaneously (will need to sort them out into the effectChain)
 options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
-maxFishPlayable = 1               // max number of fish that can be played this turn
+maxFishPlayable = 1             // max number of fish that can be played this turn
 
-enum EventType {
-   TURN_BEGIN,    // inizia il turno
-   TURN_DRAW,     // pescata di inizio turno
-   TURN_MAIN,     // inizia la fase principale del turno
-   SUMMON,        // quando un pesce viene posizionato nell'acquario
-   FREE,          // quando un pesce viene liberato nell'oceano
-   ACTION,        // si attiva una Action Card
-   PASSIVE,       // sono effetti continui automatici tipo quello del re sogliola
-   STEAL,         // effetto che muove una sogliola dall'aquario alla mano avversaria
-   POSTSTEAL,     // Subito dopo un furto
+
+function Event(_src,_callback) constructor {
+   src = _src
+   callback = _callback
 }
-
+function SystemEvent(_callback) : Event(undefined,_callback) constructor {src = global.supervisor}
+function EventTurnBegin() : SystemEvent(undefined) constructor {} // inizia il turno
+function EventTurnDraw() : SystemEvent(undefined) constructor {} // pescata di inizio turno
+function EventTurnMain() : SystemEvent(undefined) constructor {} // inizia la fase principale del turno
+function EventSummon(_src,_cb) : Event(_src,_cb) constructor {} // quando un pesce viene posizionato nell'acquario                            
+function EventFree(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // quando un pesce viene liberato nell'oceano
+function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una Action Card
+function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
+function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function CardCollection(_owner) constructor {
    owner = _owner
    _cards = new ds_list()
@@ -83,9 +80,9 @@ function location_str( location ) {
 
 function Actor() constructor {
    
-   static Event = function( _effect, _EventType, _args=undefined ) {
+   static StartEvent = function( event ) {
 
-      global.effectChainRing.Add(  [_effect,_EventType,self,_args] )
+      global.effectChainRing.Add( event )
 
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
@@ -95,9 +92,9 @@ function Actor() constructor {
          // foreach effect stored in the last chain ring
          var ring = global.effectChain.At(-1)
          for( var j=0; j< ring.size; j++) {
-            var effect = ring.At(j)
+            var _event = ring.At(j)
             for( var k=global.effectListeners.size-1; k>=0; k--) {
-               global.effectListeners.At(k).listener( effect[1], effect[2], k )
+               global.effectListeners.At(k).listener( _event )
             }
          }
       }
@@ -107,9 +104,9 @@ function Actor() constructor {
       for(var i=global.effectChain.size-1;i>=0;i--) {
          var ring = global.effectChain.At(i)
          for( var j=0;j<ring.size; j++) {
-            effect = ring.At(j)
-            if !is_undefined( effect[0] ) 
-               effect[0](effect[3])
+            _event = ring.At(j)
+            if !is_undefined( _event.callback ) 
+               _event.callback(_event)
          }
       }
       
@@ -128,11 +125,6 @@ function Player() : Actor() constructor {
    static Draw = function() {
       hand.Add( deck.Draw() );
    }
-   static Steal = function(card) {
-      Event( function(card) {
-         Opponent(card.controller).hand.Add( card )
-      }, EventType.STEAL, card )
-   }
 }
 function Supervisor() : Actor() constructor {}
 
@@ -147,7 +139,7 @@ function Card(_name,_owner,_controller, _location, _sprite) : Actor()  construct
    guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
    guiCard.card = self
    
-   listener = function( eventType, actor, effectIndex ) {}
+   listener = function( event ) {}
    
    breakpoints = false
 }
@@ -158,19 +150,19 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
       return _val
    }
    Summon = function() {
-      Event( function() {
-         controller.aquarium.Add(self)
-         global.fishPlayed +=1
-      }, EventType.SUMMON, undefined )
+      StartEvent( new EventSummon(self, function(event) {
+         event.src.controller.aquarium.Add(event.src)
+         global.fishPlayed += 1
+      }) )
    }
    SummonToOpponent = function() {
-      Event( function() {
-         Opponent(controller).aquarium.Add(self)
-         global.fishPlayed +=1
-      }, EventType.SUMMON )
+      StartEvent( new EventSummon(self, function(event) {
+         Opponent(event.src.controller).aquarium.Add(event.src)
+         global.fishPlayed += 1
+      }) )
    }
-   listener = function( eventType, actor, effectIndex ) {
-      if( eventType == EventType.TURN_MAIN ) {
+   listener = function( event ) {
+      if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
              global.turnPlayer.aquarium.size < 8 ) {
@@ -181,22 +173,22 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
 }
 function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) : Card(_name,_owner,_controller,_location,_sprite) constructor {
    desc = _effectText;
-   /* Cards that inherit from ActionCard must implement the Effect function */
    
    
-   listener = function( eventType, actor, effectIndex ) {
-      if( eventType == EventType.TURN_MAIN ) {
+   listener = function( event ) {
+      if( is_instanceof(event, EventTurnMain) ) {
          if( location == global.turnPlayer.hand ) {
             global.options.Add( ["Activate "+name,Activate] ) 
          }
       }
    }
-   static Effect = function() {
-   }
+   // Cards that inherit from ActionCard must implement the Effect function
+   static Effect = function(_evt) { }
    Activate = function() {
-      Event( Effect, EventType.ACTION )
-      global.ocean.Add(self)
+      StartEvent( new EventAction(self, Effect) )
+      global.ocean.Add( self )
    }
+   
 }
 function FishEffectCard(_name,_owner, _controller, _location, _sprite, _value, _effectText)  : FishCard(_name,_owner,_controller,_location,_sprite, _value, _effectText) constructor {
    
@@ -231,8 +223,8 @@ function CardSogliolaBlob(owner) : FishEffectCard(
    "Può essere giocato in ogni acquario"
 ) constructor {
    // Override the listener
-   listener = function( eventType, actor, effectIndex ) {
-      if( eventType == EventType.TURN_MAIN ) {
+   listener = function( event ) {
+      if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
@@ -243,7 +235,6 @@ function CardSogliolaBlob(owner) : FishEffectCard(
       }
    }
 }
-
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
    "+3 al valore per ogni altra sogliola nell'acquario"
@@ -261,35 +252,31 @@ function CardReSogliola(owner) : FishEffectCard(
       return tmpVal
    }
 }
-
-
 function CardSogliolaDiavoloNero(owner) : FishEffectCard(
    "Sogliola Diavolo Nero", owner, undefined, undefined, sprSogliolaDiavoloNero,3,
    "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario"
 ) constructor {
    _listener = listener
-   listener = function( eventType, actor, effectIndex ) {
-      _listener( eventType, actor, effectIndex )
-      if( eventType == EventType.SUMMON && actor == self ) {
-         if( Opponent(controller).aquarium.size > 0 ) {
-            global.effectChainRing.Add( [Steal,EventType.STEAL,self,[eventType,actor,effectIndex]] )
-            global.effectChainRing.Add( [undefined,EventType.POSTSTEAL,self,[eventType,actor,effectIndex]])
+   listener = function( event ) {
+      _listener( event )
+      if( is_instanceof(event,EventSummon) && event.src == self ) {
+         var opponent = Opponent(controller)
+         if( opponent.aquarium.size > 0 ) {
+            var target = opponent.aquarium.Random()
+            global.effectChainRing.Add( new EventSteal(self,Steal,target) )
          }
       }
-   }
-   Steal = function(srcEvent) {
-      var opponent = Opponent(controller)
-      var card = opponent.aquarium.Random()
-      controller.hand.Add(card)
+      Steal = function(event) {
+         controller.hand.Add(event.target)
+      }
    }
 }
-
 function CardSogliolaPietra(owner) : FishEffectCard(
    "Sogliola Pietra", owner, undefined, undefined, sprSogliolaPietra, 2,
    "Può essere giocata in ogni Acquario. Quando entra in un Acquario, Libera una sogliola casuale da quell'Acquario"
 ) constructor {
-   listener = function( eventType, actor, effectIndex ) {
-      if( eventType == EventType.TURN_MAIN ) {
+   listener = function( event ) {
+      if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
@@ -299,16 +286,32 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          }
       }
          
-      if( eventType == EventType.SUMMON && actor == self && Opponent(controller).aquarium.size > 0 ) {
-         global.effectChainRing.Add( [Free,EventType.FREE,self,[eventType,actor,effectIndex]] )
+      if( is_instanceof(event,EventSummon) && event.src == self && Opponent(controller).aquarium.size > 0 ) {
+         do var target = Opponent(controller).aquarium.Random()
+         until( target != self )
+         global.effectChainRing.Add( new EventFree(self,Free,target) )
       }
    }
    
 
-   Free = function(srcEvent) {
-      var card = self
-      while card == self
-         card = Opponent(controller).aquarium.Random()
-      global.ocean.Add(card)
+   Free = function(event) {
+      global.ocean.Add(event.target)
+   }
+}
+
+function CardSogliolaVolante(owner) : FishEffectCard(
+   "Sogliola Volante", owner, undefined, undefined, sprSogliolaVolante, 5,
+   "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte"
+) constructor {
+   _listener = listener
+   listener = function( event ) {
+      _listener( event )
+      if( is_instanceof(location,Aquarium) && is_instanceof(event,EventFree) && event.target == self ) {
+         global.effectChainRing.Add( new EventDraw(self,Draw) ) 
+      }
+   }
+   Draw = function(_evt) {
+      controller.Draw()
+      controller.Draw()
    }
 }

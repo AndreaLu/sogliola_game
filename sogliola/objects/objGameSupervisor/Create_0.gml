@@ -9,7 +9,7 @@ global.opponent = new Player()
 global.ocean = new Ocean()
 
 var newCard
-repeat(floor(40/7)) {
+repeat(floor(40/8)) {
    global.player.deck.Add( new CardSogliola(global.player) )
    global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
@@ -30,6 +30,9 @@ repeat(floor(40/7)) {
    
    global.player.deck.Add( new CardSogliolaPietra(global.player) )
    global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
+   
+   global.player.deck.Add( new CardSogliolaVolante(global.player) )
+   global.opponent.deck.Add( new CardSogliolaVolante(global.opponent) )
 }
 
 random_set_seed(20)
