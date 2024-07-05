@@ -183,7 +183,7 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) 
       }
    }
    // Cards that inherit from ActionCard must implement the Effect function
-   static Effect = function(_evt) { }
+   Effect = function(_evt) { }
    Activate = function() {
       StartEvent( new EventAction(self, Effect) )
       global.ocean.Add( self )
@@ -313,5 +313,48 @@ function CardSogliolaVolante(owner) : FishEffectCard(
    Draw = function(_evt) {
       controller.Draw()
       controller.Draw()
+   }
+}
+function CardSogliolaSalmone(owner) : FishEffectCard(
+   "SogliolaSalmone", owner, undefined, undefined, sprSogliolaSalmone, 5,
+   "Quando questa sogliola passa da un acquario alla mano, il proprietario dell'acquario pesca 2 carte"
+) constructor {
+   _listener = listener
+   listener = function( event ) {
+      _listener( event )
+      if( is_instanceof(location,Aquarium) && is_instanceof(event,EventSteal) && event.target == self ) {
+         var evt = new EventDraw(self,Draw)
+         evt.target = ( location == global.player.aquarium ) ? global.player : global.opponent
+         global.effectChainRing.Add( evt ) 
+      }
+   }
+   
+   Draw = function(event) {
+      event.target.Draw()
+      event.target.Draw()
+   }
+}
+function CardFreeSogliola(owner) : ActionCard(
+   "Free Sogliola", owner, undefined, undefined, sprFreeSogliola,
+   "Scegli una sogliola da un acquario e liberala nell'oceano"
+) constructor {
+   listener = function( event ) {
+      if( location != global.turnPlayer.hand ) return;
+      if( !is_instanceof(event,EventTurnMain) ) return;
+      if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      for( var i=0;i<controller.aquarium.size;i++;) {
+         var target = controller.aquarium.At(i)
+         global.options.Add(["Free '"+target.name+"' own", Free, target] )
+      }
+      for( var i=0;i<Opponent(controller).aquarium.size;i++;) {
+         var target = Opponent(controller).aquarium.At(i)
+         global.options.Add(["Free '"+target.name+"' opponent", Free, target] )
+      }
+   }
+   
+   Free = function( target ) {
+      StartEvent( new EventFree(self, function(event) {
+         global.ocean.Add(event.target)
+      },target) )
    }
 }

@@ -14,7 +14,10 @@ if  global.options.size > 0 {
    
    if keyboard_check_pressed(vk_enter) {
       var option = global.options.At(sel_choice)
-      option[1]()
+      if array_length(option) > 2
+         option[1](option[2])
+      else
+         option[1]()
       global.choiceMade = true
    }
 }
