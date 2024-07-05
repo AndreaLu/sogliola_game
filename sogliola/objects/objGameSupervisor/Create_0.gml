@@ -45,6 +45,9 @@ repeat(floor(40/10)) {
    
    global.player.deck.Add( new CardFurto(global.player) )
    global.opponent.deck.Add( new CardFurto(global.opponent) )
+   
+   global.player.deck.Add( new CardSogliolaGiullare(global.player) )
+   global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
 }
 
 random_set_seed(18)
@@ -53,19 +56,20 @@ global.player.deck.Shuffle()
 global.opponent.deck.Shuffle()
 
 // Draw 6 cards
-repeat(6) {
+repeat(0) {
    global.player.Draw()
    global.opponent.Draw()
 }
 
 // Fixed hands (for debug purposes) 
-if( false ) {
-   global.player.hand.Add( new CardSogliolaSalmone(global.player) )
-   global.player.hand.Add( new CardSogliolaDiavoloNero(global.player) )
+if( true ) {
+   global.player.hand.Add( new CardSogliolaGiullare(global.player) )
+   global.player.hand.Add( new CardReSogliola(global.player) )
    global.player.hand.Add( new CardPioggia(global.player) )
-   global.opponent.hand.Add( new CardSogliolaSalmone(global.opponent) )
-   global.opponent.hand.Add( new CardSogliolaDiavoloNero(global.player) )
-   global.opponent.hand.Add( new CardPioggia(global.player) )
+   global.opponent.hand.Add( new CardSogliolaPietra(global.opponent) )
+   global.opponent.hand.Add( new CardFurto(global.opponent) )
+   global.opponent.hand.Add( new CardSogliolaDiavoloNero(global.opponent) )
+   global.opponent.hand.Add( new CardFreeSogliola(global.opponent) )
 }
 
 

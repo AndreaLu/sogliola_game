@@ -57,8 +57,17 @@ function ds_list() constructor {
       ds_list_destroy(_list)
    }
    
+   // Finds the first index of a value or returns -1
    static Index = function(value) {
       return ds_list_find_index(_list,value)
+   }
+   
+   static Filter = function( check ) {
+      for( var i=0;i<size;i++) {
+         var c = _list[|i]
+         if check(c) return c;
+      }
+      return undefined;
    }
 }
 

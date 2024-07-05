@@ -17,7 +17,7 @@ function SystemEvent(_callback) : Event(undefined,_callback) constructor {src = 
 function EventTurnBegin() : SystemEvent(undefined) constructor {} // inizia il turno
 function EventTurnDraw() : SystemEvent(undefined) constructor {} // pescata di inizio turno
 function EventTurnMain() : SystemEvent(undefined) constructor {} // inizia la fase principale del turno
-function EventSummon(_src,_cb) : Event(_src,_cb) constructor {} // quando un pesce viene posizionato nell'acquario                            
+function EventSummon(_src,_cb,_opponent) : Event(_src,_cb) constructor { opponent = _opponent } // quando un pesce viene posizionato nell'acquario                            
 function EventFree(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // quando un pesce viene liberato nell'oceano
 function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una Action Card
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
@@ -153,13 +153,13 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
       StartEvent( new EventSummon(self, function(event) {
          event.src.controller.aquarium.Add(event.src)
          global.fishPlayed += 1
-      }) )
+      }, false) )
    }
    SummonToOpponent = function() {
       StartEvent( new EventSummon(self, function(event) {
          Opponent(event.src.controller).aquarium.Add(event.src)
          global.fishPlayed += 1
-      }) )
+      }, true) )
    }
    listener = function( event ) {
       if( is_instanceof(event,EventTurnMain) ) {
@@ -295,11 +295,15 @@ function CardSogliolaPietra(owner) : FishEffectCard(
                global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
          }
       }
-         
-      if( is_instanceof(event,EventSummon) && event.src == self && Opponent(controller).aquarium.size > 0 ) {
-         do var target = Opponent(controller).aquarium.Random()
-         until( target != self )
-         global.effectChainRing.Add( new EventFree(self,Free,target) )
+      
+      
+      if( is_instanceof(event,EventSummon) ) {
+         var aquarium = event.opponent ? Opponent(controller).aquarium : controller.aquarium
+         if(  event.src == self && aquarium.size > 0 ) {
+            do var target = aquarium.Random()
+            until( target != self )
+            global.effectChainRing.Add( new EventFree(self,Free,target) )
+         }
       }
    }
    
@@ -351,12 +355,25 @@ function CardFreeSogliola(owner) : ActionCard(
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
       if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      
+      // Check if Sogliola Giullare is in the Aquarium
+      var giullare = controller.aquarium._cards.Filter(
+         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+      ) != undefined
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
+         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
          global.options.Add(["Free '"+target.name+"' own", Free, target] )
       }
-      for( var i=0;i<Opponent(controller).aquarium.size;i++;) {
-         var target = Opponent(controller).aquarium.At(i)
+      
+      // Check if Sogliola Giullare is in the Aquarium
+      var opp = Opponent(controller)
+      var giullare = opp.aquarium._cards.Filter(
+         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+      ) != undefined
+      for( var i=0;i<opp.aquarium.size;i++;) {
+         var target = opp.aquarium.At(i)
+         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
          global.options.Add(["Free '"+target.name+"' opponent", Free, target] )
       }
    }
@@ -376,12 +393,25 @@ function CardFurto(owner) : ActionCard(
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
       if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      
+      // Check if Sogliola Giullare is in the Aquarium
+      var giullare = controller.aquarium._cards.Filter(
+         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+      ) != undefined
+      
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
+         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
          global.options.Add(["Steal '"+target.name+"' own", Steal, target] )
       }
-      for( var i=0;i<Opponent(controller).aquarium.size;i++;) {
-         var target = Opponent(controller).aquarium.At(i)
+      
+      var opponent = Opponent(controller)
+      giullare = opponent.aquarium._cards.Filter(
+         function(c) { return is_instanceof(c,CardSogliolaGiullare) }
+      ) != undefined
+      for( var i=0;i<opponent.aquarium.size;i++;) {
+         var target = opponent.aquarium.At(i)
+         if( giullare and is_instanceof(target,CardReSogliola) ) continue;
          global.options.Add(["Steal '"+target.name+"' opponent", Steal, target] )
       }
    }
@@ -391,4 +421,11 @@ function CardFurto(owner) : ActionCard(
          controller.hand.Add(event.target)
       },target) )
    }
+}
+
+function CardSogliolaGiullare(owner) : FishEffectCard(
+   "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
+   "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato"
+) constructor {
+   
 }
