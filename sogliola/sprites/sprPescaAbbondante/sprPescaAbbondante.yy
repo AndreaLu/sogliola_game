@@ -1,6 +1,6 @@
 {
   "$GMSprite":"",
-  "%Name":"sprFreeSogliola",
+  "%Name":"sprPescaAbbondante",
   "bboxMode":0,
   "bbox_bottom":247,
   "bbox_left":0,
@@ -12,16 +12,16 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3dff0edb-d416-48d4-afdc-8fb9529e12d9","name":"3dff0edb-d416-48d4-afdc-8fb9529e12d9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"","%Name":"29fa4bb5-d855-406a-ac37-bd8d77285103","name":"29fa4bb5-d855-406a-ac37-bd8d77285103","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":248,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"375f9d1d-0140-4a22-ae95-559bcc6882fa","blendMode":0,"displayName":"default","isLocked":false,"name":"375f9d1d-0140-4a22-ae95-559bcc6882fa","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"84f4b8b0-e888-46f2-8d3a-705f79376213","blendMode":0,"displayName":"default","isLocked":false,"name":"84f4b8b0-e888-46f2-8d3a-705f79376213","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name":"sprFreeSogliola",
+  "name":"sprPescaAbbondante",
   "nineSlice":null,
   "origin":4,
   "parent":{
@@ -33,7 +33,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"",
-    "%Name":"sprFreeSogliola",
+    "%Name":"sprPescaAbbondante",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -57,7 +57,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"sprFreeSogliola",
+    "name":"sprPescaAbbondante",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"3dff0edb-d416-48d4-afdc-8fb9529e12d9","path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"f711f4e7-971d-4de8-b882-f03bc81dac9d","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"29fa4bb5-d855-406a-ac37-bd8d77285103","path":"sprites/sprPescaAbbondante/sprPescaAbbondante.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"4b824a9a-d692-478e-ad5b-c8dd78e8f34b","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

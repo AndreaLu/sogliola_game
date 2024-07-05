@@ -39,6 +39,12 @@ repeat(floor(40/10)) {
    
    global.player.deck.Add( new CardFreeSogliola(global.player) )
    global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
+   
+   global.player.deck.Add( new CardPescaAbbondante(global.player) )
+   global.opponent.deck.Add( new CardPescaAbbondante(global.opponent) )
+   
+   global.player.deck.Add( new CardFurto(global.player) )
+   global.opponent.deck.Add( new CardFurto(global.opponent) )
 }
 
 random_set_seed(18)

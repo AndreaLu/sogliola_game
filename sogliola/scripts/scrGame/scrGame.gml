@@ -210,6 +210,16 @@ function CardPesca(owner) : ActionCard(
       controller.Draw()
    }
 }
+function CardPescaAbbondante(owner) : ActionCard(
+   "Pesca Abbondante", owner, undefined, undefined, sprPescaAbbondante,
+   "Pesca 3 carte"
+) constructor {
+   Effect = function() {
+      controller.Draw()
+      controller.Draw()
+      controller.Draw()
+   }
+}
 function CardPioggia(owner) : ActionCard(
    "Pioggia di Pesci", owner, undefined, undefined, sprPioggiaDiPesci, 
    "Per questo turno, puoi giocare due carte Sogliola"
@@ -298,7 +308,6 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       global.ocean.Add(event.target)
    }
 }
-
 function CardSogliolaVolante(owner) : FishEffectCard(
    "Sogliola Volante", owner, undefined, undefined, sprSogliolaVolante, 5,
    "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte"
@@ -355,6 +364,31 @@ function CardFreeSogliola(owner) : ActionCard(
    Free = function( target ) {
       StartEvent( new EventFree(self, function(event) {
          global.ocean.Add(event.target)
+      },target) )
+   }
+}
+function CardFurto(owner) : ActionCard(
+   "Furto", owner, undefined, undefined, sprFurto,
+   "Ruba una sogliola da un acquario e aggiungila alla tua mano"
+) constructor {
+   /* overload operatore listener di ActionCard */
+   listener = function( event ) {
+      if( location != global.turnPlayer.hand ) return;
+      if( !is_instanceof(event,EventTurnMain) ) return;
+      if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      for( var i=0;i<controller.aquarium.size;i++;) {
+         var target = controller.aquarium.At(i)
+         global.options.Add(["Steal '"+target.name+"' own", Steal, target] )
+      }
+      for( var i=0;i<Opponent(controller).aquarium.size;i++;) {
+         var target = Opponent(controller).aquarium.At(i)
+         global.options.Add(["Steal '"+target.name+"' opponent", Steal, target] )
+      }
+   }
+   
+   Steal = function( target ) {
+      StartEvent( new EventSteal(self, function(event) {
+         controller.hand.Add(event.target)
       },target) )
    }
 }
