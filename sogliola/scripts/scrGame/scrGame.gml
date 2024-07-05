@@ -22,6 +22,8 @@ function EventFree(_src,_cb,_target) : Event(_src,_cb) constructor { target = _t
 function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una Action Card
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
+function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
+
 function CardCollection(_owner) constructor {
    owner = _owner
    _cards = new ds_list()
@@ -445,5 +447,34 @@ function CardAcquarioProtetto(owner) : ActionCard(
 ) constructor {
    Effect = function() {
       controller.aquarium.protected = true
+   }
+}
+
+function CardScambioEquivalente(owner) : ActionCard(
+   "Scambio Equivalente", owner, undefined, undefined, sprScambioEquivalente,
+   "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario"
+) constructor {
+   listener = function( event ) {
+      if( location != global.turnPlayer.hand ) return;
+      if( !is_instanceof(event,EventTurnMain) ) return;
+      var opp = Opponent(controller)
+      if( opp.aquarium.size == 0 || controller.aquarium.size == 0 || opp.aquarium.protected ) return;
+      controller.aquarium._cards.foreach( function(card,ctx) {
+         var opp = Opponent(ctx.controller)
+         ctx.card1 = card
+         opp.aquarium._cards.foreach( function(card,ctx) {
+            global.options.Add(["Activate swap '"+ctx.card1.name+"' <-> '"+card.name+"'", Activate, [ctx.card1, card]])
+         },ctx)
+      },self)
+   }
+   Effect = function(event) {
+      var me = event.mine.controller
+      var them = event.theirs.controller
+      me.aquarium.Add(event.theirs)
+      them.aquarium.Add(event.mine)
+   }
+   Activate = function( _args ) {
+      StartEvent( new EventSwap(self,Effect,_args[0],_args[1]) )
+      global.ocean.Add(self)
    }
 }
