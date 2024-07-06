@@ -24,6 +24,7 @@
     {"name":"roomGame","order":1,"path":"rooms/roomGame/roomGame.yy",},
     {"name":"scrGame","order":1,"path":"scripts/scrGame/scrGame.yy",},
     {"name":"sprAcquarioProtetto","order":14,"path":"sprites/sprAcquarioProtetto/sprAcquarioProtetto.yy",},
+    {"name":"sprBack","order":16,"path":"sprites/sprBack/sprBack.yy",},
     {"name":"sprFreeSogliola","order":10,"path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},
     {"name":"sprFurto","order":12,"path":"sprites/sprFurto/sprFurto.yy",},
     {"name":"sprPesca","order":1,"path":"sprites/sprPesca/sprPesca.yy",},

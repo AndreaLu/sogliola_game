@@ -81,3 +81,11 @@ log = ds_list()
 function breakpoint() {
    return
 }
+
+function getValue(player) {
+   var value = 0
+   for(var i=0;i<player.aquarium.size;i++ ) {
+      value += player.aquarium.At(i).Value()
+   }
+   return value
+}

@@ -1,6 +1,6 @@
 /// @description Card Inspector
 if( mouse_x >= x-w/2*scale && mouse_x <= x+w/2*scale &&
-    mouse_y >= y-h/2*scale && mouse_y <= y+h/2*scale ) {
+    mouse_y >= y-h/2*scale && mouse_y <= y+h/2*scale && rotx == 0 ) {
        
    if mouse_check_button_pressed(mb_left) {
       marked = !marked

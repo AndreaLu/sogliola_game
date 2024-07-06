@@ -62,13 +62,13 @@ global.player.deck.Shuffle()
 global.opponent.deck.Shuffle()
 
 // Draw 6 cards
-repeat(0) {
+repeat(6) {
    global.player.Draw()
    global.opponent.Draw()
 }
 
 // Fixed hands (for debug purposes) 
-if( true ) {
+if( false ) {
    global.player.hand.Add( new CardSogliolaGiullare(global.player) )
    global.player.hand.Add( new CardReSogliola(global.player) )
    global.player.hand.Add( new CardPioggia(global.player) )

@@ -12,4 +12,6 @@ target_scale = 1
 hand_scale = 0.8
 aquarium_scale = 0.6
 marked = false
+rotx = 0
+target_rotx = 0
 draw_set_font(fntBasic)
