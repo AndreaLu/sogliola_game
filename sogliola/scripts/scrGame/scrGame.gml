@@ -138,7 +138,8 @@ function Player() : Actor() constructor {
    hand = new Hand(self);
    aquarium = new Aquarium(self);
    static Draw = function() {
-      hand.Add( deck.Draw() );
+      if( deck.size > 0 )
+         hand.Add( deck.Draw() );
    }
 }
 function Supervisor() : Actor() constructor {}
@@ -256,8 +257,8 @@ function CardPesca(owner) : ActionCard(
    CardType.PESCA
 ) constructor {
    Effect = function() {
-      controller.Draw()
-      controller.Draw()
+         controller.Draw()
+         controller.Draw()
    }
 }
 function CardPescaAbbondante(owner) : ActionCard(
@@ -266,9 +267,9 @@ function CardPescaAbbondante(owner) : ActionCard(
    CardType.PESCA_ABBONDANTE
 ) constructor {
    Effect = function() {
-      controller.Draw()
-      controller.Draw()
-      controller.Draw()
+         controller.Draw()
+         controller.Draw()
+         controller.Draw()
    }
 }
 function CardPioggia(owner) : ActionCard(
