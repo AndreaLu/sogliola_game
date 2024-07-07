@@ -1,3 +1,5 @@
+allCards = new ds_list() // tutte le carte esistenti si inseriscono automaticamente in questa lista
+
 effectListeners = new ds_list()
 // list of listeners:
 // that is instances that implement thel listener(event) callback
@@ -80,6 +82,17 @@ function location_str( location ) {
    return "undefined"
 }
 
+function location_str_location( _str ) {
+   if( _str == "Player deck" ) return global.player.deck
+   if( _str == "Opponent deck" ) return global.opponent.deck
+   if( _str == "Player hand" ) return global.player.hand
+   if( _str == "Opponent hand" ) return global.opponent.hand
+   if( _str == "Player aquarium" ) return global.player.aquarium
+   if( _str == "Opponent aquarium" ) return global.opponent.aquarium
+   if( _str == "The ocean" ) return global.ocean
+   return undefined
+}
+
 function Actor() constructor {
    
    static StartEvent = function( event ) {
@@ -130,22 +143,38 @@ function Player() : Actor() constructor {
 }
 function Supervisor() : Actor() constructor {}
 
-function Card(_name,_owner,_controller, _location, _sprite) : Actor()  constructor {
+function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  constructor {
    name = _name
    owner = _owner
    controller = _controller
    location = _location
+   type = _type
    sprite = _sprite
    global.effectListeners.Add(self)
-   
+   global.allCards.Add(self)
    guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
    guiCard.card = self
    
    listener = function( event ) {}
+   GetJSON = function() {
+      var data = [
+         type,
+         owner == global.player ? 0 : 1,
+         controller == global.player ? 0 : 1,
+         location_str( location ),
+      ]
+      return json_stringify( data) 
+   }
    
+   FromJSON = function(json) {
+      var data = json_parse( json )
+      owner =  (data[1] == 0 ) ? global.player : global.opponent
+      controller = (data[2] == 0 ) ? global.player : global.opponent
+      location = location_str_location( data[3] )
+   }
    breakpoints = false
 }
-function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) : Card(_name,_owner,_controller,_location, _sprite) constructor {
+function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, _type) : Card(_name,_owner,_controller,_location, _sprite, _type) constructor {
    desc = _desc
    _val = _value
    Val = function() {
@@ -173,7 +202,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc) 
       }
    } 
 }
-function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) : Card(_name,_owner,_controller,_location,_sprite) constructor {
+function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText, _type) : Card(_name,_owner,_controller,_location,_sprite, _type) constructor {
    desc = _effectText;
    
    
@@ -192,20 +221,39 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText) 
    }
    
 }
-function FishEffectCard(_name,_owner, _controller, _location, _sprite, _value, _effectText)  : FishCard(_name,_owner,_controller,_location,_sprite, _value, _effectText) constructor {
+function FishEffectCard(_name,_owner, _controller, _location, _sprite, _value, _effectText, _type)  : FishCard(_name,_owner,_controller,_location,_sprite, _value, _effectText, _type) constructor {
    
 }
 
+enum CardType {
+   SOGLIOLA,
+   PESCA,
+   PESCA_ABBONDANTE,
+   PIOGGIA,
+   SOGLIOLA_BLOB,
+   RE_SOGLIOLA,
+   SOGLIOLA_PIETRA,
+   SOGLIOLA_GIULLARE,
+   ACQUARIO_PROTETTO,
+   SCAMBIO_EQUIVALENTE,
+   SOGLIOLA_DIAVOLO_NERO,
+   SOGLIOLA_VOLANTE,
+   SOGLIOLA_SALMONE,
+   FREE_SOGLIOLA,
+   FURTO
+}
 // -----------------------------------------------------------------------------+
 // Card database                                                                |
 // -----------------------------------------------------------------------------+
 function CardSogliola(owner) : FishCard(
    "Sogliola", owner, undefined, undefined, sprSogliola, 5,
-   "Ora è piatta; leggende narrano che un tempo non lo fosse. Che pesce nobile!"
+   "Ora è piatta; leggende narrano che un tempo non lo fosse. Che pesce nobile!",
+   CardType.SOGLIOLA
 ) constructor {
 }
 function CardPesca(owner) : ActionCard(
-   "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte"
+   "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte",
+   CardType.PESCA
 ) constructor {
    Effect = function() {
       controller.Draw()
@@ -214,7 +262,8 @@ function CardPesca(owner) : ActionCard(
 }
 function CardPescaAbbondante(owner) : ActionCard(
    "Pesca Abbondante", owner, undefined, undefined, sprPescaAbbondante,
-   "Pesca 3 carte"
+   "Pesca 3 carte",
+   CardType.PESCA_ABBONDANTE
 ) constructor {
    Effect = function() {
       controller.Draw()
@@ -224,7 +273,8 @@ function CardPescaAbbondante(owner) : ActionCard(
 }
 function CardPioggia(owner) : ActionCard(
    "Pioggia di Pesci", owner, undefined, undefined, sprPioggiaDiPesci, 
-   "Per questo turno, puoi giocare due carte Sogliola"
+   "Per questo turno, puoi giocare due carte Sogliola",
+   CardType.PIOGGIA
 ) constructor {
    Effect = function() {
       global.maxFishPlayable = 2
@@ -232,7 +282,8 @@ function CardPioggia(owner) : ActionCard(
 }
 function CardSogliolaBlob(owner) : FishEffectCard(
    "Sogliola Blob", owner, undefined, undefined, sprSogliolaBlob, -10,
-   "Può essere giocato in ogni acquario"
+   "Può essere giocato in ogni acquario",
+   CardType.SOGLIOLA_BLOB
 ) constructor {
    // Override the listener
    listener = function( event ) {
@@ -249,7 +300,8 @@ function CardSogliolaBlob(owner) : FishEffectCard(
 }
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
-   "+3 al valore per ogni altra sogliola nell'acquario"
+   "+3 al valore per ogni altra sogliola nell'acquario",
+   CardType.RE_SOGLIOLA
 ) constructor {
 
    Val = function() {
@@ -266,7 +318,8 @@ function CardReSogliola(owner) : FishEffectCard(
 }
 function CardSogliolaDiavoloNero(owner) : FishEffectCard(
    "Sogliola Diavolo Nero", owner, undefined, undefined, sprSogliolaDiavoloNero,3,
-   "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario"
+   "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario",
+   CardType.SOGLIOLA_DIAVOLO_NERO
 ) constructor {
    _listener = listener
    listener = function( event ) {
@@ -285,7 +338,8 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
 }
 function CardSogliolaPietra(owner) : FishEffectCard(
    "Sogliola Pietra", owner, undefined, undefined, sprSogliolaPietra, 2,
-   "Può essere giocata in ogni Acquario. Quando entra in un Acquario, Libera una sogliola casuale da quell'Acquario"
+   "Può essere giocata in ogni Acquario. Quando entra in un Acquario, Libera una sogliola casuale da quell'Acquario",
+   CardType.SOGLIOLA_PIETRA
 ) constructor {
    listener = function( event ) {
       if( is_instanceof(event,EventTurnMain) ) {
@@ -299,9 +353,9 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       }
       
       
-      if( is_instanceof(event,EventSummon) ) {
+      if( is_instanceof(event,EventSummon) && event.src == self) {
          var aquarium = event.opponent ? Opponent(controller).aquarium : controller.aquarium
-         if(  event.src == self && aquarium.size > 0 ) {
+         if( aquarium.size > 0 ) {
             do var target = aquarium.Random()
             until( target != self )
             global.effectChainRing.Add( new EventFree(self,Free,target) )
@@ -316,7 +370,8 @@ function CardSogliolaPietra(owner) : FishEffectCard(
 }
 function CardSogliolaVolante(owner) : FishEffectCard(
    "Sogliola Volante", owner, undefined, undefined, sprSogliolaVolante, 5,
-   "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte"
+   "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte",
+   CardType.SOGLIOLA_VOLANTE
 ) constructor {
    _listener = listener
    listener = function( event ) {
@@ -333,7 +388,8 @@ function CardSogliolaVolante(owner) : FishEffectCard(
 }
 function CardSogliolaSalmone(owner) : FishEffectCard(
    "SogliolaSalmone", owner, undefined, undefined, sprSogliolaSalmone, 5,
-   "Quando questa sogliola passa da un acquario alla mano, il proprietario dell'acquario pesca 2 carte"
+   "Quando questa sogliola passa da un acquario alla mano, il proprietario dell'acquario pesca 2 carte",
+   CardType.SOGLIOLA_SALMONE
 ) constructor {
    _listener = listener
    listener = function( event ) {
@@ -352,7 +408,8 @@ function CardSogliolaSalmone(owner) : FishEffectCard(
 }
 function CardFreeSogliola(owner) : ActionCard(
    "Free Sogliola", owner, undefined, undefined, sprFreeSogliola,
-   "Scegli una sogliola da un acquario e liberala nell'oceano"
+   "Scegli una sogliola da un acquario e liberala nell'oceano",
+   CardType.FREE_SOGLIOLA
 ) constructor {
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
@@ -393,7 +450,8 @@ function CardFreeSogliola(owner) : ActionCard(
 }
 function CardFurto(owner) : ActionCard(
    "Furto", owner, undefined, undefined, sprFurto,
-   "Ruba una sogliola da un acquario e aggiungila alla tua mano"
+   "Ruba una sogliola da un acquario e aggiungila alla tua mano",
+   CardType.FURTO
 ) constructor {
    target = undefined
    /* overload operatore listener di ActionCard */
@@ -437,13 +495,15 @@ function CardFurto(owner) : ActionCard(
 }
 function CardSogliolaGiullare(owner) : FishEffectCard(
    "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
-   "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato"
+   "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato",
+   CardType.SOGLIOLA_GIULLARE
 ) constructor {
    
 }
 function CardAcquarioProtetto(owner) : ActionCard(
    "Acquario Protetto", owner, undefined, undefined, sprAcquarioProtetto,
-   "I pesci nel tuo Acquario sono protetti fino al tuo prossimo turno"
+   "I pesci nel tuo Acquario sono protetti fino al tuo prossimo turno",
+   CardType.ACQUARIO_PROTETTO
 ) constructor {
    Effect = function() {
       controller.aquarium.protected = true
@@ -452,7 +512,8 @@ function CardAcquarioProtetto(owner) : ActionCard(
 
 function CardScambioEquivalente(owner) : ActionCard(
    "Scambio Equivalente", owner, undefined, undefined, sprScambioEquivalente,
-   "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario"
+   "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario",
+   CardType.SCAMBIO_EQUIVALENTE
 ) constructor {
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;

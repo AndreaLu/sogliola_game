@@ -1,42 +1,24 @@
 
-if  global.options.size > 0  && global.turnPlayer == global.player {
-   if sel_choice > global.options.size sel_choice = 0
-   if keyboard_check_pressed(vk_down)
-      sel_choice = (sel_choice + 1) % global.options.size
-   if keyboard_check_pressed(vk_up) {
-      sel_choice = sel_choice - 1
-      if sel_choice == -1 sel_choice = global.options.size-1
-   }
-   
-   var dy = 20
-   var j = 0
-   draw_rectangle_color(room_width-400-10,dy-10,room_width-20,dy-10+dy*8, c_black,c_dkgray,c_black,c_dkgray,false)
-   for(var i = max(0,sel_choice-3); i<min(max(0,sel_choice-5)+7,global.options.size); i++ ) {
-      draw_set_color( i==sel_choice ? c_fuchsia : c_white )
-      draw_text(room_width-400,dy, ((i==sel_choice) ? "> " : "  " )+  global.options.At(i)[0])
-      dy += 20
-   }
-   
-   if keyboard_check_pressed(vk_enter) {
-      var option = global.options.At(sel_choice)
-      if array_length(option) > 2
-         option[1](option[2])
-      else
-         option[1]()
-      global.choiceMade = true
-   }
+draw_set_color(c_white)
+draw_text( room_width-260, room_height-300, string( getScore(global.player) ) )
+draw_text( room_width-260, 300, string( getScore(global.opponent) ) )
+
+if global.player.aquarium.protected {
+   draw_rectangle_color(
+      0,
+      global.playerAquariumY + global.h/2 - global.h*global.aquariumScale/2,
+      global.w*global.aquariumScale*8,
+      global.playerAquariumY + global.h/2 + global.h*global.aquariumScale/2,
+      c_aqua,c_aqua,c_aqua,c_aqua, false
+   )
 }
 
-val = 0
-global.player.aquarium._cards.foreach( function(card,ctx) {
-   ctx.val += card.Val()
-},self)
-draw_set_color(c_white)
-draw_text( room_width-200, room_height-300, string(val))
-
-val = 0
-global.opponent.aquarium._cards.foreach( function(card,ctx) {
-   ctx.val += card.Val()
-},self)
-
-draw_text( room_width-200, 300, string(val))
+if global.opponent.aquarium.protected {
+   draw_rectangle_color(
+      0,
+      global.opponentAquariumY + global.h/2 - global.h*global.aquariumScale/2,
+      global.w*global.aquariumScale*8,
+      global.opponentAquariumY + global.h/2 + global.h*global.aquariumScale/2,
+      c_aqua,c_aqua,c_aqua,c_aqua, false
+   )
+}

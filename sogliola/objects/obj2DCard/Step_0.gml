@@ -1,5 +1,7 @@
 if is_undefined(card) exit
 
+
+
 var pos
 switch( card.location ) {
    case global.player.hand:
@@ -14,7 +16,7 @@ switch( card.location ) {
       pos = global.player.aquarium._cards.Index(card)
       target_scale = aquarium_scale
       target_x = w*target_scale*pos
-      target_y = room_height-h*hand_scale-20-aquarium_scale*h-30
+      target_y = global.playerAquariumY 
       target_rotz = 0
       target_rotx = 0
       break
@@ -22,7 +24,7 @@ switch( card.location ) {
       pos = global.opponent.aquarium._cards.Index(card)
       target_scale = aquarium_scale
       target_x = w*target_scale*pos
-      target_y = room_height-h*hand_scale-20-aquarium_scale*h*2-120
+      target_y = global.opponentAquariumY
       target_rotz = 180
       target_rotx = 0
       break
@@ -34,6 +36,25 @@ switch( card.location ) {
       target_rotz = 180
       target_rotx = 180
       break
+   case global.opponent.deck:
+      pos = global.opponent.deck.size-1-global.opponent.deck._cards.Index(card)
+      target_scale = aquarium_scale
+      target_x = room_width-200-pos*3
+      target_y = 200-pos
+      target_rotx = 180
+      target_rotx = 180
+      depth = -pos
+      break;
+   case global.player.deck:
+      pos = global.player.deck.size-1-global.player.deck._cards.Index(card)
+      target_scale = aquarium_scale
+      target_x = room_width-200-pos*3
+      target_y = room_height-400+pos
+      target_rotx = 180
+      target_rotx = 180
+      depth = -pos
+      break;
+      
    default:
       target_x = -w
       target_y = -h

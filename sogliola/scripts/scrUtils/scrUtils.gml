@@ -82,10 +82,119 @@ function breakpoint() {
    return
 }
 
-function getValue(player) {
-   var value = 0
+function getScore(player) {
+   var _score = 0
    for(var i=0;i<player.aquarium.size;i++ ) {
-      value += player.aquarium.At(i).Value()
+      _score += player.aquarium.At(i).Val()
    }
-   return value
+   return _score
+}
+
+
+function GameSave() {
+   var cards = []
+   for(var i=0; i<global.allCards.size; i++ ) {
+      array_push(cards,global.allCards.At(i).GetJSON())
+   }
+   var globals = [
+      global.turnPlayer == global.player ? 0 : 1,
+      global.player.aquarium.protected,
+      global.opponent.aquarium.protected,
+      global.maxFishPlayable,
+      global.fishPlayed,
+      global.onePlayerFinished
+   ]
+
+   if( file_exists("savedata") ) file_delete("savedata")
+   var file = file_text_open_write("savedata")
+   file_text_write_string(file,json_stringify([cards,globals]))
+   file_text_close(file)
+}
+
+
+function GameLoad() {
+   random_set_seed(0) // il seed non è importante, poiché non conta ciò che sarebbe
+   // successo dopo nel game da cui proviene il salvataggio, ma conta 
+   // solamente avere una continuazione sempre riproducibile dai savedata
+   var file = file_text_open_read("savedata")
+   var data = json_parse(file_text_read_string(file)) 
+   file_text_close(file)
+   var cards = data[0]
+   var globals = data[1]
+   for(var i=0;i<array_length(cards);i++) {
+      var cardJSON = cards[i]
+      var card = json_parse(cardJSON)
+      var c;
+      switch( card[0] ) {
+         case CardType.ACQUARIO_PROTETTO:
+            c = new CardAcquarioProtetto(undefined) 
+            break;
+         case CardType.FREE_SOGLIOLA:
+            c = new CardFreeSogliola(undefined)
+            break;
+         case CardType.FURTO:
+            c = new CardFurto(undefined)
+            break;
+         case CardType.PESCA:
+            c = new CardPesca(undefined)
+            break;
+         case CardType.PESCA_ABBONDANTE:
+            c = new CardPescaAbbondante(undefined)
+            break;
+         case CardType.PIOGGIA:
+            c = new CardPioggia( undefined )
+            break;
+         case CardType.RE_SOGLIOLA:
+            c = new CardReSogliola( undefined )
+            break;
+         case CardType.SCAMBIO_EQUIVALENTE:
+            c = new CardScambioEquivalente(undefined)
+            break;
+         case CardType.SOGLIOLA:
+            c = new CardSogliola( undefined )
+            break
+         case CardType.SOGLIOLA_BLOB:
+            c = new CardSogliolaBlob(undefined)
+            break;
+         case CardType.SOGLIOLA_DIAVOLO_NERO:
+            c = new CardSogliolaDiavoloNero(undefined)
+            break;
+         case CardType.SOGLIOLA_GIULLARE:
+            c = new CardSogliolaGiullare(undefined)
+            break;
+         case CardType.SOGLIOLA_PIETRA:
+            c = new CardSogliolaPietra(undefined)
+            break;
+         case CardType.SOGLIOLA_SALMONE:
+            c = new CardSogliolaSalmone(undefined)
+            break;
+         case CardType.SOGLIOLA_VOLANTE:
+            c = new CardSogliolaVolante(undefined)
+            break;
+         default:
+            show_message("tipo non trovato!")
+      }
+      c.FromJSON(cardJSON) // popola i campi
+      c.location.Add( c )
+   }
+   global.turnPlayer = globals[0] == 0 ? global.player : global.opponent
+   global.turnOpponent = Opponent(global.turnPlayer)
+   global.player.aquarium.protected = globals[1]
+   global.opponent.aquarium.protected = globals[2]
+   global.turnPassed = false
+   global.choiceMade = true
+   global.maxFishPlayable = globals[3]
+   global.fishPlayed = globals[4]
+   global.onePlayerFinished = globals[5]
+}
+
+function GameOver() {
+   var delta = getScore(global.player) - getScore(global.opponent)
+   if( delta > 0 )
+      show_message("game over: you win!")
+   else if( delta == 0 )
+      show_message("game over: draw!")
+   else
+      show_message("game over: you lose!")
+   game_end(0)
 }

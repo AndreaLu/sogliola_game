@@ -45,6 +45,7 @@
     {"id":{"name":"roomGame","path":"rooms/roomGame/roomGame.yy",},},
     {"id":{"name":"roomTest","path":"rooms/roomTest/roomTest.yy",},},
     {"id":{"name":"scrGame","path":"scripts/scrGame/scrGame.yy",},},
+    {"id":{"name":"scrGUI2D","path":"scripts/scrGUI2D/scrGUI2D.yy",},},
     {"id":{"name":"scrUtils","path":"scripts/scrUtils/scrUtils.yy",},},
     {"id":{"name":"sprAcquarioProtetto","path":"sprites/sprAcquarioProtetto/sprAcquarioProtetto.yy",},},
     {"id":{"name":"sprBack","path":"sprites/sprBack/sprBack.yy",},},
