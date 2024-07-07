@@ -1,6 +1,6 @@
 
 
-
+attesa = 0
 global.supervisor = new Supervisor()
 
 // Create the playher and opponent (and their decks)
