@@ -1,3 +1,4 @@
+
 function ds_list() constructor {
    _list = ds_list_create()
    size = 0
@@ -102,21 +103,57 @@ function GameSave() {
       global.opponent.aquarium.protected,
       global.maxFishPlayable,
       global.fishPlayed,
-      global.onePlayerFinished
+      global.onePlayerFinished,
+      global.random.value
    ]
 
-   if( file_exists("savedata") ) file_delete("savedata")
-   var file = file_text_open_write("savedata")
+   if( file_exists("savedata.json") ) file_delete("savedata.json")
+   var file = file_text_open_write("savedata.json")
    file_text_write_string(file,json_stringify([cards,globals]))
    file_text_close(file)
 }
 
-
+function Random() constructor {
+   value = 2
+   repetitions = 0
+   static GetNext = function() {
+      var newBit = (((value >> 19) ^ (value >> 18) ^ (value >> 17)  ^ (value >> 14) ) & 1)
+      value = ((value << 1) | newBit)
+      return value
+   }
+   
+   static SetSeed = function(_seed) {
+      value = _seed
+      repeat(1000) {
+         GetNext()
+      }
+   }
+   static IRandom = function(_max) {
+      var mask = power( 2, ceil(log2(_max+1)+1) ) - 1
+      var v 
+      do {
+         v = GetNext() & mask
+      }
+      until( v <= _max+1 && v > 0 )
+      return v-1
+   }
+}
+global.random = new Random()
+/*
+r = new Random()
+repeat(10) {
+   arr = array_create(10,0)
+   repeat(10000) {
+      var v = r.IRandom(9)
+      arr[v] += 1
+   }
+   show_message( arr )
+}*/
 function GameLoad() {
    random_set_seed(0) // il seed non è importante, poiché non conta ciò che sarebbe
    // successo dopo nel game da cui proviene il salvataggio, ma conta 
    // solamente avere una continuazione sempre riproducibile dai savedata
-   var file = file_text_open_read("savedata")
+   var file = file_text_open_read("savedata.json")
    var data = json_parse(file_text_read_string(file)) 
    file_text_close(file)
    var cards = data[0]
@@ -186,6 +223,7 @@ function GameLoad() {
    global.maxFishPlayable = globals[3]
    global.fishPlayed = globals[4]
    global.onePlayerFinished = globals[5]
+   global.random.value = globals[6]
 }
 
 function GameOver() {

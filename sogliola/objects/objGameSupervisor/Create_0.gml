@@ -13,11 +13,12 @@ global.onePlayerFinished = false
 
 
 
-if file_exists("savedata") && show_question("savedata exists, load it?") {
+if file_exists("savedata.json") && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false
 } else {
    randomize()
+   global.random.SetSeed(date_get_second(date_current_datetime()))
    var newCard
    repeat(1) {
       global.player.deck.Add( new CardSogliola(global.player) )

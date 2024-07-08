@@ -23,8 +23,6 @@ if( true ) { // let the user pick it
    
       if keyboard_check_pressed(vk_enter) {
          var option = global.options.At(sel_choice)
-         //objGameSupervisor.savegame.Add( sel_choice )
-         game_save("sogliola_savedata")
          if array_length(option) > 2
             option[1](option[2])
          else
