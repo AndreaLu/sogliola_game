@@ -28,12 +28,12 @@ if startTurn {
 }
 
 // Wait for a user action to be made (either from the AI or the human)
-if !global.choiceMade && (global.turnPlayer == global.opponent) {
+if !global.choiceMade { //&& (global.turnPlayer == global.opponent) {
    attesa += 1
-   if( attesa >= fps*1.2 ) {
+   if( attesa >= room_speed*5 ) {
       attesa = 0
       var choice
-      choice = global.random.IRandom(global.options.size-1)
+      choice = global.srandom.IRandom(global.options.size-1)
       var option = global.options.At(choice)
       if array_length(option) > 2
          option[1](option[2])

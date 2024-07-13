@@ -18,7 +18,7 @@ if file_exists("savedata.json") && show_question("savedata exists, load it?") {
    startTurn = false
 } else {
    randomize()
-   global.random.SetSeed(date_get_second(date_current_datetime()))
+   global.srandom.SetSeed(date_get_second(date_current_datetime()))
    var newCard
    repeat(1) {
       global.player.deck.Add( new CardSogliola(global.player) )
@@ -77,8 +77,10 @@ if file_exists("savedata.json") && show_question("savedata exists, load it?") {
    }
 
    // Determine whose turn it is, randomly
-   global.turnPlayer = global.player //choose(global.player,global.opponent)
-   global.turnOpponent = global.opponent
+   //global.turnPlayer = global.player //choose(global.player,global.opponent)
+   //global.turnOpponent = global.opponent
+   global.turnPlayer = global.opponent
+   global.turnOpponent = global.player
 
    startTurn = true
    

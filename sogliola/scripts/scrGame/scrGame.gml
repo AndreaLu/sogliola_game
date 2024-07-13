@@ -153,7 +153,13 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
    sprite = _sprite
    global.effectListeners.Add(self)
    global.allCards.Add(self)
-   guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
+   index = global.allCards.size-1
+   if( room == room2DGame ) {
+      guiCard = instance_create_layer(-1000,-1000,"Instances",obj2DCard)
+   }
+   else {
+      guiCard = instance_create_layer(0,0,"Instances",obj3DCard)
+   }
    guiCard.card = self
    
    listener = function( event ) {}

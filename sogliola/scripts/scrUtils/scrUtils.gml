@@ -104,7 +104,7 @@ function GameSave() {
       global.maxFishPlayable,
       global.fishPlayed,
       global.onePlayerFinished,
-      global.random.value
+      global.srandom.value
    ]
 
    if( file_exists("savedata.json") ) file_delete("savedata.json")
@@ -138,7 +138,7 @@ function Random() constructor {
       return v-1
    }
 }
-global.random = new Random()
+global.srandom = new Random()
 /*
 r = new Random()
 repeat(10) {
@@ -223,7 +223,7 @@ function GameLoad() {
    global.maxFishPlayable = globals[3]
    global.fishPlayed = globals[4]
    global.onePlayerFinished = globals[5]
-   global.random.value = globals[6]
+   global.srandom.value = globals[6]
 }
 
 function GameOver() {

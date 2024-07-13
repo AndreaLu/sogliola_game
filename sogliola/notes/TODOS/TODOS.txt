@@ -1,8 +1,2 @@
 - implementa controllo giullare in diavolo nero e sogliola pietra
-- aggiungi nuove carte
-- implementa funzioni custom per il random che consentano di mettere
-  nel game save non solo il seed ma anche il numero di numeri generati
-  in modo da ritornare esattamente alle stessed condizioni
-  (fai quindi anche in modo che il prng sia ripristinabile solo sapendo
-  il numero di numeri generati)
-
+- aggiungi carta medusa
