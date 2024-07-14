@@ -11,6 +11,7 @@ if async_load[?"type"] == network_type_data {
    
    switch( msg[0] ) {
       case "welcome":
+         networkSendPacket("ciao! mi chiamo Nino")
          break
 
       case "match_start":

@@ -6,7 +6,6 @@ import random
 
 clients = []
 freeClients = []
-clientWaiting = None
 addresses = {}
 
 HOST = ''
@@ -34,12 +33,9 @@ def accept_incoming_connections():
 # This thread is started whenever a client joins the server.
 # The argument is the client socket
 def handle_client(client): 
-    global clientWaiting
-
+    client.send(bytes("welcome", "utf8"))
     msg = client.recv(BUFSIZ)
     print(msg.decode("utf8"))
-
-    client.send(bytes("welcome", "utf8"))
     clients.append(client)
     freeClients.append(client)
 
