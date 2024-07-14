@@ -1,2 +1,3 @@
 - implementa controllo giullare in diavolo nero e sogliola pietra
 - aggiungi carta medusa
+- genera un seme lato server condiviso per entrambi i giocatori del match

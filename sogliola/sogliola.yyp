@@ -58,6 +58,7 @@
     {"id":{"name":"objTest","path":"objects/objTest/objTest.yy",},},
     {"id":{"name":"room2DGame","path":"rooms/room2DGame/room2DGame.yy",},},
     {"id":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
+    {"id":{"name":"roomMultiplayerWaiting","path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},},
     {"id":{"name":"roomTest","path":"rooms/roomTest/roomTest.yy",},},
     {"id":{"name":"scr3D","path":"scripts/scr3D/scr3D.yy",},},
     {"id":{"name":"scrCamera","path":"scripts/scrCamera/scrCamera.yy",},},
@@ -85,9 +86,10 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
+    {"roomId":{"name":"roomMultiplayerWaiting","path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},},
     {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
-    {"roomId":{"name":"room2DGame","path":"rooms/room2DGame/room2DGame.yy",},},
     {"roomId":{"name":"roomTest","path":"rooms/roomTest/roomTest.yy",},},
+    {"roomId":{"name":"room2DGame","path":"rooms/room2DGame/room2DGame.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

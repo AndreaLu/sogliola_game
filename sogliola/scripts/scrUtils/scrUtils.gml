@@ -236,3 +236,26 @@ function GameOver() {
       show_message("game over: you lose!")
    game_end(0)
 }
+
+function networkTypeString( _type ) {
+   switch(_type) {
+      case network_type_connect:
+         return "connect"
+      case network_type_disconnect:
+         return "disconnect"
+      case network_type_data:
+         return "data"
+      case network_type_non_blocking_connect:
+         return "nonblocking connect"
+      default:
+         return "unknown type"
+   }
+}
+
+
+function networkSendPacket( _msg ) {
+   static buffer = buffer_create(128,buffer_fixed,1)
+   buffer_seek(buffer,0,buffer_seek_start)
+   buffer_write(buffer,buffer_string,_msg)
+   network_send_raw(global.client,buffer,string_length(_msg)+1)
+}

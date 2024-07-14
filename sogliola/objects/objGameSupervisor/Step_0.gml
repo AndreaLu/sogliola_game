@@ -1,4 +1,4 @@
-
+if( room != room2DGame && room != room3DGame ) exit
 if startTurn {
    startTurn = false
    // Inizializza tutto per questo turno
@@ -27,25 +27,34 @@ if startTurn {
    }
 }
 
-// Wait for a user action to be made (either from the AI or the human)
-if !global.choiceMade { //&& (global.turnPlayer == global.opponent) {
-   attesa += 1
-   if( attesa >= room_speed*5 ) {
-      attesa = 0
-      var choice
-      choice = global.srandom.IRandom(global.options.size-1)
-      var option = global.options.At(choice)
-      if array_length(option) > 2
-         option[1](option[2])
-      else
-         option[1]()
-      global.choiceMade = true
+// Opponent turn
+if !global.choiceMade && (global.turnPlayer == global.opponent) {
+
+   if !global.multiplayer {
+      // AI turn
+      attesa += 1
+      if( attesa >= room_speed*5 ) {
+         attesa = 0
+         var choice
+         choice = global.srandom.IRandom(global.options.size-1)
+         var option = global.options.At(choice)
+         if array_length(option) > 2
+            option[1](option[2])
+         else
+            option[1]()
+         global.choiceMade = true
+      }
+   } else {
+      // Online multiplayer.. 
+      // the choice will come from the async event
    }
 }
+
+
 if global.choiceMade {
    global.choiceMade = false
    GameSave()
-   if ! global.turnPassed {
+   if !global.turnPassed {
       // Verify game end condition
       if( global.turnPlayer.aquarium.size >= 8 || global.turnOpponent.aquarium.size >= 8 ) {
          GameOver()
@@ -61,3 +70,4 @@ if global.choiceMade {
       startTurn = true
    }
 }
+

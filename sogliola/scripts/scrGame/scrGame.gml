@@ -1,3 +1,4 @@
+multiplayer = true
 allCards = new ds_list() // tutte le carte esistenti si inseriscono automaticamente in questa lista
 
 effectListeners = new ds_list()

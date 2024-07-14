@@ -25,6 +25,7 @@
     {"name":"objTest","order":1,"path":"objects/objTest/objTest.yy",},
     {"name":"room2DGame","order":1,"path":"rooms/room2DGame/room2DGame.yy",},
     {"name":"room3DGame","order":2,"path":"rooms/room3DGame/room3DGame.yy",},
+    {"name":"roomMultiplayerWaiting","order":3,"path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},
     {"name":"scr3D","order":3,"path":"scripts/scr3D/scr3D.yy",},
     {"name":"scrCamera","order":4,"path":"scripts/scrCamera/scrCamera.yy",},
     {"name":"scrGame","order":1,"path":"scripts/scrGame/scrGame.yy",},

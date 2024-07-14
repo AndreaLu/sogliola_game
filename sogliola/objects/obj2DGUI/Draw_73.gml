@@ -28,6 +28,11 @@ if( true ) { // let the user pick it
          else
             option[1]()
          global.choiceMade = true
+         if global.multiplayer {
+            // Send the message!
+            networkSendPacket("move,"+string(sel_choice))
+
+         }
       }
    }
 }
