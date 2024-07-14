@@ -39,6 +39,10 @@ file_text_close(file)
 
 lightDir = [0,0,0]
 
+bgr = color_get_red(c_dkgrey)/255
+bgg = color_get_green(c_dkgrey)/255
+bgb = color_get_blue(c_dkgrey)/255
+
 
 // Initialize 3D
 gpu_set_zwriteenable(true)
