@@ -37,13 +37,15 @@
     {"$GMIncludedFile":"","%Name":"card.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"card.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"converter.py","CopyToMask":-1,"filePath":"datafiles/graphics","name":"converter.py","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.blend","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"scene.blend1","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend1","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"scene.obj.3dc","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj.3dc","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.6.1.160",
+    "IDEVersion":"2024.6.0.157",
   },
   "name":"sogliola",
   "resources":[
