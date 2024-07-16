@@ -18,8 +18,10 @@ void main()
     float waveSpeed = 2.0;                   // Adjust for wave speed
 
     float wave = sin(in_Position.x * waveFrequency + u_Time * waveSpeed) * waveAmplitude;
+	float waveX = cos(in_Position.y * waveFrequency + u_Time * waveSpeed) * waveAmplitude;
 
-    vec4 object_space_pos = vec4(in_Position.x, in_Position.y, in_Position.z + wave, 1.0);
+
+    vec4 object_space_pos = vec4(in_Position.x, in_Position.y+waveX, in_Position.z + wave, 1.0);
     gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * object_space_pos;
     v_vTexcoord = in_TextureCoord;
     v_vColour = in_Colour;
