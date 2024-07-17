@@ -32,6 +32,7 @@
     {"name":"scrGUI2D","order":2,"path":"scripts/scrGUI2D/scrGUI2D.yy",},
     {"name":"sha_old","order":1,"path":"shaders/sha_old/sha_old.yy",},
     {"name":"shaOcean","order":2,"path":"shaders/shaOcean/shaOcean.yy",},
+    {"name":"shaTableWater","order":3,"path":"shaders/shaTableWater/shaTableWater.yy",},
     {"name":"sprAcquarioProtetto","order":14,"path":"sprites/sprAcquarioProtetto/sprAcquarioProtetto.yy",},
     {"name":"sprBack","order":16,"path":"sprites/sprBack/sprBack.yy",},
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
@@ -50,5 +51,6 @@
     {"name":"sprSogliolaPietra","order":7,"path":"sprites/sprSogliolaPietra/sprSogliolaPietra.yy",},
     {"name":"sprSogliolaSalmone","order":9,"path":"sprites/sprSogliolaSalmone/sprSogliolaSalmone.yy",},
     {"name":"sprSogliolaVolante","order":2,"path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},
+    {"name":"sprTable","order":20,"path":"sprites/sprTable/sprTable.yy",},
   ],
 }

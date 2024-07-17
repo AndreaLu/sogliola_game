@@ -60,6 +60,7 @@ scene = mesh3DGLoad("./graphics/scene.obj.3dg")
 ocean = mesh3DGLoad("./graphics/ocean.obj.3dg")
 table = mesh3DGLoad("./graphics/table.obj.3dg")
 cat = mesh3DGLoad("./graphics/cat.obj.3dg")
+tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 
 initialized = false
 idx = 1000

@@ -22,7 +22,7 @@ matrix_set(matrix_world,matBuild([0,0,bobbing],[0,0,0],[1,1,1]))
 vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
-vertex_submit(table,pr_trianglelist,-1);
+vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
 
 with( obj3DCard ) {
    if !is_undefined(card) {
@@ -37,6 +37,10 @@ matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 shader_set(shaOcean);
 shader_set_uniform_f(shader_get_uniform(shaOcean, "u_Time"), current_time / 1000.0);
 vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprOcean,0));
+
+shader_set(shaTableWater);
+shader_set_uniform_f(shader_get_uniform(shaTableWater, "u_Time"), current_time / 1000.0);
+vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprOcean,0));
 
 
 shader_reset()
