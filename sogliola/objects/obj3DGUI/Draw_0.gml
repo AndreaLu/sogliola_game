@@ -17,9 +17,11 @@ shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
 
 
 shader_set_uniform_f_array(shader_get_uniform(sha,"cardCol"),[bgr,bgg,bgb]);
+var bobbing = sin(current_time/600)*0.05;
+matrix_set(matrix_world,matBuild([0,0,bobbing],[0,0,0],[1,1,1]))
+vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
-vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 vertex_submit(table,pr_trianglelist,-1);
 
 with( obj3DCard ) {
