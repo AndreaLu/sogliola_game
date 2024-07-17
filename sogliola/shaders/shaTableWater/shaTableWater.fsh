@@ -18,10 +18,10 @@ void main()
 	uv.x += wave1 - wave2;
 	vec4 baseColor = texture2D(gm_BaseTexture, fract(uv));
 	float luminance = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
-	float alpha = 0.5;
+	float alpha = 0.4;
 	if (luminance > 0.7)
 	{
-		alpha = 0.8;
+		alpha = 0.75;
 	}
 	if (luminance > 0.9)
 	{
