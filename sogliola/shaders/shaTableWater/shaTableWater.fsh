@@ -18,14 +18,14 @@ void main()
 	uv.x += wave1 - wave2;
 	vec4 baseColor = texture2D(gm_BaseTexture, fract(uv));
 	float luminance = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
-	float alpha = 0.4;
+	float alpha = 0.2;
 	if (luminance > 0.7)
 	{
-		alpha = 0.75;
+		alpha = 0.6;
 	}
 	if (luminance > 0.9)
 	{
-		alpha = 0.9;
+		alpha = 0.8;
 	}
 	gl_FragColor = v_vColour * vec4(baseColor.xyz, alpha);
 }
