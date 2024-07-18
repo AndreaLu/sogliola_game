@@ -50,13 +50,18 @@ gpu_set_ztestenable(true)
 view_enabled = true
 view_set_visible(0,true)
 var camera = camera_create()
-var projMat = matrix_build_projection_perspective_fov(-60,view_get_wport(0)/view_get_hport(0), 0.001, 1000);
+var projMat = matrix_build_projection_perspective_fov(-60,view_get_wport(0)/view_get_hport(0), 100, 10000);
 camera_set_proj_mat(camera,projMat)
 view_set_camera(0,camera)
 camera_set_update_script(view_camera[0], freeCamera);
 gpu_set_cullmode(cull_clockwise)
 
 scene = mesh3DGLoad("./graphics/scene.obj.3dg")
+ocean = mesh3DGLoad("./graphics/ocean.obj.3dg")
+table = mesh3DGLoad("./graphics/table.obj.3dg")
+cat = mesh3DGLoad("./graphics/cat.obj.3dg")
+tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
+
 initialized = false
 idx = 1000
 sf = -1

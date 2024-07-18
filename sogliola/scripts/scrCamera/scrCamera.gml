@@ -122,7 +122,7 @@ function loadBlenderCamera() {
    var vw  = file_text_read_real(file)
    var vh  = file_text_read_real(file)
    fov *= (vh/vw)
-   var projMat = matrix_build_projection_perspective_fov(fov,vw/vh, 0.001, 1000);
+   var projMat = matrix_build_projection_perspective_fov(fov,vw/vh, 0.1, 100);
    camera_set_proj_mat(view_camera[0],projMat)
    file_text_close(file)
 

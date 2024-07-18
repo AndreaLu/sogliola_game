@@ -9,3 +9,5 @@ targetPos = [0,0,0]
 targetRot= [0,0,0]
 targetScal = [1,1,1]
 zero3=[0,0,0]
+
+randomrot = random_range(-5,5);

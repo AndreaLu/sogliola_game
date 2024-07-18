@@ -36,13 +36,13 @@ switch( card.location ) {
       pos = global.opponent.deck.size-1-global.opponent.deck._cards.Index(card)
       targetScal = obj3DGUI.TargetDkOpScal
       v3SumIP([0,0,0.02*pos],obj3DGUI.TargetDkOpPos,targetPos)
-      v3SumIP([180,0,0],obj3DGUI.TargetDkOpRot,targetRot)
+      v3SumIP([180,0,randomrot],obj3DGUI.TargetDkOpRot,targetRot)
       break;
    case global.player.deck:
       pos = global.player.deck.size-1-global.player.deck._cards.Index(card)
       targetScal = obj3DGUI.TargetDkPlScal
       v3SumIP([0,0,0.02*pos],obj3DGUI.TargetDkPlPos,targetPos)
-      v3SumIP([180,0,0],obj3DGUI.TargetDkPlRot,targetRot)
+      v3SumIP([180,0,randomrot],obj3DGUI.TargetDkPlRot,targetRot)
       break;
    case global.ocean:
       pos = global.ocean.size-1-global.ocean._cards.Index(card)
