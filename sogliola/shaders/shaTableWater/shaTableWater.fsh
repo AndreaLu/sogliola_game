@@ -1,31 +1,32 @@
-//
-// Simple passthrough fragment shader
-//
-varying vec2 v_vTexcoord;
-varying vec4 v_vColour;
-uniform float u_Time;
+uniform float u_Time; 
+varying vec2 fragCoord; 
+#define TAU 6.28318530718
+#define MAX_ITER 5
 
-void main()
+void main(void) 
 {
-	// Repeating the texture coordinates
-    vec2 uv = mod(v_vTexcoord * 1.0, 1.0); // Adjust the 4.0 to control the repetition frequency
-     // Adding wave effect
-    
-	float wave1 = sin((uv.x + u_Time) * 1.0) * 0.05; // Wave 1
-    float wave2 = sin((uv.x * 2.0 + u_Time * 0.5) * 3.0) * 0.03; // Wave 2 with different frequency and amplitude
-    
-	uv.y += wave1 + wave2;
-	uv.x += wave1 - wave2;
-	vec4 baseColor = texture2D(gm_BaseTexture, fract(uv));
-	float luminance = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
-	float alpha = 0.2;
-	if (luminance > 0.7)
-	{
-		alpha = 0.6;
-	}
-	if (luminance > 0.9)
-	{
-		alpha = 0.8;
-	}
-	gl_FragColor = v_vColour * vec4(baseColor.xyz, alpha);
+    float time = u_Time * 0.5 + 23.0;
+    vec2 uv = fragCoord.xy / vec2(6).xy;
+
+    // Apply pixelation effect
+    uv = floor(uv * 48.0) / 48.0;
+
+    vec2 p = mod(uv * TAU, TAU) - 250.0;
+
+    vec2 i = vec2(p);
+    float c = 1.0;
+    float inten = 0.005;
+
+    for (int n = 0; n < MAX_ITER; n++) 
+    {
+        float t = time * (1.0 - (3.5 / float(n + 1)));
+        i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+        c += 1.0 / length(vec2(p.x / (sin(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
+    }
+    c /= float(MAX_ITER);
+    c = 1.17 - pow(abs(c), 1.4);
+    vec3 colour = vec3(pow(abs(c), 8.0));
+    colour = clamp(colour + vec3(0.0, 0.35, 0.5), 0.0, 1.0);
+
+    gl_FragColor = vec4(colour, 0.3 + colour.r * colour.r * 0.7);
 }
