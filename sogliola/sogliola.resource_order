@@ -36,6 +36,7 @@
     {"name":"sprAcquarioProtetto","order":14,"path":"sprites/sprAcquarioProtetto/sprAcquarioProtetto.yy",},
     {"name":"sprBack","order":16,"path":"sprites/sprBack/sprBack.yy",},
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
+    {"name":"sprCursor","order":21,"path":"sprites/sprCursor/sprCursor.yy",},
     {"name":"sprFreeSogliola","order":10,"path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},
     {"name":"sprFurto","order":12,"path":"sprites/sprFurto/sprFurto.yy",},
     {"name":"sprOcean","order":19,"path":"sprites/sprOcean/sprOcean.yy",},

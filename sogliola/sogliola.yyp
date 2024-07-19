@@ -91,6 +91,7 @@
     {"id":{"name":"sprAcquarioProtetto","path":"sprites/sprAcquarioProtetto/sprAcquarioProtetto.yy",},},
     {"id":{"name":"sprBack","path":"sprites/sprBack/sprBack.yy",},},
     {"id":{"name":"sprCat","path":"sprites/sprCat/sprCat.yy",},},
+    {"id":{"name":"sprCursor","path":"sprites/sprCursor/sprCursor.yy",},},
     {"id":{"name":"sprFreeSogliola","path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},},
     {"id":{"name":"sprFurto","path":"sprites/sprFurto/sprFurto.yy",},},
     {"id":{"name":"sprOcean","path":"sprites/sprOcean/sprOcean.yy",},},

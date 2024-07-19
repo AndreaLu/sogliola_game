@@ -65,3 +65,5 @@ tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 initialized = false
 idx = 1000
 sf = -1
+
+window_set_cursor(cr_none);

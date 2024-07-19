@@ -16,4 +16,12 @@ if( idx >= 0 && idx < global.allCards.size ) {
    else
       draw_sprite_ext(sprBack,0,w/2*scale,h/2*scale, scale, scale, 0, c_white, 1);
 }
+
+var cursor = 0;
+if (mouse_check_button(mb_any)){
+	cursor=1
+}
+draw_sprite_ext(sprCursor,cursor,window_mouse_get_x(),window_mouse_get_y(), 2,2, 0, c_white, 1)
+
 gpu_set_cullmode(cull_clockwise)
+
