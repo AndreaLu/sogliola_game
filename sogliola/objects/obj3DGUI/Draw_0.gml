@@ -35,8 +35,11 @@ with( obj3DCard ) {
 
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 shader_set(shaOcean);
+var sMask = shader_get_sampler_index(shaOcean, "t_Mask");
+texture_set_stage(sMask, sprite_get_texture(sprWaterMask, 0));
 shader_set_uniform_f(shader_get_uniform(shaOcean, "u_Time"), current_time / 1000.0);
-vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprOcean,0));
+shader_set_uniform_f(shader_get_uniform(shaOcean, "v_Time"), current_time / 1000.0);
+vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprWater,0));
 
 //shader_set(shaTableWater);
 //shader_set_uniform_f(shader_get_uniform(shaTableWater, "u_Time"), current_time / 1000.0);
