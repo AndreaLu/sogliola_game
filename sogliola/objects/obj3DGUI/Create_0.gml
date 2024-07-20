@@ -83,3 +83,4 @@ if global.debugMode {
 // array che viene costruito durante l'interazione con l'utente
 // il primo elemento sarà la carta che si sta attivando/evocando
 global.pickingTarget = undefined
+window_set_cursor(cr_none);

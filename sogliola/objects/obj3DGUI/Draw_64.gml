@@ -209,6 +209,11 @@ if watching && keyboard_check_pressed( ord("S")) {
    )
 }
 
+var cursor = 0;
+if (mouse_check_button(mb_any)){
+	cursor=1
+}
+draw_sprite_ext(sprCursor,cursor,window_mouse_get_x(),window_mouse_get_y(), 2,2, 0, c_white, 1)
 
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)

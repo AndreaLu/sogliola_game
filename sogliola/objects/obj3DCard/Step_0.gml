@@ -1,6 +1,9 @@
 if is_undefined(card) exit
 
+var bobbing = 0.1+sin(current_time/1000)*0.1;
+var xbobbing = cos(randomrot*10+current_time/1000*0.5)*0.1;
 
+var pos
 switch( card.location ) {
 
    /* HAND */
@@ -38,8 +41,8 @@ switch( card.location ) {
       pos = global.player.aquarium._cards.Index(card)
       offs = pos-global.player.aquarium.size/2
       v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
-      v3SumIP([offs,0,0],obj3DGUI.TargetAqPlPos,targetPos)
-      v3SumIP(zero3,obj3DGUI.TargetAqPlRot,targetRot)
+      v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqPlPos,targetPos)
+      v3SumIP([0,0,xbobbing*30],obj3DGUI.TargetAqPlRot,targetRot)
       break
    case global.opponent.aquarium:
       pos = global.opponent.aquarium._cards.Index(card)
