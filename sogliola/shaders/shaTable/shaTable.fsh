@@ -23,6 +23,7 @@ void main()
 	vec4 base_color2 = texture2D(t_Mask, fract(uv*3.0));
 	vec4 base_mask = texture2D(t_Mask, fract(v_vTexcoord*2.0)) * base_color2.x;
 
-    gl_FragColor = vec4(base_color.xyz + base_mask.xyz + alpha_tex.r, 0.4 + base_mask.x + alpha_tex.r);
+    gl_FragData[0] = vec4(base_color.xyz + base_mask.xyz + alpha_tex.r, 0.4 + base_mask.x + alpha_tex.r);
+    gl_FragData[1] = vec4(0.0,0.0, v_vTexcoord.y < 0.5 ? 0.5 : 1.0 , 1.0);
 
 }

@@ -30,6 +30,9 @@ switch( card.location ) {
    case global.opponent.hand:
       pos = global.opponent.hand._cards.Index(card)
       offs = pos-global.opponent.hand.size/2
+      if( frac(global.player.hand.size/2) == 0 ) {
+         offs -= 0.5
+      }
       v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
       v3SumIP([0.3*offs,0.1*offs,0],obj3DGUI.TargetHndOpPos,targetPos)
       v3SumIP([0,offs,0],obj3DGUI.TargetHndOpRot,targetRot)
@@ -39,14 +42,14 @@ switch( card.location ) {
    /* AQUARIUM */
    case global.player.aquarium:
       pos = global.player.aquarium._cards.Index(card)
-      offs = pos-global.player.aquarium.size/2
+      offs = pos-global.player.aquarium.size/2+0.5
       v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
       v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqPlPos,targetPos)
       v3SumIP([0,0,xbobbing*30],obj3DGUI.TargetAqPlRot,targetRot)
       break
    case global.opponent.aquarium:
       pos = global.opponent.aquarium._cards.Index(card)
-      offs = pos-global.opponent.aquarium.size/2
+      offs = pos-global.opponent.aquarium.size/2+0.5
       v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
       v3SumIP([offs,0,0],obj3DGUI.TargetAqOpPos,targetPos)
       v3SumIP(zero3,obj3DGUI.TargetAqOpRot,targetRot)
