@@ -50,9 +50,10 @@ if( !is_undefined(objectHover) ) {
             new StackMoveCamera(
                global.Blender.CamAq.From,
                global.Blender.CamAq.To,
-               0.3, function() { global.pickingTarget = [card] }
+               0.3, undefined
             )
-         } 
+            global.pickingTarget = [card]
+         }
          if( array_length(options) == 1) {
             // Esegui la mossa, l'unica possibile
             var option = options[0]
@@ -69,7 +70,6 @@ if( !is_undefined(objectHover) ) {
       }
       // Secondo click in poi, su carte
       if !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
-         
          // Trova tutte le mosse restanti che hanno come target tutti gli elementi attualmente
          // presenti in pickingTarget, oltre alla carta attuale
          options = global.options.FilterAll( function(option,args) {
