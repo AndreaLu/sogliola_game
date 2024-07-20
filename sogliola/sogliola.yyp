@@ -112,6 +112,7 @@
     {"id":{"name":"sprSogliolaVolante","path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},},
     {"id":{"name":"sprTable","path":"sprites/sprTable/sprTable.yy",},},
     {"id":{"name":"sprWater","path":"sprites/sprWater/sprWater.yy",},},
+    {"id":{"name":"sprWaterMask","path":"sprites/sprWaterMask/sprWaterMask.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

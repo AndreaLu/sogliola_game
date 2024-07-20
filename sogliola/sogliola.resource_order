@@ -56,5 +56,6 @@
     {"name":"sprSogliolaVolante","order":2,"path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},
     {"name":"sprTable","order":20,"path":"sprites/sprTable/sprTable.yy",},
     {"name":"sprWater","order":23,"path":"sprites/sprWater/sprWater.yy",},
+    {"name":"sprWaterMask","order":24,"path":"sprites/sprWaterMask/sprWaterMask.yy",},
   ],
 }
