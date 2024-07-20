@@ -58,7 +58,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
    if !global.multiplayer {
       // AI turn
       attesa += 1
-      if( attesa >= 1 ) {
+      if( attesa >= room_speed*0.5 ) {
       
          attesa = 0
          var choice

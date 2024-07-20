@@ -54,6 +54,8 @@ table = mesh3DGLoad("./graphics/table.obj.3dg")
 cat = mesh3DGLoad("./graphics/cat.obj.3dg")
 tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 
+
+watching = false
 initialized = false
 objectHover = undefined
 sf = -1

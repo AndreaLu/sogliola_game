@@ -3,6 +3,8 @@ ENGINE:
 - rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
 - aggiungi carta medusa
 - non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
+- interazione 3D: permetti di tornare indietro durante un cardpicking
+- se c'è una sola opzione, fai comunque scegliere all'utente (senza attivazione automatica)
 
 NETWORKING: 
 - genera un seme lato server condiviso per entrambi i giocatori del match

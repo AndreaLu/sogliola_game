@@ -34,15 +34,13 @@ if( !is_undefined(objectHover) ) {
       }
 
       // Mossa ------------------------------------------------------------------------
-      if card.name == "Furto" && mouse_check_button_pressed(mb_left) && card.location == global.player.hand
-         breakpoint()
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
       },[card])
       porcodio = options
       // Primo click
-      if !global.zooming && mouse_check_button_pressed(mb_left) && is_undefined(global.pickingTarget) {
+      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && is_undefined(global.pickingTarget) {
 
          if( array_length(options) > 1) {
 
@@ -69,7 +67,7 @@ if( !is_undefined(objectHover) ) {
          }
       }
       // Secondo click in poi, su carte
-      if !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
+      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
          // Trova tutte le mosse restanti che hanno come target tutti gli elementi attualmente
          // presenti in pickingTarget, oltre alla carta attuale
          options = global.options.FilterAll( function(option,args) {
@@ -192,6 +190,24 @@ global.options.foreach( function(option,ctx) {
    draw_text(100,ctx.drawY,option[0])
    ctx.drawY += 20
 },self)
+
+
+if keyboard_check_pressed( ord("W")) && global.turnPlayer == global.player {
+   watching = true
+   new StackMoveCamera(
+      global.Blender.CamAq.From,
+      global.Blender.CamAq.To,
+      0.3, undefined
+   )
+}
+
+if watching && keyboard_check_pressed( ord("S")) {
+   new StackMoveCamera(
+      global.Blender.CamHand.From,
+      global.Blender.CamHand.To,
+      0.3, function() {obj3DGUI.watching = false}
+   )
+}
 
 
 // restore culling for next 3d rendering
