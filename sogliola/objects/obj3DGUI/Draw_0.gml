@@ -38,10 +38,14 @@ shader_set(shaOcean);
 shader_set_uniform_f(shader_get_uniform(shaOcean, "u_Time"), current_time / 1000.0);
 vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprOcean,0));
 
-shader_set(shaTableWater);
-shader_set_uniform_f(shader_get_uniform(shaTableWater, "u_Time"), current_time / 1000.0);
+//shader_set(shaTableWater);
+//shader_set_uniform_f(shader_get_uniform(shaTableWater, "u_Time"), current_time / 1000.0);
+//vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprOcean,0));
+shader_set(shaTest);
+var sAlpha = shader_get_sampler_index(shaTest, "t_Alpha");
+texture_set_stage(sAlpha, sprite_get_texture(sprAlpha, 0));
+shader_set_uniform_f(shader_get_uniform(shaTest, "u_Time"), current_time / 1000.0);
 vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprOcean,0));
-
 
 shader_reset()
 matrix_set(matrix_world,matrix_build_identity())
