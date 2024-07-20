@@ -22,7 +22,7 @@ cardZoom = false
 // this function is called by obj3DGUI whenever the cursor is over a card
 // in the player hand
 setMouseHover = function() {
-   if mouseHover || global.hovering return;
+   if mouseHover || global.hovering || global.zooming return;
    global.hovering = true
    mouseHover = true
    time_source_start(
@@ -60,7 +60,7 @@ setZoom = function() {
    v3LC2IP(
       camTo,
       global.Blender.HndPl.Transform.k,
-      1,8,
+      1,3.5,
       camFrom
    )
    

@@ -91,6 +91,19 @@ function ds_list() constructor {
       }
       return undefined;
    }
+   
+   static FilterAll = function( check, args ) {
+      var arr = []
+      var j = 0
+      for( var i=0; i<size;i++) {
+         var c = _list[|i]
+         if check(c,args) {
+            arr[@j] = c
+            j+=1
+         }
+      }
+      return arr;
+   }
 }
 
 

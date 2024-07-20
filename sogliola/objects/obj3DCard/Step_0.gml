@@ -91,7 +91,7 @@ if !cardZoom && mouseHover && global.hoverTarget != card {
 }
 
 if cardZoom {
-   
+
    if mouse_check_button_pressed(mb_right) {
       cardZoom = false
       new StackMoveCamera(
@@ -100,5 +100,5 @@ if cardZoom {
          0.3,function () { global.zooming = false }
       )
    }
-   
+
 }

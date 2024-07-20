@@ -76,3 +76,5 @@ if global.debugMode {
    // Start the Blender server
    blenderServer = network_create_server_raw(network_socket_tcp, 2233, 1);
 }
+
+global.pickingTarget = undefined
