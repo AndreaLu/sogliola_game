@@ -6,6 +6,7 @@ if gameInitialized || (room != room2DGame && room != room3DGame )
 gameInitialized = true
 
 
+var seed = 8
 if !global.multiplayer && file_exists("savedata.json") && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false
@@ -14,16 +15,20 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
    if global.multiplayer {
       // TODO: genera un seme lato server condiviso per entrambi i giocatori
       // del match
-      random_set_seed(42)
+      random_set_seed(seed)
    } else {
-      randomize()
-      show_message(random_get_seed())
+      //randomize()
+      random_set_seed(seed)
    }
-   global.srandom.SetSeed(date_get_second(date_current_datetime()))
    
+   //global.srandom.SetSeed(date_get_second(date_current_datetime()))
+   global.srandom.SetSeed(seed)    
    
    var newCard
    repeat(1) {
+      global.player.deck.Add( new CardFreeSogliola(global.player) )
+      global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
+      
       global.player.deck.Add( new CardSogliola(global.player) )
       global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
@@ -51,8 +56,7 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
       global.player.deck.Add( new CardSogliolaSalmone(global.player) )
       global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
    
-      global.player.deck.Add( new CardFreeSogliola(global.player) )
-      global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
+      
    
       global.player.deck.Add( new CardPescaAbbondante(global.player) )
       global.opponent.deck.Add( new CardPescaAbbondante(global.opponent) )
@@ -68,7 +72,10 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
    
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
       global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )
+      
+     
    }
+   //repeat(100) global.player.deck.Add( new CardScambioEquivalente(global.player) )
 
    
 
@@ -95,13 +102,15 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
    }
    
    global.turnPlayer.deck.Shuffle()
-   global.turnOpponent.deck.Shuffle()
-
+   //global.turnOpponent.deck.Shuffle()
+   
+   
    // Draw 4 cards
    repeat(4) {
       global.turnPlayer.Draw()
       global.turnOpponent.Draw()
    }
+   
 
    startTurn = true
 }

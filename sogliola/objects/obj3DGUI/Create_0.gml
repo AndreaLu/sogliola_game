@@ -55,7 +55,7 @@ cat = mesh3DGLoad("./graphics/cat.obj.3dg")
 tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 
 initialized = false
-idx = 1000
+objectHover = undefined
 sf = -1
    var fov = global.Blender.CamHand.FovY
    camera_set_proj_mat(
@@ -77,4 +77,7 @@ if global.debugMode {
    blenderServer = network_create_server_raw(network_socket_tcp, 2233, 1);
 }
 
+
+// array che viene costruito durante l'interazione con l'utente
+// il primo elemento sarà la carta che si sta attivando/evocando
 global.pickingTarget = undefined

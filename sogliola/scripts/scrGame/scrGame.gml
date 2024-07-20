@@ -16,7 +16,9 @@ effectChainRing = new ds_list()  // list of effects that triggered simultaneousl
 // src: card struct that added this move. can be undefiend
 // args: arguments (can be an array) that will be given to the callback
 // can be absent or even undefined. in both cases it will not be passed to the
-// callback
+// callback. Generally (always?) this is used for the targets of an effect
+// the card effect is put in the callback and the targets of the effect
+// are passed as the array
 options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
@@ -309,9 +311,9 @@ function CardSogliolaBlob(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon,self] )
+               global.options.Add( ["Summon "+name,Summon,self,global.player.aquarium] )
             if global.turnOpponent.aquarium.size < 8
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent, self])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,global.opponent.aquarium])
          }
       }
    }
@@ -364,9 +366,9 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon,self] )
+               global.options.Add( ["Summon "+name,Summon,self,global.player.aquarium] )
             if global.turnOpponent.aquarium.size < 8 && !global.turnOpponent.aquarium.protected
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self ])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,global.opponent.aquarium])
          }
       }
       
@@ -476,7 +478,9 @@ function CardFurto(owner) : ActionCard(
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
+      
       if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      
       
       // Check if Sogliola Giullare is in the Aquarium
       var giullare = controller.aquarium._cards.Filter(
@@ -527,7 +531,6 @@ function CardAcquarioProtetto(owner) : ActionCard(
       controller.aquarium.protected = true
    }
 }
-
 function CardScambioEquivalente(owner) : ActionCard(
    "Scambio Equivalente", owner, undefined, undefined, sprScambioEquivalente,
    "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario",
@@ -536,6 +539,8 @@ function CardScambioEquivalente(owner) : ActionCard(
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
+      if( controller == global.player )
+         show_debug_message("lol")
       var opp = Opponent(controller)
       if( opp.aquarium.size == 0 || controller.aquarium.size == 0 || opp.aquarium.protected ) return;
       controller.aquarium._cards.foreach( function(card,ctx) {

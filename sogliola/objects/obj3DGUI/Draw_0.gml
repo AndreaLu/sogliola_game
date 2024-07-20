@@ -26,7 +26,7 @@ vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
 
 with( obj3DCard ) {
    if !is_undefined(card) {
-      shader_set_uniform_f_array(shader_get_uniform(sha,"cardCol"),[card.index/255,0,0]);
+      shader_set_uniform_f_array(shader_get_uniform(sha,"cardCol"),[(card.index+1)/255,0,0]);
       matrix_set(matrix_world,matBuild(position,rot,scale))
       vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));

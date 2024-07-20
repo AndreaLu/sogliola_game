@@ -15,78 +15,146 @@ var w = sprite_get_width(sprBack)
 var h = sprite_get_height(sprBack)
 
 
-// Draw the preview of the card
+// +==================================================================================+
+// | Interazione con il player                                                        |
+// +==================================================================================+
 global.hoverTarget = undefined
-if( idx >= 0 && idx < global.allCards.size ) {
-   card = global.allCards.At(idx)
+if( !is_undefined(objectHover) ) {
    
-   global.hoverTarget = card
-   if ( card.location == global.player.hand ) {
-      card.guiCard.setMouseHover()
-      if mouse_check_button_pressed(mb_right) {
-         card.guiCard.setZoom()
-      }
-   }
-   
-   
-   // Raccogli tutte le mosse disponibili per questa carta
-   var options = global.options.FilterAll(function(option,args) {
-      var card = args[0]
-      return (option[2] == card)
-   },[card])
+   if is_instanceof( objectHover, Card ) {
+      card = objectHover
+      global.hoverTarget = card
       
+      // Zoom della carta in mano -----------------------------------------------------
+      if ( card.location == global.player.hand ) {
+         card.guiCard.setMouseHover()
+         if mouse_check_button_pressed(mb_right) {
+            card.guiCard.setZoom()
+         }
+      }
 
-   if !global.zooming && mouse_check_button_pressed(mb_left) && is_undefined(global.pickingTarget) {
+      // Mossa ------------------------------------------------------------------------
+      if card.name == "Furto" && mouse_check_button_pressed(mb_left) && card.location == global.player.hand
+         breakpoint()
+      var options = global.options.FilterAll(function(option,args) {
+         var card = args[0]
+         return (option[2] == card)
+      },[card])
+      porcodio = options
+      // Primo click
+      if !global.zooming && mouse_check_button_pressed(mb_left) && is_undefined(global.pickingTarget) {
 
-      if( array_length(options) > 1) {
+         if( array_length(options) > 1) {
+
+            // Zoom nell'acquario, bisogna scegliere il target
+            new StackMoveCamera(
+               global.Blender.CamAq.From,
+               global.Blender.CamAq.To,
+               0.3, function() { global.pickingTarget = [card] }
+            )
+         } 
+         if( array_length(options) == 1) {
+            // Esegui la mossa, l'unica possibile
+            var option = options[0]
+            if( array_length(option) > 3 && (!is_undefined(option[3])) )
+               option[1](option[3])
+            else
+               option[1]()
+            global.choiceMade = true
+            if global.multiplayer {
+               // Send the message!
+               networkSendPacket("move,"+string(sel_choice))
+            }
+         }
+      }
+      // Secondo click in poi, su carte
+      if !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
          
-         // Zoom nell'acquario, bisogna scegliere il target
-         new StackMoveCamera(
-            global.Blender.CamAq.From,
-            global.Blender.CamAq.To,
-            0.3, function() { global.pickingTarget = card }
-         )
-            
-            
-      } 
-      if( array_length(options) == 1) {
-         // Esegui la mossa, l'unica possibile
-         var option = options[0]
-         if( array_length(option) > 3 && (!is_undefined(option[3])) )
-            option[1](option[3])
-         else
-            option[1]()
-         global.choiceMade = true
-         if global.multiplayer {
-            // Send the message!
-            networkSendPacket("move,"+string(sel_choice))
+         // Trova tutte le mosse restanti che hanno come target tutti gli elementi attualmente
+         // presenti in pickingTarget, oltre alla carta attuale
+         options = global.options.FilterAll( function(option,args) {
+            // escludi le mosse la cui carta sorgente non sia quella che si vuole attivare/evocare
+            if( option[2] != args[0][0]) return false;
+            // crea un array con tutti i target da ricercare nelle mosse
+            var targets = []
+            array_copy(targets,0,args[0],1,array_length(args[0])-1)
+            targets[@array_length(targets)] = args[1]
+            // crea un array con tutti i target della mossa
+            var optionTargets = (!is_array(option[3])) ? [option[3]] : option[3]
+            // verifica che tutti i target in targets siano anche in optionTargets
+            var count = 0
+            for( var i=0;i<array_length(optionTargets);i++) {
+               var target = optionTargets[i]
+               for( var j=0;j<array_length(targets);j++) {
+                  if targets[j] == target {
+                     count += 1
+                     break
+                  }
+               }
+               if count == array_length(targets) {
+                  return true
+               }
+            }
+         },[global.pickingTarget,card])
+         
+         if array_length(options) == 1 {
+            // Esegue la mossa
+            var option = options[0]
+            if( array_length(option) > 3 && (!is_undefined(option[3])) )
+               option[1](option[3])
+            else
+               option[1]()
+            global.choiceMade = true
+            if global.multiplayer {
+               // Send the message!
+               networkSendPacket("move,"+string(sel_choice))
+            }
+            new StackMoveCamera(
+               global.Blender.CamHand.From,
+               global.Blender.CamHand.To,
+               0.3, function() {global.pickingTarget = undefined}
+            )
+         }
+         else if array_length(options) > 1 {
+            // Se c'era più di una mossa, aggiunge la carta selezionata all'array
+            // pickingTarget
+            global.pickingTarget[@array_length(global.pickingTarget)] = card
          }
       }
    }
-   if !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
-      // Verifica se card è bersagliabile da option[3]
-      options = global.options.FilterAll( function(option,args) {
-         return( option[2] == args[0] && option[3] == args[1] )
-      },[global.pickingTarget,card])
-      if array_length(options) > 1
-         show_message("NON DOVREBBE MAI SUCCEDEre")
-      if array_length(options) == 1 {
-         // Esegue la mossa
-         var option = options[0]
-         if( array_length(option) > 3 && (!is_undefined(option[3])) )
-            option[1](option[3])
-         else
-            option[1]()
-         global.choiceMade = true
-         if global.multiplayer {
-            // Send the message!
-            networkSendPacket("move,"+string(sel_choice))
-         }
-         new StackMoveCamera(
-            global.Blender.CamHand.From,
-            global.Blender.CamHand.To,
-            0.3, function() {global.pickingTarget = undefined}
-         )
+   // secondo click in poi, su acquari. Per ora gli effetti che coinvolgono gli acquari
+   // hanno un solo target possibile, quindi faccio gestione semplificata. Dovessero
+   // sorgere carte con più target, di cui almeno uno acquario, dovrò correggere..
+   if is_instanceof( objectHover, Aquarium ) &&
+      !is_undefined(global.pickingTarget) &&
+      mouse_check_button_pressed(mb_left) {
+      // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
+      // passando il mouse
+      aquarium = objectHover
+      var a = global.options.Filter(
+         function(option,args) { 
+            if array_length(option) < 4 || is_array(option[3]) return false;
+            return option[3] == args[0] 
+         },
+         [aquarium]
+      )
+      if !is_undefined(a) {
+            // Esegue la mossa
+            var option = a
+            if( array_length(option) > 3 && (!is_undefined(option[3])) )
+               option[1](option[3])
+            else
+               option[1]()
+            global.choiceMade = true
+            if global.multiplayer {
+               // Send the message!
+               networkSendPacket("move,"+string(sel_choice))
+            }
+            new StackMoveCamera(
+               global.Blender.CamHand.From,
+               global.Blender.CamHand.To,
+               0.3, function() { global.pickingTarget = undefined }
+            )
       }
    }
 }
@@ -117,6 +185,13 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
    }
 }
 
+
+drawY = 100
+draw_set_color(c_black)
+global.options.foreach( function(option,ctx) {
+   draw_text(100,ctx.drawY,option[0])
+   ctx.drawY += 20
+},self)
 
 
 // restore culling for next 3d rendering

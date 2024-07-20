@@ -22,6 +22,11 @@ v3SetIP(global.Blender.CamHand.To,global.camera.To)
 function ds_list() constructor {
    _list = ds_list_create()
    size = 0
+   static Insert = function(element,pos) {
+      ds_list_insert(_list,pos,element)
+      size += 1
+   }
+   
    static Add = function(element) {
       ds_list_add(_list,element)
       size += 1
@@ -37,6 +42,7 @@ function ds_list() constructor {
       }
       return newList
    }
+   
    static At = function(pos) {
       if( pos < 0 ) pos = size+pos
       return _list[|pos]
@@ -84,10 +90,15 @@ function ds_list() constructor {
       return ds_list_find_index(_list,value)
    }
    
-   static Filter = function( check ) {
+   static Filter = function( check , args ) {
       for( var i=0;i<size;i++) {
          var c = _list[|i]
-         if check(c) return c;
+         if !is_undefined(args) {
+            if check(c,args) return c;
+         }
+         else {
+            if check(c) return c;
+         }
       }
       return undefined;
    }

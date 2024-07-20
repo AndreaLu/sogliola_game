@@ -28,6 +28,7 @@ if startTurn {
                   global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
                   if global.turnPlayer.deck.size > 0
                      global.turnPlayer.Draw()
+                     global.choiceMade = true // PEZZA PEZZISSIMA
                   } ) )
                }
             )
@@ -57,7 +58,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
    if !global.multiplayer {
       // AI turn
       attesa += 1
-      if( attesa >= room_speed*2 ) {
+      if( attesa >= 1 ) {
       
          attesa = 0
          var choice

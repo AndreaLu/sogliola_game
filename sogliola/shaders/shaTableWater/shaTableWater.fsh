@@ -27,5 +27,6 @@ void main()
 	{
 		alpha = 0.8;
 	}
-	gl_FragColor = v_vColour * vec4(baseColor.xyz, alpha);
+	gl_FragData[0] = v_vColour * vec4(baseColor.xyz, alpha);
+   gl_FragData[1] = vec4(0.0,0.0, v_vTexcoord.y < 0.5 ? 0.5 : 1.0 , 1.0);
 }
