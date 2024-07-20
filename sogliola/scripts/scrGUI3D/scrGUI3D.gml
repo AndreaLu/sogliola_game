@@ -33,10 +33,10 @@ function StackMoveCamera(location,target,duration,callback) : Stack(callback) co
       var cc = sin(t*pi-pi/2)*0.5+0.5
       var c = sin(cc*pi-pi/2)*0.5+0.5
       
-      if t >= 0.5 && !is_undefined(Callback) {
+      /*if t >= 0.5 && !is_undefined(Callback) {
          Callback()
          Callback = undefined
-      }
+      }*/
       v3SlerpIP(_dirA,_dirB,c,_dir)
       v3LC2IP(fromA,fromB,1-c,c,global.camera.From)
       v3LC2IP(global.camera.From,_dir,1,1,global.camera.To)
