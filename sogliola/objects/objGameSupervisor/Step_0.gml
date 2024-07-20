@@ -10,17 +10,41 @@ if startTurn {
    
    global.supervisor.StartEvent( new EventTurnBegin() )
 
-   global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
-      if global.turnPlayer.deck.size > 0
-         global.turnPlayer.Draw()
-   } ) )// function() { global.turnPlayer.Draw() } , EventType.TURN_DRAW ) 
 
-   
    global.options.Clear()
-   global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;} ] )
-   // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
-   global.supervisor.StartEvent( new EventTurnMain() )
+   if( global.turnPlayer.deck.size > 0 ) {
    
+      if global.turnPlayer == global.player {
+         new StackMoveCamera(
+            global.Blender.CamDeck.From,
+            global.Blender.CamDeck.To,
+            0.8, undefined 
+         )
+         global.options.Add( ["Draw", function() {
+            new StackMoveCamera(
+               global.Blender.CamHand.From,
+               global.Blender.CamHand.To,
+               0.8, function() {
+                  global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
+                  if global.turnPlayer.deck.size > 0
+                     global.turnPlayer.Draw()
+                  } ) )
+               }
+            )
+         }, global.turnPlayer.deck.At(0)])
+         
+      } else {
+
+         global.options.Add( ["Draw", function() {
+            global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
+               if global.turnPlayer.deck.size > 0
+                  global.turnPlayer.Draw()
+            } ) )
+         }, global.turnPlayer.deck.At(0)])
+      }
+   }
+   global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;}, undefined ] )
+
    if( global.options.size == 1 ) {
       if( global.onePlayerFinished ) GameOver()
       global.onePlayerFinished = true
@@ -33,13 +57,23 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
    if !global.multiplayer {
       // AI turn
       attesa += 1
-      if( attesa >= room_speed*5 ) {
+      if( attesa >= room_speed*2 ) {
+      
          attesa = 0
          var choice
-         choice = global.srandom.IRandom(global.options.size-1)
+         canDraw = false
+         global.options.foreach(function(option,ctx) {
+            if option[0] == "Draw" {
+               canDraw = true
+               return true
+            }
+         },self)
+         
+         if canDraw choice = 0
+         else choice = global.srandom.IRandom(global.options.size-1)
          var option = global.options.At(choice)
-         if array_length(option) > 2
-            option[1](option[2])
+         if (array_length(option) > 3) && (!is_undefined(option[3]))
+            option[1](option[3])
          else
             option[1]()
          global.choiceMade = true
@@ -61,7 +95,7 @@ if global.choiceMade {
       }
       
       global.options.Clear()
-      global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;} ] )
+      global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;}, undefined] )
       // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
       global.supervisor.StartEvent( new EventTurnMain() )
    } else {

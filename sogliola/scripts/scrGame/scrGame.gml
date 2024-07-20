@@ -7,6 +7,16 @@ effectListeners = new ds_list()
 
 effectChain = new ds_list()      //
 effectChainRing = new ds_list()  // list of effects that triggered simultaneously (will need to sort them out into the effectChain)
+// options will contain all of the moves that the player can make
+// It is a list of arrays, each has this structure
+// [ desc, callback, src, arguments ]
+// desc: string description of the move
+// callback: function that will be called if and when the move is actually
+// performed by the user
+// src: card struct that added this move. can be undefiend
+// args: arguments (can be an array) that will be given to the callback
+// can be absent or even undefined. in both cases it will not be passed to the
+// callback
 options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
@@ -205,7 +215,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
              global.turnPlayer.aquarium.size < 8 ) {
-            global.options.Add( ["Summon "+name,Summon] ) 
+            global.options.Add( ["Summon "+name,Summon, self] ) 
          }
       }
    } 
@@ -217,7 +227,7 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText, 
    listener = function( event ) {
       if( is_instanceof(event, EventTurnMain) ) {
          if( location == global.turnPlayer.hand ) {
-            global.options.Add( ["Activate "+name,Activate] ) 
+            global.options.Add( ["Activate "+name,Activate,self] ) 
          }
       }
    }
@@ -299,9 +309,9 @@ function CardSogliolaBlob(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon] )
+               global.options.Add( ["Summon "+name,Summon,self] )
             if global.turnOpponent.aquarium.size < 8
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent, self])
          }
       }
    }
@@ -354,9 +364,9 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon] )
+               global.options.Add( ["Summon "+name,Summon,self] )
             if global.turnOpponent.aquarium.size < 8 && !global.turnOpponent.aquarium.protected
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self ])
          }
       }
       
@@ -431,7 +441,7 @@ function CardFreeSogliola(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Free '"+target.name+"' own", Activate, target] )
+         global.options.Add(["Free '"+target.name+"' own", Activate, self, target] )
       }
       
       // Check if Sogliola Giullare is in the Aquarium
@@ -443,7 +453,7 @@ function CardFreeSogliola(owner) : ActionCard(
          for( var i=0;i<opp.aquarium.size;i++;) {
             var target = opp.aquarium.At(i)
             if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-            global.options.Add(["Free '"+target.name+"' opponent", Activate, target] )
+            global.options.Add(["Free '"+target.name+"' opponent", Activate, self, target] )
          }
       }
    }
@@ -476,7 +486,7 @@ function CardFurto(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Activate Steal on '"+target.name+"' own", Activate, target] )
+         global.options.Add(["Activate Steal on '"+target.name+"' own", Activate, self, target] )
       }
       
       var opponent = Opponent(controller)
@@ -487,7 +497,7 @@ function CardFurto(owner) : ActionCard(
          for( var i=0;i<opponent.aquarium.size;i++;) {
             var target = opponent.aquarium.At(i)
             if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-            global.options.Add(["Activate Steal on '"+target.name+"' opponent", Activate, target] )
+            global.options.Add(["Activate Steal on '"+target.name+"' opponent", Activate, self, target] )
          }
       }
    }
@@ -532,7 +542,11 @@ function CardScambioEquivalente(owner) : ActionCard(
          var opp = Opponent(ctx.controller)
          ctx.card1 = card
          opp.aquarium._cards.foreach( function(card,ctx) {
-            global.options.Add(["Activate swap '"+ctx.card1.name+"' <-> '"+card.name+"'", Activate, [ctx.card1, card]])
+            global.options.Add([
+               "Activate swap '"+ctx.card1.name+"' <-> '"+card.name+"'",
+               Activate,
+               self,
+               [ctx.card1, card]])
          },ctx)
       },self)
    }

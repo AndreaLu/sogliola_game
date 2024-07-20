@@ -1,41 +1,32 @@
-var file = file_text_open_read("cards.json")
-var _x,_y,_z;
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetAqPlPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetAqPlRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetAqPlPos = global.Blender.AqPl.Position
+TargetAqPlRot = global.Blender.AqPl.Rotation
 TargetAqPlScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetAqOpPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetAqOpRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetAqOpPos = global.Blender.AqOp.Position
+TargetAqOpRot = global.Blender.AqOp.Rotation
 TargetAqOpScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetDkPlPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetDkPlRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetDkPlPos = global.Blender.DckPl.Position
+TargetDkPlRot = global.Blender.DckPl.Rotation
 TargetDkPlScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetDkOpPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetDkOpRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetDkOpPos = global.Blender.DckOp.Position
+TargetDkOpRot = global.Blender.DckOp.Rotation
 TargetDkOpScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetOceanPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetOceanRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetOceanPos = global.Blender.Ocean.Position
+TargetOceanRot = global.Blender.Ocean.Rotation
 TargetOceanScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetHndOpPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetHndOpRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetHndOpPos = global.Blender.HndOp.Position
+TargetHndOpRot = global.Blender.HndOp.Rotation
 TargetHndOpScal = [1,1,1]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetHndPlPos = [_x,_y,_z]
-_x = file_text_read_real(file); _y = file_text_read_real(file); _z = file_text_read_real(file)
-TargetHndPlRot = [-_x*180/pi,-_y*180/pi,-_z*180/pi]
+
+TargetHndPlPos = global.Blender.HndPl.Position
+TargetHndPlRot = global.Blender.HndPl.Rotation
 TargetHndPlScal = [1,1,1]
-file_text_close(file)
+
 
 lightDir = [0,0,0]
 
@@ -50,7 +41,8 @@ gpu_set_ztestenable(true)
 view_enabled = true
 view_set_visible(0,true)
 var camera = camera_create()
-var projMat = matrix_build_projection_perspective_fov(-60,view_get_wport(0)/view_get_hport(0), 100, 10000);
+
+var projMat = matrix_build_projection_perspective_fov(-60,view_get_wport(0)/view_get_hport(0), 0.1, 100);
 camera_set_proj_mat(camera,projMat)
 view_set_camera(0,camera)
 camera_set_update_script(view_camera[0], freeCamera);
@@ -65,3 +57,22 @@ tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 initialized = false
 idx = 1000
 sf = -1
+   var fov = global.Blender.CamHand.FovY
+   camera_set_proj_mat(
+      view_camera[0],
+      matrix_build_projection_perspective_fov(
+         -fov*180/pi, // FOV
+         1920/1080,   // Aspect ratio
+         0.1,         // Z-Near
+         100          // Z-Far
+      )
+   );
+//window_set_size(room_width*2,room_height*2)
+//window_set_cursor(cr_none)
+
+
+
+if global.debugMode {
+   // Start the Blender server
+   blenderServer = network_create_server_raw(network_socket_tcp, 2233, 1);
+}

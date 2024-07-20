@@ -1,3 +1,23 @@
+debugMode = true // TODO: setta false in produzione
+
+// Load Blender File
+var json = ""
+var file = file_text_open_read("blender.json")
+while( !file_text_eof(file) )
+   json += " "+file_text_readln(file)
+file_text_close(file)
+Blender = json_parse(json)
+
+
+global.camera = {
+   From:[1,0,0],
+   To:[0,1,0],
+   Up:[0,0,1]
+}
+v3SetIP(global.Blender.CamHand.From,global.camera.From)
+v3SetIP(global.Blender.CamHand.To,global.camera.To)
+
+
 
 function ds_list() constructor {
    _list = ds_list_create()
@@ -36,7 +56,8 @@ function ds_list() constructor {
    }
    static foreach = function(func,ctx=undefined) {
       for( var i=0; i<size; i++ ) {
-         func( _list[|i], ctx)
+         if func( _list[|i], ctx) == true
+            break
       }
    }
    static rofeach = function(func) {

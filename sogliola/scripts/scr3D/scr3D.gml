@@ -1,3 +1,14 @@
+function v3Copy(v) {
+   var w = array_create(3)
+   v3SetIP(v,w)
+   return w
+}
+// puts the vector v into w
+function v3SetIP(v,w) {
+   w[@0] = v[0]
+   w[@1] = v[1]
+   w[@2] = v[2]
+}
 // Puts into w a version of v scaled by a and returns it
 function v3ScaleIP(a,v,w) {
 	w[@0] = v[0]*a;

@@ -90,7 +90,7 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
    global.turnOpponent.deck.Shuffle()
 
    // Draw 4 cards
-   repeat(5) {
+   repeat(4) {
       global.turnPlayer.Draw()
       global.turnOpponent.Draw()
    }

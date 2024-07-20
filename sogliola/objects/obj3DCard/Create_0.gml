@@ -11,3 +11,17 @@ targetScal = [1,1,1]
 zero3=[0,0,0]
 
 randomrot = random_range(-5,5);
+
+
+mouseHover = false
+mouseHoverTimer = 0
+alreadyHover = false
+global.hovering = false
+// this function is called by obj3DGUI whenever the cursor is over a card
+// in the player hand
+setMouseHover = function() {
+   if global.hovering return;
+   global.hovering = true
+   mouseHover = true
+   mouseHoverTimer = 1
+}

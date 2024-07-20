@@ -1,3 +1,19 @@
+ENGINE:
 - implementa controllo giullare in diavolo nero e sogliola pietra
+- rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
 - aggiungi carta medusa
+NETWORKING: 
 - genera un seme lato server condiviso per entrambi i giocatori del match
+3DGUI:
+- interazione tramite click (aggiungi handle alle carte al global.options)
+- stacking animazioni effetti carte e catene
+- polishing animazioni
+WORLD:
+- implementa il contesto - mondo 2d dall'alto stile pokemon
+  col gatto che va in giro e sfida gli altri gatti del torneo guadagnando
+  carte di volta in volta
+  
+POLISHING:
+- miglior movimento telecamera nelle animazioni Stack
+  (usa quaternioni per slerpare la direzione e un arco costruito con blender
+   invece di una retta tra due punti 3D per la locazione)
