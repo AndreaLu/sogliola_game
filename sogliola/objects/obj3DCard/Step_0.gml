@@ -1,27 +1,32 @@
 if is_undefined(card) exit
 
 
-
-var pos
 switch( card.location ) {
 
    /* HAND */
    case global.player.hand:
       pos = global.player.hand._cards.Index(card)
       
-      var offs = pos-global.player.hand.size/2
+      offs = pos-global.player.hand.size/2
       if( frac(global.player.hand.size/2) == 0 ) {
          offs -= 0.5
       }
 
-      //if( mouseHover ) v3ScaleIP(1.5,obj3DGUI.TargetHndPlScal,targetScal)
-      v3SetIP(obj3DGUI.TargetHndPlScal,targetScal)
-      v3SumIP([0.4*offs,0*offs, mouseHover ? 0.3 : 0],global.Blender.HndPl.Position,targetPos)
-      v3SumIP([0,10,0],obj3DGUI.TargetHndPlRot,targetRot)
+      v3ScaleIP(cardZoom ? 1.2 : 1, obj3DGUI.TargetHndPlScal, targetScal)
+      v3LC3IP(
+         global.Blender.HndPl.Position,
+         global.Blender.HndPl.Transform.j,
+         [1,0,0],
+         1,  // posizione di partenza
+         (mouseHover || cardZoom) ? (cardZoom ? 1.2 : 0.6): 0, // mousehover
+         0.4*offs, // offset carta in mano
+         targetPos
+      )
+      v3SumIP([0,cardZoom ? 0 : 10,0],obj3DGUI.TargetHndPlRot,targetRot)
       break
    case global.opponent.hand:
       pos = global.opponent.hand._cards.Index(card)
-      var offs = pos-global.opponent.hand.size/2
+      offs = pos-global.opponent.hand.size/2
       v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
       v3SumIP([0.3*offs,0.1*offs,0],obj3DGUI.TargetHndOpPos,targetPos)
       v3SumIP([0,offs,0],obj3DGUI.TargetHndOpRot,targetRot)
@@ -31,14 +36,14 @@ switch( card.location ) {
    /* AQUARIUM */
    case global.player.aquarium:
       pos = global.player.aquarium._cards.Index(card)
-      var offs = pos-global.player.aquarium.size/2
+      offs = pos-global.player.aquarium.size/2
       v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
       v3SumIP([offs,0,0],obj3DGUI.TargetAqPlPos,targetPos)
       v3SumIP(zero3,obj3DGUI.TargetAqPlRot,targetRot)
       break
    case global.opponent.aquarium:
       pos = global.opponent.aquarium._cards.Index(card)
-      var offs = pos-global.opponent.aquarium.size/2
+      offs = pos-global.opponent.aquarium.size/2
       v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
       v3SumIP([offs,0,0],obj3DGUI.TargetAqOpPos,targetPos)
       v3SumIP(zero3,obj3DGUI.TargetAqOpRot,targetRot)
@@ -79,3 +84,21 @@ switch( card.location ) {
 v3LC2IP(position,targetPos,0.9,0.1,position)
 v3LC2IP(scale,targetScal,0.9,0.1,scale)
 v3LC2IP(rot,targetRot,0.9,0.1,rot)
+
+
+if !cardZoom && mouseHover && global.hoverTarget != card {
+   mouseHover = false
+}
+
+if cardZoom {
+   
+   if mouse_check_button_pressed(mb_right) {
+      cardZoom = false
+      new StackMoveCamera(
+         global.Blender.CamHand.From,
+         global.Blender.CamHand.To,
+         0.3,function () { global.zooming = false }
+      )
+   }
+   
+}

@@ -16,7 +16,7 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
       // del match
       random_set_seed(42)
    } else {
-      randomize()
+      //randomize()
    }
    global.srandom.SetSeed(date_get_second(date_current_datetime()))
    

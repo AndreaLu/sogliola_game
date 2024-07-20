@@ -12,10 +12,11 @@ import threading
 
 # This script, when executed inside blender, extracts the data within 
 # the collection "Export", when it is present, to a json file for game maker.
-# Additionally, if the variable startDebugServer is True, it will connect to 
+# Additionally, if the variable startServer is True, it will connect to 
 # the game maker game debug server and update in real time this info
 # In GM, the global variable "global.Blender" will hold all the information
 startDebugServer = True
+storeData = True
 
 # find blender.json filename in the "datafiles" directory for game maker
 blend_file_path = bpy.data.filepath
@@ -30,9 +31,11 @@ def getData(collection_name):
     # Replace 'CollectionName' with the name of your collection
     blend_file_path = bpy.data.filepath
     blend_dir = os.path.dirname(bpy.path.abspath(blend_file_path))
+    fname = os.path.join(blend_dir, 'blender.json')
 
     # Get the collection by name
     collection = bpy.data.collections.get(collection_name)
+    out_fname = output_file_path = os.path.join(blend_dir, 'data.json')
     if collection is not None:
         data = {
         }
@@ -75,10 +78,20 @@ def getData(collection_name):
             if obj.type == "MESH":
                 rot = obj.rotation_euler
                 rot = [-rot.x*180/pi,-rot.y*180/pi,-rot.z*180/pi]
-
+                
+                matrix_world = obj.matrix_world
+                local_x = matrix_world.col[0].to_3d().normalized()
+                local_y = matrix_world.col[1].to_3d().normalized()
+                local_z = matrix_world.col[2].to_3d().normalized()
+                
                 data[obj.name] = {
                     "Position": list(obj.location),
-                    "Rotation": rot
+                    "Rotation": rot,
+                    "Transform":{
+                        "i":list(local_x),
+                        "j":list(local_y),
+                        "k":list(local_z)
+                    }
                 }
     else:
         message(f"Collection '{collection_name}' not found.")
@@ -93,7 +106,8 @@ def saveData():
     with open(fname,"w") as fout:
         fout.write(json.dumps(data,indent=3))
 
-saveData()
+if storeData:
+    saveData()
 
 
 if startDebugServer:

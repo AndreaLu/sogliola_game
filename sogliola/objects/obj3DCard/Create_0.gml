@@ -12,16 +12,65 @@ zero3=[0,0,0]
 
 randomrot = random_range(-5,5);
 
-
+//_mouseHover = false
 mouseHover = false
 mouseHoverTimer = 0
 alreadyHover = false
 global.hovering = false
+global.hoverTarget = undefined
+cardZoom = false
 // this function is called by obj3DGUI whenever the cursor is over a card
 // in the player hand
 setMouseHover = function() {
-   if global.hovering return;
+   if mouseHover || global.hovering return;
    global.hovering = true
    mouseHover = true
-   mouseHoverTimer = 1
+   time_source_start(
+      time_source_create(
+         time_source_game,
+         0.03, time_source_units_seconds,
+         function(obj) {
+            with( obj3DCard ) {
+               mouseHover = false
+            }
+            global.hovering = false
+            obj.mouseHover = global.hoverTarget == obj.card
+         },[self]
+      )
+   )
+}
+
+global.zooming = false // true if a card is in zoom mode
+
+setZoom = function() {
+   if global.zooming return;
+
+   static camTo = [0,0,0]
+   static camFrom = [0,0,0]
+   
+   v3LC3IP(
+         global.Blender.HndPl.Position,
+         global.Blender.HndPl.Transform.j,
+         [1,0,0],
+         1, // position
+         1.2, // j
+         0.4*offs, // x
+         camTo
+   )
+   v3LC2IP(
+      camTo,
+      global.Blender.HndPl.Transform.k,
+      1,8,
+      camFrom
+   )
+   
+   new StackMoveCamera(camFrom,camTo,0.5,undefined)
+   //v3LerpIP(global.camera.From,tmpVec,0.04,global.camera.From)
+   //v3LerpIP(global.camera.To,targetPos,0.01,global.camera.To)
+   
+   
+   
+   cardZoom = true
+   global.zooming = true
+   
 }

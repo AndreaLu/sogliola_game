@@ -51,6 +51,5 @@ function freeCamera() {
          global.camera.Up
       )
    );
- 
 }
 

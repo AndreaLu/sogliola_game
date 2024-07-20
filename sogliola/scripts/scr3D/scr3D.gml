@@ -42,6 +42,10 @@ function v3SumIP(v,w,z) {
 function v3Sum(v,w) {
 	return [v[0]+w[0],v[1]+w[1],v[2]+w[2]];
 }
+function v3LerpIP(v,w,a,z) {
+   a = 1-clamp(a,0,1)
+   v3LC2IP(v,w,a,1-a,z)
+}
 // Puts a*v + b*w into z and returns it
 function v3LC2IP(v,w,a,b,z) {
 	z[@0] = v[0]*a + w[0]*b;
@@ -248,4 +252,23 @@ function rayCast(P,r,mesh) {
 		}
 	}
 	return result;
+}
+
+// puts into z the slerp between v and w with coefficient t 
+function v3SlerpIP(v,w,t,z) {
+   static tmp = [0,0,0]
+   var dot = v3Dot(v,w) // dot = sum(v0[i] * v1[i] for i in range(len(v0)))
+   dot = clamp(dot,-1,1) // dot = min(max(dot, -1.0), 1.0) 
+   // Calculate the angle between the vectors
+   var theta = arccos(dot) * t //  theta = math.acos(dot) * t
+
+   // Orthogonal vector to v0
+   v3LC2IP(w,v,1,-dot,tmp) // relative_vec = [v1[i] - dot * v0[i] for i in range(len(v0))]
+   v3NormalizeIP(tmp,tmp)
+   //norm = math.sqrt(sum(x * x for x in relative_vec))
+   //relative_vec = [x / norm for x in relative_vec]
+
+   // Perform the slerp
+   v3LC2IP(v,tmp,cos(theta),sin(theta),z)
+   //result = [v0[i] * math.cos(theta) + relative_vec[i] * math.sin(theta) for i in range(len(v0))]
 }
