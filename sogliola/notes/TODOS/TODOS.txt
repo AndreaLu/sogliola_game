@@ -2,9 +2,13 @@ ENGINE:
 - implementa controllo giullare in diavolo nero e sogliola pietra
 - rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
 - aggiungi carta medusa
-- non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
-- interazione 3D: permetti di tornare indietro durante un cardpicking
+
+INTERAZIONE:
 - se c'è una sola opzione, fai comunque scegliere all'utente (senza attivazione automatica)
+- non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
+- permetti di tornare indietro durante un cardpicking
+- strano glitch grafico quando si sposta il cursore sotto la carta che si sta enfatizzando
+- implementa attese con grafica catene
 
 NETWORKING: 
 - genera un seme lato server condiviso per entrambi i giocatori del match
@@ -18,7 +22,6 @@ WORLD:
 - implementa il contesto - mondo 2d dall'alto stile pokemon
   col gatto che va in giro e sfida gli altri gatti del torneo guadagnando
   carte di volta in volta
-
 
 POLISHING:
 - miglior movimento telecamera nelle animazioni Stack

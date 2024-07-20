@@ -155,6 +155,19 @@ if( !is_undefined(objectHover) ) {
             )
       }
    }
+
+   
+}
+
+// Annullare un cardpicking in corso
+if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
+   global.pickingTarget = undefined
+   // Torno alla mano, al massimo non accade niente
+   new StackMoveCamera(
+      global.Blender.CamHand.From,
+      global.Blender.CamHand.To,
+      0.3, undefined
+   )
 }
 
 
@@ -192,20 +205,39 @@ global.options.foreach( function(option,ctx) {
 },self)
 
 
-if keyboard_check_pressed( ord("W")) && global.turnPlayer == global.player {
+if keyboard_check_pressed( ord("W")) && !watching && global.turnPlayer == global.player {
    watching = true
    new StackMoveCamera(
       global.Blender.CamAq.From,
       global.Blender.CamAq.To,
-      0.3, undefined
+      0.3, function() {
+         time_source_start(
+            time_source_create(
+               time_source_game,0.1,
+               time_source_units_seconds, function() {
+               obj3DGUI.watchingBack = false
+            })
+         )
+      }
    )
 }
 
-if watching && keyboard_check_pressed( ord("S")) {
+if watching && keyboard_check_pressed(ord("S")) && !watchingBack {
+   watchingBack = true
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
-      0.3, function() {obj3DGUI.watching = false}
+      0.3, function() {
+         obj3DGUI.watchingBack = true
+         time_source_start(
+            time_source_create(
+               time_source_game,0.1,
+               time_source_units_seconds, function() {
+               obj3DGUI.watching = false
+            })
+         )
+         
+      }
    )
 }
 

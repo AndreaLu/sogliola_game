@@ -56,6 +56,7 @@ tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 
 
 watching = false
+watchingBack = true
 initialized = false
 objectHover = undefined
 sf = -1
