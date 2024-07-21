@@ -44,12 +44,11 @@ if( !is_undefined(objectHover) ) {
       porcodio = options
       
       // ------------------------------------------------------------------------------
-      // Primo click 
+      // Primo click
       if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
          && is_undefined(global.pickingTarget) {
 
          if( array_length(options) > 1) {
-
             // Zoom nell'acquario, bisogna scegliere il target
             new StackMoveCamera(
                global.Blender.CamAq.From,
@@ -58,17 +57,27 @@ if( !is_undefined(objectHover) ) {
             )
             global.pickingTarget = [card]
          }
-         if( array_length(options) == 1) {
-            // Esegui la mossa, l'unica possibile
+
+         // La mossa possibile è una sola. La eseguo, solo se non ci sono target da 
+         // cliccare. Se ce ne sono, anche se uno solo, lo lascio scegliere al
+         // giocatore
+         if( array_length(options) == 1 ) {
             var option = options[0]
-            if( array_length(option) > 3 && (!is_undefined(option[3])) )
-               option[1](option[3])
-            else
+            // Se non ci sono target possibili, esegui l'unica mossa possibile
+            if (array_length(option) <= 3 || is_undefined(option[3])) {
                option[1]()
-            global.choiceMade = true
-            if global.multiplayer {
-               // Send the message!
-               networkSendPacket("move,"+string(sel_choice))
+               global.choiceMade = true
+               if global.multiplayer {
+                  // Send the message!
+                  networkSendPacket("move,"+string(sel_choice))
+               }
+            } else {
+               new StackMoveCamera(
+                  global.Blender.CamAq.From,
+                  global.Blender.CamAq.To,
+                  0.3, undefined
+               )
+               global.pickingTarget = [card]
             }
          }
       }
