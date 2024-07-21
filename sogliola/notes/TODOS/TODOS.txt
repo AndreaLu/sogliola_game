@@ -4,7 +4,6 @@ ENGINE:
 - aggiungi carta medusa
 
 INTERAZIONE:
-- se c'è una sola opzione, fai comunque scegliere all'utente (senza attivazione automatica)
 - non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
 - strano glitch grafico quando si sposta il cursore sotto la carta che si sta enfatizzando
 - implementa attese con grafica catene
