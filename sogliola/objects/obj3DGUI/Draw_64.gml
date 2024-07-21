@@ -268,5 +268,11 @@ if (mouse_check_button(mb_any)){
 }
 draw_sprite_ext(sprCursor,cursor,window_mouse_get_x(),window_mouse_get_y(), 2,2, 0, c_white, 1)
 
+
+// Disegno di debug per l'acquario protetto
+if global.player.aquarium.protected
+   draw_text(400,100,"acquario player protetto")
+if global.opponent.aquarium.protected
+   draw_text(400,80,"acquario avversario protetto")
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
