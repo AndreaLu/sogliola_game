@@ -5,29 +5,19 @@ ENGINE:
 
 INTERAZIONE:
 - non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
-- strano glitch grafico quando si sposta il cursore sotto la carta che si sta enfatizzando
 - implementa attese con grafica catene
+- polishing animazione pesca e lancio all'oceano
+- fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
+  alla telecamera (o lo fa in modo molto subdolo)
 
 NETWORKING: 
 - genera un seme lato server condiviso per entrambi i giocatori del match
-
-3DGUI:
-- interazione tramite click (aggiungi handle alle carte al global.options)
-- stacking animazioni effetti carte e catene
-- polishing animazioni
 
 WORLD:
 - implementa il contesto - mondo 2d dall'alto stile pokemon
   col gatto che va in giro e sfida gli altri gatti del torneo guadagnando
   carte di volta in volta
 
-POLISHING:
-- miglior movimento telecamera nelle animazioni Stack
-  (usa quaternioni per slerpare la direzione e un arco costruito con blender
-   invece di una retta tra due punti 3D per la locazione)
-- fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
-  alla telecamera
-  
 IMPROVEMENTS:
 - eseugire una option tra le global.options dovrebbe essere fatto con una funzione
   globale, perché ci sono diverse linee di codice sempre uguali

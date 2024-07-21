@@ -84,7 +84,7 @@ function Deck(owner) : CardCollection(owner) constructor {
 }
 
 
-function location_str( location ) {
+function location_to_str( location ) {
    if location == global.player.deck        return "Player deck"
    if location == global.opponent.deck      return "Opponent deck"
    if location == global.player.hand        return "Player hand"
@@ -95,7 +95,7 @@ function location_str( location ) {
    return "undefined"
 }
 
-function location_str_location( _str ) {
+function str_to_location( _str ) {
    if( _str == "Player deck" ) return global.player.deck
    if( _str == "Opponent deck" ) return global.opponent.deck
    if( _str == "Player hand" ) return global.player.hand
@@ -181,7 +181,7 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
          type,
          owner == global.player ? 0 : 1,
          controller == global.player ? 0 : 1,
-         location_str( location ),
+         location_to_str( location ),
       ]
       return json_stringify( data) 
    }
@@ -190,7 +190,7 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
       var data = json_parse( json )
       owner =  (data[1] == 0 ) ? global.player : global.opponent
       controller = (data[2] == 0 ) ? global.player : global.opponent
-      location = location_str_location( data[3] )
+      location = str_to_location( data[3] )
    }
    breakpoints = false
 }

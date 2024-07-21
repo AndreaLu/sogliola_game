@@ -30,6 +30,14 @@ with( obj3DCard ) {
       matrix_set(matrix_world,matBuild(position,rot,scale))
       vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+      // draw the ghost card
+      if card.location == global.player.hand && !global.zooming {
+      shader_set_uniform_f(shader_get_uniform(sha,"cardGhost"),1)
+      matrix_set(matrix_world,matBuild(ghost.position,ghost.rot,ghost.scale))
+      vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
+      vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+      shader_set_uniform_f(shader_get_uniform(sha,"cardGhost"),0)
+      }
    }
 }
 

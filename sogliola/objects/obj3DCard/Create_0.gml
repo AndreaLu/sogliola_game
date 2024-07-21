@@ -5,44 +5,35 @@ card = undefined
 position = [0,0,0]
 scale = [1,1,1]
 rot = [0,0,0]
+// ghost is needed to fix the mousehover glitch issue
+// we draw a hidden card in the original position (not hovered)
+// only in the clickbuffer to extend the hover region
+ghost = {
+   position : [0,0,0],
+   scale : [0,0,0],
+   rot : [0,0,0],
+   targetPos : [0,0,0],
+   targetRot : [0,0,0],
+   targetScal : [1,1,1]
+}
 targetPos = [0,0,0]
 targetRot= [0,0,0]
 targetScal = [1,1,1]
 zero3=[0,0,0]
+uno3=[1,1,1]
 
 randomrot = random_range(-5,5);
-
-mouseHover = false
-mouseHoverTimer = 0
-alreadyHover = false
-global.hovering = false
-global.hoverTarget = undefined
-cardZoom = false
-// this function is called by obj3DGUI whenever the cursor is over a card
-// in the player hand
-setMouseHover = function() {
-   if mouseHover || global.hovering || global.zooming return;
-   global.hovering = true
-   mouseHover = true
-   time_source_start(
-      time_source_create(
-         time_source_game,
-         0.03, time_source_units_seconds,
-         function(obj) {
-            with( obj3DCard ) {
-               mouseHover = false
-            }
-            global.hovering = false
-            obj.mouseHover = global.hoverTarget == obj.card
-         },[self]
-      )
-   )
-}
 
 
 // +----------------------------------------------------------------------------+
 // | Zoom della carta in mano                                                   |
 // +----------------------------------------------------------------------------+
+prevMouseHover = false
+mouseHover = false
+cardZoom = false
+canHover = true
+canUnhover = false
+
 global.zooming = false // true if a card is in zoom mode
 
 setZoom = function() {

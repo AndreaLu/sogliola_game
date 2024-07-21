@@ -16,7 +16,7 @@ if( mouse_x >= x-w/2*scale && mouse_x <= x+w/2*scale &&
    draw_text(vx,dy,card.name); dy += 20 + 10
    draw_sprite_stretched(sprite_index,0,vx,dy,w*1.5,h*1.5); dy += h*1.5 + 10
    
-   draw_text(vx,dy,"location: "+location_str(card.location) ); dy += 20
+   draw_text(vx,dy,"location: "+location_to_str(card.location) ); dy += 20
    draw_text(vx,dy,"owner: " + (card.owner == global.player ? "Player" : "Opponent")); dy += 20
    draw_text(vx,dy,"cntrl: " + (card.controller == global.player ? "Player" : "Opponent")); dy += 20
    draw_text_ext(vx,dy,"desc: " + card.desc,20,room_width-vx-30)

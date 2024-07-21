@@ -8,7 +8,8 @@ while( !file_text_eof(file) )
 file_text_close(file)
 Blender = json_parse(json)
 
-
+// This struct holds the informatino the 3D camera uses
+// TODO: add fov info
 global.camera = {
    From:[1,0,0],
    To:[0,1,0],
@@ -122,7 +123,6 @@ function Opponent(player) {
    return player == global.player ? global.opponent : global.player
 }
 
-log = ds_list()
 
 function breakpoint() {
    return

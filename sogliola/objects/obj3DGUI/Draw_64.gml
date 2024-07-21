@@ -29,7 +29,7 @@ if( !is_undefined(objectHover) ) {
       // Zoom della carta in mano
 
       if ( card.location == global.player.hand ) {
-         card.guiCard.setMouseHover()
+         //card.guiCard.setMouseHover()
          if mouse_check_button_pressed(mb_right) {
             card.guiCard.setZoom()
          }
