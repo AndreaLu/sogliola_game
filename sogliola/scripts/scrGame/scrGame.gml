@@ -320,7 +320,7 @@ function CardSogliolaBlob(owner) : FishEffectCard(
 }
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
-   "+3 al valore per ogni altra sogliola nell'acquario",
+   "+4 al valore per ogni altra sogliola nell'acquario",
    CardType.RE_SOGLIOLA
 ) constructor {
 
@@ -330,7 +330,7 @@ function CardReSogliola(owner) : FishEffectCard(
       tmpVal = _val
       controller.aquarium._cards.foreach(function(card,ctx) {
          if card == ctx return;
-         ctx.tmpVal += 3;
+         ctx.tmpVal += 4;
       },self)
       
       return tmpVal
