@@ -25,18 +25,18 @@ if( !is_undefined(objectHover) ) {
       card = objectHover
       global.hoverTarget = card
       
-      // +----------------------------------------------------------------------------+
-      // | Zoom della carta in mano                                                   |
-      // +----------------------------------------------------------------------------+
+      // ------------------------------------------------------------------------------
+      // Zoom della carta in mano
+
       if ( card.location == global.player.hand ) {
          card.guiCard.setMouseHover()
          if mouse_check_button_pressed(mb_right) {
             card.guiCard.setZoom()
          }
       }
-      // +----------------------------------------------------------------------------+
-      // | Cardpicking                                                                |
-      // +----------------------------------------------------------------------------+
+// +----------------------------------------------------------------------------------+
+// | Cardpicking                                                                      |
+// +----------------------------------------------------------------------------------+
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
@@ -165,10 +165,8 @@ if( !is_undefined(objectHover) ) {
             )
       }
    }
-
-   
 }
-
+// ------------------------------------------------------------------------------------
 // Annullare un cardpicking in corso
 if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
    global.pickingTarget = undefined
@@ -181,7 +179,9 @@ if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
 }
 
 
-// Passare il turno
+// +----------------------------------------------------------------------------------+
+// | Passare il turno                                                                 |
+// +----------------------------------------------------------------------------------+
 if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
    var test = global.options.Filter( function(option) {
       return option[0] == "Pass the turn"
@@ -214,8 +214,10 @@ global.options.foreach( function(option,ctx) {
    ctx.drawY += 20
 },self)
 
-
-if keyboard_check_pressed( ord("W")) && !watching && global.turnPlayer == global.player {
+// +----------------------------------------------------------------------------------+
+// | Passaggio da playign a watching aquarium                                         |
+// +----------------------------------------------------------------------------------+
+if keyboard_check_pressed(ord("W")) && !watching && global.turnPlayer == global.player {
    watching = true
    new StackMoveCamera(
       global.Blender.CamAq.From,
@@ -253,7 +255,7 @@ if watching && keyboard_check_pressed(ord("S")) && !watchingBack {
 
 var cursor = 0;
 if (mouse_check_button(mb_any)){
-	cursor=1
+   cursor=1
 }
 draw_sprite_ext(sprCursor,cursor,window_mouse_get_x(),window_mouse_get_y(), 2,2, 0, c_white, 1)
 
