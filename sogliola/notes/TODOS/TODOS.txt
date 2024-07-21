@@ -6,9 +6,19 @@ ENGINE:
 INTERAZIONE:
 - non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
 - implementa attese con grafica catene
-- polishing animazione pesca e lancio all'oceano
+- animazione carta che viene sommersa (free sogliola)
 - fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
   alla telecamera (o lo fa in modo molto subdolo)
+
+
+GRAFICA:
+- draw di testo e valore sulle carte
+- [proposta] qualcosina sullo sfondo delle carte invece del monocolore
+- [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
+- cambiare un po' la figura sogliola volante perché difficile da distinguere da sogliola normale
+- bottiglia di grog/latte/rum per passare il turno
+- protezione acquario
+- qualcosa per mostrare il punteggio?
 
 NETWORKING: 
 - genera un seme lato server condiviso per entrambi i giocatori del match

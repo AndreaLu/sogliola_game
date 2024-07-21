@@ -3,6 +3,7 @@ function Stack(callback) {
    done = false
    Update = function() {}
    Callback = callback
+   global.stack.Add(self)
 }
 // location: new position of the camera
 // target: new target position of the camera (lookAt)
@@ -42,8 +43,118 @@ function StackMoveCamera(location,target,duration,callback) : Stack(callback) co
       v3LC2IP(global.camera.From,_dir,1,1,global.camera.To)
       //v3LC2IP(toA,toB,1-c,c,global.camera.To)
    }
+}
+
+// es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
+function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(undefined) constructor {
+   
+   // Lettura argomenti
+   dur = duration
+   guiCard = guicard
+   anim = animation
+   guiCard.drawing = true
+   _callback = callback
+   t = 0 // da 0 a dur
+   progress = 0 // da 0 a 1
+   
+
    
    
-   global.stack.Add(self)
+   guicard.drawing = true
+   startPos = guicard.targetPos
    
+   var offs = global.player.hand.size/2
+   if( frac((global.player.hand.size+1)/2) == 0 ) {
+      offs -= 0.5
+   }
+         
+   endPos = [0,0,0]
+   v3LC3IP(
+      global.Blender.HndPl.Position,
+      global.Blender.HndPl.Transform.j,
+      [1,0,0],
+      1,  // posizione di partenza
+      0, // mousehover
+      0.4*offs, // offset carta in mano
+      endPos
+   )
+   
+   Update = function() {
+      // incrementa t 
+      t += delta_time/1000000
+      progress = clamp(t/dur,0,1)
+      done = (progress == 1)
+      
+      var channels = [
+         anim.RotX,
+         anim.RotY,
+         anim.RotZ,
+         anim.PosX,
+         anim.PosY,
+         anim.PosZ
+      ]
+      var channelValue = [ // uno per ogni canale 
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+      ]
+      
+      // Calcola il valore di ogni canale interpolato tra i due keyframe subito prima e dopo
+      if( progress == 0 ) { // prendo il valore del primo keyframe
+         channelValue[0] = channels[0][0][1]
+         channelValue[1] = channels[1][0][1]
+         channelValue[2] = channels[2][0][1]
+         channelValue[3] = channels[3][0][1]
+         channelValue[4] = channels[4][0][1]
+         channelValue[5] = channels[5][0][1]
+      } else if( progress == 1) { // prendo il valore dell'ultimo keyframe
+         channelValue[0] = channels[0][array_length(channels[0])-1][1]
+         channelValue[1] = channels[1][array_length(channels[1])-1][1]
+         channelValue[2] = channels[2][array_length(channels[2])-1][1]
+         channelValue[3] = channels[3][array_length(channels[3])-1][1]
+         channelValue[4] = channels[4][array_length(channels[4])-1][1]
+         channelValue[5] = channels[5][array_length(channels[5])-1][1]
+      } else { // interpolo il valore tra due keyframe o tengo buono l'ultimo se ho superato l'ultimo keyframe
+         for( var c=0;c<array_length(channels); c++ ) {
+            var channel = channels[c]
+            var found = false
+            for(var i=1;i<array_length(channel);i++) {
+               var keyFrame = channel[i]
+               var prevKeyFrame = channel[i-1]
+               if( keyFrame[0] > progress ) {
+                  found = true
+                  var alpha = (progress - prevKeyFrame[0])/(keyFrame[0]-prevKeyFrame[0])
+                  channelValue[c] = lerp(prevKeyFrame[1],keyFrame[1],alpha)
+                  break
+               }
+            }
+            if( !found ) // l'ultimo keyframe è prima del punto attuale... uso il suo valore comunque
+               channelValue[c] = channel[array_length(channel)-1][1]
+         }
+      }
+      
+      //if( progress > 0 )  {
+      //   show_message(guiCard.targetRot)
+      //   show_message(channelValue)
+      //}
+      
+      // Applico!
+      guiCard.targetRot[@0] = channelValue[0]
+      guiCard.targetRot[@1] = channelValue[1]
+      guiCard.targetRot[@2] = channelValue[2]
+      v3SetIP(guiCard.targetRot,guiCard.ghost.targetRot)
+      v3LerpIP(startPos,endPos,progress,guiCard.targetPos)
+      v3SetIP(guiCard.targetPos,guiCard.ghost.targetPos)
+      //guiCard.targetPos[@0] = channelValue[3]*0+startPos[0]
+      //guiCard.targetPos[@1] = channelValue[4]*0+startPos[1]
+      //guiCard.targetPos[@2] = channelValue[5]*0+startPos[2]
+   }
+   
+   Callback = function() {
+      guiCard.drawing = false
+      _callback()
+   }
 }

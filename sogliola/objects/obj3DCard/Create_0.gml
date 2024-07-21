@@ -22,6 +22,8 @@ targetScal = [1,1,1]
 zero3=[0,0,0]
 uno3=[1,1,1]
 
+drawing = false // true if the drawing animation is running
+
 randomrot = random_range(-5,5);
 
 

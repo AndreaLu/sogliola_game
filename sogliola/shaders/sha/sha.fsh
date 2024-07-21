@@ -41,6 +41,6 @@ void main()
     // Primo render target: colore toon
     gl_FragData[0] = vec4(toonColor, 1.0-v_vCardGhost);
     
-    // Secondo render target: colore della carta
+    // Secondo render target: colore della carta click buffer
     gl_FragData[1] = vec4(v_vCardCol.xyz, 1.0);
 }

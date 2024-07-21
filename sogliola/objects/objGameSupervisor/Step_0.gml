@@ -13,7 +13,6 @@ if startTurn {
 
    global.options.Clear()
    if( global.turnPlayer.deck.size > 0 ) {
-   
       if global.turnPlayer == global.player {
          new StackMoveCamera(
             global.Blender.CamDeck.From,
@@ -25,17 +24,21 @@ if startTurn {
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
                0.8, function() {
-                  global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
-                  if global.turnPlayer.deck.size > 0
-                     global.turnPlayer.Draw()
-                     global.choiceMade = true // PEZZA PEZZISSIMA
-                  } ) )
+                  new StackBlenderAnimLerpPos(
+                     global.Blender.AnimCardDraw.Action,
+                     3, global.turnPlayer.deck.At(0).guiCard,
+                     function() {
+                        global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
+                        if global.turnPlayer.deck.size > 0
+                           global.turnPlayer.Draw()
+                           global.choiceMade = true // PEZZA PEZZISSIMA
+                        } ) )
+                     }
+                  )
                }
             )
          }, global.turnPlayer.deck.At(0)])
-         
       } else {
-
          global.options.Add( ["Draw", function() {
             global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
                if global.turnPlayer.deck.size > 0
@@ -71,7 +74,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
          },self)
          
          if canDraw choice = 0
-         else choice = global.srandom.IRandom(global.options.size-1)
+         else choice = irandom(global.options.size-1)//global.srandom.IRandom(global.options.size-1)
          var option = global.options.At(choice)
          if (array_length(option) > 3) && (!is_undefined(option[3]))
             option[1](option[3])
