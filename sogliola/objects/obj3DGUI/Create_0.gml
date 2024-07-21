@@ -55,8 +55,12 @@ cat = mesh3DGLoad("./graphics/cat.obj.3dg")
 tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 
 
+// Queste due variabili servono alla gestione del passaggio
+// tra watching aquarium e playing
 watching = false
 watchingBack = true
+
+
 initialized = false
 objectHover = undefined
 sf = -1

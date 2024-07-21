@@ -25,22 +25,28 @@ if( !is_undefined(objectHover) ) {
       card = objectHover
       global.hoverTarget = card
       
-      // Zoom della carta in mano -----------------------------------------------------
+      // +----------------------------------------------------------------------------+
+      // | Zoom della carta in mano                                                   |
+      // +----------------------------------------------------------------------------+
       if ( card.location == global.player.hand ) {
          card.guiCard.setMouseHover()
          if mouse_check_button_pressed(mb_right) {
             card.guiCard.setZoom()
          }
       }
-
-      // Mossa ------------------------------------------------------------------------
+      // +----------------------------------------------------------------------------+
+      // | Cardpicking                                                                |
+      // +----------------------------------------------------------------------------+
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
       },[card])
       porcodio = options
-      // Primo click
-      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && is_undefined(global.pickingTarget) {
+      
+      // ------------------------------------------------------------------------------
+      // Primo click 
+      if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
+         && is_undefined(global.pickingTarget) {
 
          if( array_length(options) > 1) {
 
@@ -66,12 +72,15 @@ if( !is_undefined(objectHover) ) {
             }
          }
       }
-      // Secondo click in poi, su carte
-      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && !is_undefined(global.pickingTarget) {
-         // Trova tutte le mosse restanti che hanno come target tutti gli elementi attualmente
-         // presenti in pickingTarget, oltre alla carta attuale
+      // ------------------------------------------------------------------------------
+      // Secondo click in poi, su carte 
+      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && 
+         !is_undefined(global.pickingTarget) {
+         // Trova tutte le mosse restanti che hanno come target tutti gli elementi
+         // attualmente presenti in pickingTarget, oltre alla carta attuale
          options = global.options.FilterAll( function(option,args) {
-            // escludi le mosse la cui carta sorgente non sia quella che si vuole attivare/evocare
+            // escludi le mosse la cui carta sorgente non sia quella che si vuole 
+            // attivare/evocare
             if( option[2] != args[0][0]) return false;
             // crea un array con tutti i target da ricercare nelle mosse
             var targets = []
@@ -120,6 +129,7 @@ if( !is_undefined(objectHover) ) {
          }
       }
    }
+   // ---------------------------------------------------------------------------------
    // secondo click in poi, su acquari. Per ora gli effetti che coinvolgono gli acquari
    // hanno un solo target possibile, quindi faccio gestione semplificata. Dovessero
    // sorgere carte con più target, di cui almeno uno acquario, dovrò correggere..

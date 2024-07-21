@@ -12,7 +12,6 @@ zero3=[0,0,0]
 
 randomrot = random_range(-5,5);
 
-//_mouseHover = false
 mouseHover = false
 mouseHoverTimer = 0
 alreadyHover = false
@@ -40,6 +39,10 @@ setMouseHover = function() {
    )
 }
 
+
+// +----------------------------------------------------------------------------+
+// | Zoom della carta in mano                                                   |
+// +----------------------------------------------------------------------------+
 global.zooming = false // true if a card is in zoom mode
 
 setZoom = function() {
@@ -65,11 +68,7 @@ setZoom = function() {
    )
    
    new StackMoveCamera(camFrom,camTo,0.5,undefined)
-   //v3LerpIP(global.camera.From,tmpVec,0.04,global.camera.From)
-   //v3LerpIP(global.camera.To,targetPos,0.01,global.camera.To)
-   
-   
-   
+
    cardZoom = true
    global.zooming = true
    
