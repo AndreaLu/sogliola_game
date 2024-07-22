@@ -87,9 +87,15 @@ function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(un
          anim.RotZ,
          anim.PosX,
          anim.PosY,
-         anim.PosZ
+         anim.PosZ,
+         anim.ScalX,
+         anim.ScalY,
+         anim.ScalZ
       ]
       var channelValue = [ // uno per ogni canale 
+         0,
+         0,
+         0,
          0,
          0,
          0,
@@ -100,19 +106,13 @@ function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(un
       
       // Calcola il valore di ogni canale interpolato tra i due keyframe subito prima e dopo
       if( progress == 0 ) { // prendo il valore del primo keyframe
-         channelValue[0] = channels[0][0][1]
-         channelValue[1] = channels[1][0][1]
-         channelValue[2] = channels[2][0][1]
-         channelValue[3] = channels[3][0][1]
-         channelValue[4] = channels[4][0][1]
-         channelValue[5] = channels[5][0][1]
+         for( var i=0;i<9;i++)
+            channelValue[i] = channels[i][0][1]
       } else if( progress == 1) { // prendo il valore dell'ultimo keyframe
-         channelValue[0] = channels[0][array_length(channels[0])-1][1]
-         channelValue[1] = channels[1][array_length(channels[1])-1][1]
-         channelValue[2] = channels[2][array_length(channels[2])-1][1]
-         channelValue[3] = channels[3][array_length(channels[3])-1][1]
-         channelValue[4] = channels[4][array_length(channels[4])-1][1]
-         channelValue[5] = channels[5][array_length(channels[5])-1][1]
+         for( var i=0;i<9;i++) {
+            var channel = channels[i]
+            channelValue[i] = channel[array_length(channel)-1][1]
+         }
       } else { // interpolo il valore tra due keyframe o tengo buono l'ultimo se ho superato l'ultimo keyframe
          for( var c=0;c<array_length(channels); c++ ) {
             var channel = channels[c]

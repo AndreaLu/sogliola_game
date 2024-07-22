@@ -1,22 +1,21 @@
-ENGINE:
+IMPORTANTI(da fare in giornate dedicate)
+1. - IA semplice (sort delle mosse in base al delta score con albero decisionale)
+2. - implementa attese con grafica catene
+3. - draw di testo e valore sulle carte
+4. - bottiglia di grog/latte/rum per passare il turno.
+
+SECONDARI(ordinati per importanza)
+- rendi tutti gli effetti che targettano, in modo da permettere di cliccare l'acquario
+- animazione carta che viene sommersa oppure lanciata nell'oceano (free sogliola)
 - implementa controllo giullare in diavolo nero e sogliola pietra
 - rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
 - aggiungi carta medusa
-
-INTERAZIONE:
-- non viene considerato mai il fov delle telecamere tra cui ci si sposta con Stack
-- implementa attese con grafica catene
-- animazione carta che viene sommersa (free sogliola)
+- [proposta] qualcosina sullo sfondo delle carte invece del monocolore
+  rendi piu semplice il caricamento in gm dele sprite (usa files invece di sprite)
 - fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
   alla telecamera (o lo fa in modo molto subdolo)
-
-
-GRAFICA:
-- draw di testo e valore sulle carte
-- [proposta] qualcosina sullo sfondo delle carte invece del monocolore
+- glitch dei controlli durante la pescata dello zoom delle carte - pesca automatica?
 - [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
-- cambiare un po' la figura sogliola volante perché difficile da distinguere da sogliola normale
-- bottiglia di grog/latte/rum per passare il turno
 - protezione acquario
 - qualcosa per mostrare il punteggio?
 
