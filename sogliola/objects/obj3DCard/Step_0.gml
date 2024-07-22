@@ -23,11 +23,11 @@ if !drawing {
             global.Blender.HndPl.Transform.j,
             [1,0,0],
             1,  // posizione di partenza
-            (mouseHover || cardZoom) ? (cardZoom ? 1.2 : 0.6): 0, // mousehover
+            (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6): 0, // mousehover
             0.4*offs, // offset carta in mano
             targetPos
          )
-         v3SumIP([0,cardZoom ? 0 : 10,0],obj3DGUI.TargetHndPlRot,targetRot)
+         v3SumIP([0,cardZoom ? 0 : 3,0],obj3DGUI.TargetHndPlRot,targetRot)
       
          // Ghost values
          v3ScaleIP( 1, obj3DGUI.TargetHndPlScal, ghost.targetScal)
@@ -40,7 +40,7 @@ if !drawing {
             0.4*offs, // offset carta in mano
             ghost.targetPos
          )
-         v3SumIP([0,cardZoom ? 0 : 10,0],obj3DGUI.TargetHndPlRot,ghost.targetRot)
+         v3SumIP([0,cardZoom ? 0 : 5,0],obj3DGUI.TargetHndPlRot,ghost.targetRot)
          break
 
       case global.opponent.hand:
@@ -61,7 +61,7 @@ if !drawing {
          pos = global.player.aquarium._cards.Index(card)
          offs = pos-global.player.aquarium.size/2+0.5
          var t = current_time/1000+0.5*offs
-         var bobbing = sin(t)*0.1;
+         var bobbing = sin(t)*0.02;
          var xbobbing = cos(t)*0.1;
          v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
          v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqPlPos,targetPos)
@@ -72,7 +72,7 @@ if !drawing {
          pos = global.opponent.aquarium._cards.Index(card)
          offs = pos-global.opponent.aquarium.size/2+0.5
          var t = current_time/1000+0.5*offs
-         var bobbing = cos(t)*0.1;
+         var bobbing = cos(t)*0.02;
          var xbobbing = sin(t)*0.1;
          v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
          v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqOpPos,targetPos)

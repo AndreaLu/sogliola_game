@@ -1,0 +1,1 @@
+audio_play_sound(sndMainLoop,0,true);
