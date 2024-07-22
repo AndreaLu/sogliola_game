@@ -1,34 +1,15 @@
-
-TargetAqPlPos = global.Blender.AqPl.Position
-TargetAqPlRot = global.Blender.AqPl.Rotation
 TargetAqPlScal = [1,1,1]
-
-TargetAqOpPos = global.Blender.AqOp.Position
-TargetAqOpRot = global.Blender.AqOp.Rotation
 TargetAqOpScal = [1,1,1]
-
-TargetDkPlPos = global.Blender.DckPl.Position
-TargetDkPlRot = global.Blender.DckPl.Rotation
 TargetDkPlScal = [1,1,1]
-
-TargetDkOpPos = global.Blender.DckOp.Position
-TargetDkOpRot = global.Blender.DckOp.Rotation
 TargetDkOpScal = [1,1,1]
-
-TargetOceanPos = global.Blender.Ocean.Position
-TargetOceanRot = global.Blender.Ocean.Rotation
 TargetOceanScal = [1,1,1]
-
-TargetHndOpPos = global.Blender.HndOp.Position
-TargetHndOpRot = global.Blender.HndOp.Rotation
 TargetHndOpScal = [1,1,1]
-
-TargetHndPlPos = global.Blender.HndPl.Position
-TargetHndPlRot = global.Blender.HndPl.Rotation
 TargetHndPlScal = [1,1,1]
 
 
 lightDir = [0,0,0]
+v3SubIP([0,0,20],[0,6,10],lightDir)
+v3NormalizeIP(lightDir,lightDir)
 
 bgr = color_get_red(c_dkgrey)/255
 bgg = color_get_green(c_dkgrey)/255

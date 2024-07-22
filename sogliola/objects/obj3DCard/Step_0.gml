@@ -27,7 +27,7 @@ if !drawing {
             0.4*offs, // offset carta in mano
             targetPos
          )
-         v3SumIP([0,cardZoom ? 0 : 3,0],obj3DGUI.TargetHndPlRot,targetRot)
+         v3SumIP([0,cardZoom ? 0 : 3,0],global.Blender.HndPl.Rotation,targetRot)
       
          // Ghost values
          v3ScaleIP( 1, obj3DGUI.TargetHndPlScal, ghost.targetScal)
@@ -40,7 +40,7 @@ if !drawing {
             0.4*offs, // offset carta in mano
             ghost.targetPos
          )
-         v3SumIP([0,cardZoom ? 0 : 5,0],obj3DGUI.TargetHndPlRot,ghost.targetRot)
+         v3SumIP([0,cardZoom ? 0 : 5,0],global.Blender.HndPl.Rotation,ghost.targetRot)
          break
 
       case global.opponent.hand:
@@ -50,8 +50,8 @@ if !drawing {
             offs -= 0.5
          }
          v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
-         v3SumIP([0.3*offs,0.1*offs,0],obj3DGUI.TargetHndOpPos,targetPos)
-         v3SumIP([0,offs,0],obj3DGUI.TargetHndOpRot,targetRot)
+         v3SumIP([0.3*offs,0.1*offs,0],global.Blender.HndOp.Position,targetPos)
+         v3SumIP([0,offs,0],global.Blender.HndOp.Rotation,targetRot)
          break
 
 
@@ -64,8 +64,8 @@ if !drawing {
          var bobbing = sin(t)*0.02;
          var xbobbing = cos(t)*0.1;
          v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
-         v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqPlPos,targetPos)
-         v3SumIP([0,0,xbobbing*30],obj3DGUI.TargetAqPlRot,targetRot)
+         v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqPl.Position,targetPos)
+         v3SumIP([0,0,xbobbing*30],global.Blender.AqPl.Rotation,targetRot)
          break
       
       case global.opponent.aquarium:
@@ -75,8 +75,8 @@ if !drawing {
          var bobbing = cos(t)*0.02;
          var xbobbing = sin(t)*0.1;
          v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
-         v3SumIP([offs+xbobbing,0,bobbing],obj3DGUI.TargetAqOpPos,targetPos)
-         v3SumIP(zero3,obj3DGUI.TargetAqOpRot,targetRot)
+         v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqOp.Position,targetPos)
+         v3SumIP(zero3,global.Blender.AqOp.Rotation,targetRot)
          break
 
 
@@ -84,14 +84,14 @@ if !drawing {
       case global.opponent.deck:
          pos = global.opponent.deck.size-1-global.opponent.deck._cards.Index(card)
          v3SetIP(obj3DGUI.TargetDkOpScal,targetScal)
-         v3SumIP([0,0,0.02*pos],obj3DGUI.TargetDkOpPos,targetPos)
-         v3SumIP([180,0,randomrot],obj3DGUI.TargetDkOpRot,targetRot)
+         v3SumIP([0,0,0.02*pos],global.Blender.DckOp.Position,targetPos)
+         v3SumIP([180,0,randomrot],global.Blender.DckOp.Rotation,targetRot)
          break;
       case global.player.deck:
          pos = global.player.deck.size-1-global.player.deck._cards.Index(card)
          v3SetIP(obj3DGUI.TargetDkPlScal,targetScal)
-         v3SumIP([0,0,0.02*pos],obj3DGUI.TargetDkPlPos,targetPos)
-         v3SumIP([180,0,randomrot],obj3DGUI.TargetDkPlRot,targetRot)
+         v3SumIP([0,0,0.02*pos],global.Blender.DckPl.Position,targetPos)
+         v3SumIP([180,0,randomrot],global.Blender.DckPl.Rotation,targetRot)
          break;
       
       
@@ -99,8 +99,8 @@ if !drawing {
       case global.ocean:
          pos = global.ocean.size-1-global.ocean._cards.Index(card)
          v3SetIP(obj3DGUI.TargetOceanScal,targetScal)
-         v3SumIP([0,0,0.02*pos],obj3DGUI.TargetOceanPos,targetPos)
-         v3SumIP([180,0,0],obj3DGUI.TargetOceanRot,targetRot)
+         v3SumIP([0,0,0.02*pos],global.Blender.Ocean.Position,targetPos)
+         v3SumIP([180,0,0],global.Blender.Ocean.Rotation,targetRot)
          break;
       default:
          targetPos[@0] = 0

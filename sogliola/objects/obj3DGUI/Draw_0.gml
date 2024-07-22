@@ -11,8 +11,7 @@ draw_clear(c_dkgrey)
 shader_set(sha)
 
 
-v3SubIP([0,0,20],[0,6,10],lightDir)
-lightDir = v3Normalize(lightDir)
+
 shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
 
 

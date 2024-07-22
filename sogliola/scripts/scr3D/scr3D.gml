@@ -95,7 +95,7 @@ function v3Cross(v,w) {
 		v[0]*w[1]-v[1]*w[0],
 	];
 }
-// Normalizes vector v and returns it
+// Puts into w the normalized version of vector v
 function v3NormalizeIP(v,w) {
 	var l = 1/sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	w[@0] = v[0]*l;
