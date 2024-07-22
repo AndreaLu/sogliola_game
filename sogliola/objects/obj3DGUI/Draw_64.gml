@@ -53,6 +53,7 @@ if( !is_undefined(objectHover) ) {
             new StackMoveCamera(
                global.Blender.CamAq.From,
                global.Blender.CamAq.To,
+               global.Blender.CamAq.FovY,
                0.3, undefined
             )
             global.pickingTarget = [card]
@@ -75,6 +76,7 @@ if( !is_undefined(objectHover) ) {
                new StackMoveCamera(
                   global.Blender.CamAq.From,
                   global.Blender.CamAq.To,
+                  global.Blender.CamAq.FovY,
                   0.3, undefined
                )
                global.pickingTarget = [card]
@@ -128,6 +130,7 @@ if( !is_undefined(objectHover) ) {
             new StackMoveCamera(
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
+               global.Blender.CamHand.FovY,
                0.3, function() {global.pickingTarget = undefined}
             )
          }
@@ -170,6 +173,7 @@ if( !is_undefined(objectHover) ) {
             new StackMoveCamera(
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
+               global.Blender.CamHand.FovY,
                0.3, function() { global.pickingTarget = undefined }
             )
       }
@@ -183,6 +187,7 @@ if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
+      global.Blender.CamHand.FovY,
       0.3, undefined
    )
 }
@@ -205,6 +210,7 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
       new StackMoveCamera(
          global.Blender.CamOpponent.From,
          global.Blender.CamOpponent.To,
+         global.Blender.CamOpponent.FovY,
          0.3, undefined
       )
       global.choiceMade = true
@@ -231,6 +237,7 @@ if keyboard_check_pressed(ord("W")) && !watching && global.turnPlayer == global.
    new StackMoveCamera(
       global.Blender.CamAq.From,
       global.Blender.CamAq.To,
+      global.Blender.CamAq.FovY,
       0.3, function() {
          time_source_start(
             time_source_create(
@@ -248,6 +255,7 @@ if watching && keyboard_check_pressed(ord("S")) && !watchingBack {
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
+      global.Blender.CamHand.FovY,
       0.3, function() {
          obj3DGUI.watchingBack = true
          time_source_start(

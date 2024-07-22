@@ -60,7 +60,7 @@ setZoom = function() {
       camFrom
    )
    
-   new StackMoveCamera(camFrom,camTo,0.5,undefined)
+   new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,undefined)
 
    cardZoom = true
    global.zooming = true

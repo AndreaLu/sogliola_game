@@ -66,17 +66,6 @@ watchingBack = true
 initialized = false
 objectHover = undefined
 sf = -1
-   var fov = global.Blender.CamHand.FovY
-   camera_set_proj_mat(
-      view_camera[0],
-      matrix_build_projection_perspective_fov(
-         -fov*180/pi, // FOV
-         1920/1080,   // Aspect ratio
-         0.1,         // Z-Near
-         100          // Z-Far
-      )
-   );
-
 
 if global.debugMode {
    // Start the Blender server

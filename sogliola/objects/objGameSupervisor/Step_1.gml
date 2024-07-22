@@ -97,6 +97,7 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
       new StackMoveCamera(
          global.Blender.CamOpponent.From,
          global.Blender.CamOpponent.To,
+         global.Blender.CamOpponent.FovY,
          0.3, undefined
       )
    }

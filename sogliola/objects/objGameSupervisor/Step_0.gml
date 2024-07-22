@@ -17,12 +17,14 @@ if startTurn {
          new StackMoveCamera(
             global.Blender.CamDeck.From,
             global.Blender.CamDeck.To,
+            global.Blender.CamDeck.FovY,
             0.8, undefined 
          )
          global.options.Add( ["Draw", function() {
             new StackMoveCamera(
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
+               global.Blender.CamHand.FovY,
                0.8, function() {
                   new StackBlenderAnimLerpPos(
                      global.Blender.AnimCardDraw.Action,

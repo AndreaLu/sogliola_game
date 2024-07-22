@@ -7,12 +7,10 @@ function Stack(callback) {
 }
 // location: new position of the camera
 // target: new target position of the camera (lookAt)
+// fov: new Fov for the camera
 // duration: length of the animation in seconds
 // callback: function that will be called when the anim is over
-
-
-
-function StackMoveCamera(location,target,duration,callback) : Stack(callback) constructor {
+function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback) constructor {
    static _dirA = [0,0,0]
    static _dirB = [0,0,0]
    static _dir = [0,0,0]
@@ -22,6 +20,8 @@ function StackMoveCamera(location,target,duration,callback) : Stack(callback) co
    toA = v3Copy(global.camera.To)
    toB = v3Copy(target)
    dur = duration
+   startFov = global.camera.FOV
+   endFov = fov
    
    v3SubIP(global.camera.To,global.camera.From,_dirA)
    v3SubIP(target,location,_dirB)
@@ -33,15 +33,11 @@ function StackMoveCamera(location,target,duration,callback) : Stack(callback) co
       done = (t == 1)
       var cc = sin(t*pi-pi/2)*0.5+0.5
       var c = sin(cc*pi-pi/2)*0.5+0.5
-      
-      /*if t >= 0.5 && !is_undefined(Callback) {
-         Callback()
-         Callback = undefined
-      }*/
+      // c coefficient ranging between 0 and 1
       v3SlerpIP(_dirA,_dirB,c,_dir)
       v3LC2IP(fromA,fromB,1-c,c,global.camera.From)
       v3LC2IP(global.camera.From,_dir,1,1,global.camera.To)
-      //v3LC2IP(toA,toB,1-c,c,global.camera.To)
+      global.camera.FOV = lerp(startFov,endFov,c)
    }
 }
 

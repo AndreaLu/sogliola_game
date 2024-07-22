@@ -13,10 +13,12 @@ Blender = json_parse(json)
 global.camera = {
    From:[1,0,0],
    To:[0,1,0],
-   Up:[0,0,1]
+   Up:[0,0,1],
+   FOV:90
 }
 v3SetIP(global.Blender.CamHand.From,global.camera.From)
 v3SetIP(global.Blender.CamHand.To,global.camera.To)
+global.camera.fov = global.Blender.CamHand.FovY
 
 
 

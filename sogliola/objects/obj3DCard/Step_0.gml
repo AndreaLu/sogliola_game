@@ -175,6 +175,7 @@ if cardZoom {
       new StackMoveCamera(
          global.Blender.CamHand.From,
          global.Blender.CamHand.To,
+         global.Blender.CamHand.FovY,
          0.3,function () { global.zooming = false }
       )
    }
