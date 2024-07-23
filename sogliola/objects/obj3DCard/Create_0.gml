@@ -37,13 +37,14 @@ canHover = true
 canUnhover = false
 
 global.zooming = false // true if a card is in zoom mode
+global.zoomCamTransition = false 
 
 setZoom = function() {
    if global.zooming return;
 
    static camTo = [0,0,0]
    static camFrom = [0,0,0]
-   
+   global.zoomCamTransition = true
    v3LC3IP(
          global.Blender.HndPl.Position,
          global.Blender.HndPl.Transform.j,
@@ -60,7 +61,9 @@ setZoom = function() {
       camFrom
    )
    
-   new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,undefined)
+   new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,function () {
+      global.zoomCamTransition = false
+   })
 
    cardZoom = true
    global.zooming = true

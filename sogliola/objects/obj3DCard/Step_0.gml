@@ -167,7 +167,8 @@ if is_undefined(objHov) || !is_instanceof(objHov,Card) && canUnhover {
 
 // Uscire dalla modalità card zoom
 if cardZoom {
-   if mouse_check_button_pressed(mb_right) {
+   if mouse_check_button_pressed(mb_right) && !global.zoomCamTransition  {
+      obj3DGUI.objectHover = undefined
       cardZoom = false
       new StackMoveCamera(
          global.Blender.CamHand.From,
