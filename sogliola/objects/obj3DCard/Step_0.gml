@@ -164,11 +164,8 @@ if is_undefined(objHov) || !is_instanceof(objHov,Card) && canUnhover {
    canUnhover = false
 }
 
-/*
-if !cardZoom && mouseHover && global.hoverTarget != card {
-   mouseHover = false
-}*/
 
+// Uscire dalla modalità card zoom
 if cardZoom {
    if mouse_check_button_pressed(mb_right) {
       cardZoom = false

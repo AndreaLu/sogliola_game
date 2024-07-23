@@ -5,21 +5,19 @@
 4. - bottiglia di grog/latte/rum per passare il turno.
 
 # SECONDARI(ordinati per importanza)
-
-- animazione carta che viene sommersa oppure lanciata nell'oceano (free sogliola)
-- implementa controllo giullare in diavolo nero e sogliola pietra
-- rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
-- aggiungi carta medusa
+- [lod] animazione carta che viene sommersa oppure lanciata nell'oceano (free sogliola)
+- [sla] implementa controllo giullare in diavolo nero e sogliola pietra
+- [sla] rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
+- [lod/sla] aggiungi carta medusa
 - [proposta] qualcosina sullo sfondo delle carte invece del monocolore
-  rendi piu semplice il caricamento in gm dele sprite (usa files invece di sprite)
 - fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
   alla telecamera (o lo fa in modo molto subdolo)
-- glitch dei controlli durante la pescata dello zoom delle carte - pesca automatica?
-- [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
-- protezione acquario
-- qualcosa per mostrare il punteggio?
-- genera un seme lato server condiviso per entrambi i giocatori del match
-- implementa il contesto - mondo 2d dall'alto stile pokemon
+- [sla] glitch dei controlli durante la pescata dello zoom delle carte - pesca automatica?
+- [lod] [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
+- [lod/sla] protezione acquario
+- [lod/sla] qualcosa per mostrare il punteggio?
+- [sla] genera un seme lato server condiviso per entrambi i giocatori del match
+- [lod/sla] implementa il contesto - mondo 2d dall'alto stile pokemon
   col gatto che va in giro e sfida gli altri gatti del torneo guadagnando
   carte di volta in volta
 

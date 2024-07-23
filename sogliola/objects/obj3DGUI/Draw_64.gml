@@ -4,6 +4,8 @@
 // 3d uses culling which prevents 2d graphics from being displayed, remove it
 gpu_set_cullmode(cull_noculling)
 
+if watching
+   draw_rectangle(0,0,100,100,false)
 
 
 /* debug: show the cards buffer */
@@ -19,17 +21,16 @@ var h = sprite_get_height(sprBack)
 // +===============================================================================================+
 // | Interazione con il player                                                                     |
 // +===============================================================================================+
-global.hoverTarget = undefined
+
 if( !is_undefined(objectHover) ) {
    
    if is_instanceof( objectHover, Card ) {
       card = objectHover
-      global.hoverTarget = card
       
       // ------------------------------------------------------------------------------
       // Zoom della carta in mano
 
-      if ( card.location == global.player.hand ) {
+      if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
          if mouse_check_button_pressed(mb_right) {
             card.guiCard.setZoom()
@@ -237,8 +238,10 @@ global.options.foreach( function(option,ctx) {
 // +-----------------------------------------------------------------------------------------------+
 // | Passaggio da playign a watching aquarium                                                      |
 // +-----------------------------------------------------------------------------------------------+
-if keyboard_check_pressed(ord("W")) && !watching && global.turnPlayer == global.player {
+if keyboard_check_pressed(ord("W")) && !watching 
+   && global.turnPlayer == global.player && !global.zooming {
    watching = true
+   camTransition = true
    new StackMoveCamera(
       global.Blender.CamAq.From,
       global.Blender.CamAq.To,
@@ -249,14 +252,16 @@ if keyboard_check_pressed(ord("W")) && !watching && global.turnPlayer == global.
                time_source_game,0.1,
                time_source_units_seconds, function() {
                obj3DGUI.watchingBack = false
+               obj3DGUI.camTransition = false
             })
          )
       }
    )
 }
 
-if watching && keyboard_check_pressed(ord("S")) && !watchingBack {
+if watching && keyboard_check_pressed(ord("S")) && !watchingBack && !global.zooming {
    watchingBack = true
+   camTransition = true
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
@@ -268,6 +273,7 @@ if watching && keyboard_check_pressed(ord("S")) && !watchingBack {
                time_source_game,0.1,
                time_source_units_seconds, function() {
                obj3DGUI.watching = false
+               obj3DGUI.camTransition = false
             })
          )
          

@@ -42,6 +42,7 @@ bottle = mesh3DGLoad("./graphics/bottle.obj.3dg")
 // tra watching aquarium e playing
 watching = false
 watchingBack = true
+camTransition = false
 
 
 initialized = false

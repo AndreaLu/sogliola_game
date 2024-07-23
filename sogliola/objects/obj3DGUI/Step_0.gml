@@ -1,5 +1,5 @@
 
-if surface_exists(sf) {
+if surface_exists(sf) && !global.zooming && !camTransition {
    var color = surface_getpixel(sf,window_mouse_get_x(),window_mouse_get_y())
    // Codifica clickbuffer:
    // se il colore è un rosso, si tratta di una carta
