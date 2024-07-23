@@ -5,6 +5,7 @@
 gpu_set_cullmode(cull_noculling)
 
 
+
 /* debug: show the cards buffer */
 if keyboard_check(vk_escape) && global.debugMode
    draw_surface(sf,0,0)
@@ -15,9 +16,9 @@ var w = sprite_get_width(sprBack)
 var h = sprite_get_height(sprBack)
 
 
-// +==================================================================================+
-// | Interazione con il player                                                        |
-// +==================================================================================+
+// +===============================================================================================+
+// | Interazione con il player                                                                     |
+// +===============================================================================================+
 global.hoverTarget = undefined
 if( !is_undefined(objectHover) ) {
    
@@ -34,9 +35,9 @@ if( !is_undefined(objectHover) ) {
             card.guiCard.setZoom()
          }
       }
-      // +----------------------------------------------------------------------------------+
-      // | Cardpicking                                                                      |
-      // +----------------------------------------------------------------------------------+
+      // +-----------------------------------------------------------------------------------------+
+      // | Cardpicking                                                                             |
+      // +-----------------------------------------------------------------------------------------+
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
@@ -197,9 +198,9 @@ if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
 }
 
 
-// +----------------------------------------------------------------------------------+
-// | Passare il turno                                                                 |
-// +----------------------------------------------------------------------------------+
+// +-----------------------------------------------------------------------------------------------+
+// | Passare il turno                                                                              |
+// +-----------------------------------------------------------------------------------------------+
 if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
    var test = global.options.Filter( function(option) {
       return option[0] == "Pass the turn"
@@ -233,9 +234,9 @@ global.options.foreach( function(option,ctx) {
    ctx.drawY += 20
 },self)
 
-// +----------------------------------------------------------------------------------+
-// | Passaggio da playign a watching aquarium                                         |
-// +----------------------------------------------------------------------------------+
+// +-----------------------------------------------------------------------------------------------+
+// | Passaggio da playign a watching aquarium                                                      |
+// +-----------------------------------------------------------------------------------------------+
 if keyboard_check_pressed(ord("W")) && !watching && global.turnPlayer == global.player {
    watching = true
    new StackMoveCamera(

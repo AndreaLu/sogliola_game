@@ -11,23 +11,42 @@ if !surface_exists(sfDummy)
 // | shaClickBuffer                                                                                |
 // +-----------------------------------------------------------------------------------------------+
 
+// durante il summon, nascondi le carte sogliola in modo da non ostruire l'acquario
+// nel click buffer. 
+var onlyDrawAquarium = false
+if !is_undefined(global.pickingTarget) {
+   // Filtra le opzioni possibili
+   onlyDrawAquarium = !is_undefined(global.options.Filter(
+      function(option) { 
+         if array_length(option) < 4 || is_array(option[3]) return false;
+         if option[2] != global.pickingTarget[0] return false;
+         return ( is_instanceof(option[3],Aquarium) )
+      }
+   ))
+}
+
 
 surface_set_target_ext(1,sf)
 shader_set(shaClickBuffer)
 draw_clear(c_dkgray)
 shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),0)
 
-with( obj3DCard ) {
-   if !is_undefined(card) {
-      shader_set_uniform_f_array(shader_get_uniform(shaClickBuffer,"cardCol"),[(card.index+1)/255,0,0]);
-      matrix_set(matrix_world,matBuild(position,rot,scale))
-      vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
-      vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
-      // draw the ghost card
-      if card.location == global.player.hand && !global.zooming {
-         matrix_set(matrix_world,matBuild(ghost.position,ghost.rot,ghost.scale))
-         vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
-         vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+if !onlyDrawAquarium {
+   with( obj3DCard ) {
+      if !is_undefined(card) {
+         shader_set_uniform_f_array(
+            shader_get_uniform(shaClickBuffer,"cardCol"),
+            [(card.index+1)/255,0,0]
+         );
+         matrix_set(matrix_world,matBuild(position,rot,scale))
+         vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
+         vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+         // draw the ghost card
+         if card.location == global.player.hand && !global.zooming {
+            matrix_set(matrix_world,matBuild(ghost.position,ghost.rot,ghost.scale))
+            vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
+            vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+         }
       }
    }
 }
