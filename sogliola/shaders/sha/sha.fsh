@@ -5,8 +5,6 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying vec3 v_vNormal;
 varying vec3 v_vLightDir;
-varying vec3 v_vCardCol;
-varying float v_vCardGhost;
 
 void main()
 {
@@ -39,8 +37,7 @@ void main()
     vec3 toonColor = coeff * baseColor.rgb;
     
     // Primo render target: colore toon
-    gl_FragData[0] = vec4(toonColor, 1.0-v_vCardGhost);
-    
-    // Secondo render target: colore della carta click buffer
-    gl_FragData[1] = vec4(v_vCardCol.xyz, 1.0);
+    //gl_FragColor= vec4(toonColor, 1.0 );
+    gl_FragData[0] = vec4(toonColor, 1.0 );
+    gl_FragData[1] = vec4(0.0,0.0,0.0,0.0);
 }

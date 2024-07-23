@@ -79,6 +79,7 @@
     {"id":{"name":"scrGUI3D","path":"scripts/scrGUI3D/scrGUI3D.yy",},},
     {"id":{"name":"scrUtils","path":"scripts/scrUtils/scrUtils.yy",},},
     {"id":{"name":"sha","path":"shaders/sha/sha.yy",},},
+    {"id":{"name":"shaClickBuffer","path":"shaders/shaClickBuffer/shaClickBuffer.yy",},},
     {"id":{"name":"shaOcean","path":"shaders/shaOcean/shaOcean.yy",},},
     {"id":{"name":"shaTable","path":"shaders/shaTable/shaTable.yy",},},
     {"id":{"name":"sndBottleSpin","path":"sounds/sndBottleSpin/sndBottleSpin.yy",},},

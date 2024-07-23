@@ -47,6 +47,7 @@ watchingBack = true
 initialized = false
 objectHover = undefined
 sf = -1
+sfDummy = -1
 
 if global.debugMode {
    // Start the Blender server

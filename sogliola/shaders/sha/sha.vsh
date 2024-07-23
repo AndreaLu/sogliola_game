@@ -10,12 +10,9 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying vec3 v_vNormal;
 varying vec3 v_vLightDir;
-varying vec3 v_vCardCol;
-varying float v_vCardGhost;
 
 uniform vec3 lightDir;
-uniform vec3 cardCol;
-uniform float cardGhost;
+
 
 
 
@@ -28,6 +25,5 @@ void main()
    v_vTexcoord = in_TextureCoord;
    v_vNormal = -in_Normal;
    v_vLightDir = lightDir;
-   v_vCardCol = cardCol;
-   v_vCardGhost = cardGhost;
+
 }
