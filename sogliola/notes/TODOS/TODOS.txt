@@ -5,7 +5,8 @@
 4. - bottiglia di grog/latte/rum per passare il turno.
 
 # SECONDARI(ordinati per importanza)
-- asd
+- durante il summon, nascondi le carte sogliola in modo da non ostruire
+  il click buffer. 
 - animazione carta che viene sommersa oppure lanciata nell'oceano (free sogliola)
 - implementa controllo giullare in diavolo nero e sogliola pietra
 - rendi esplicito che proteggi acquario va bene anche contro sogliola pietra
