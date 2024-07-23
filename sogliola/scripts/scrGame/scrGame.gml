@@ -217,7 +217,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
              global.turnPlayer.aquarium.size < 8 ) {
-            global.options.Add( ["Summon "+name,Summon, self] ) 
+            global.options.Add( ["Summon target"+name,Summon, self, global.turnPlayer.aquarium] ) 
          }
       }
    } 

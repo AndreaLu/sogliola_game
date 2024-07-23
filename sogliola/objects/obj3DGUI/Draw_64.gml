@@ -34,55 +34,15 @@ if( !is_undefined(objectHover) ) {
             card.guiCard.setZoom()
          }
       }
-// +----------------------------------------------------------------------------------+
-// | Cardpicking                                                                      |
-// +----------------------------------------------------------------------------------+
+      // +----------------------------------------------------------------------------------+
+      // | Cardpicking                                                                      |
+      // +----------------------------------------------------------------------------------+
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
       },[card])
       porcodio = options
       
-      // ------------------------------------------------------------------------------
-      // Primo click
-      if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
-         && is_undefined(global.pickingTarget) {
-
-         if( array_length(options) > 1) {
-            // Zoom nell'acquario, bisogna scegliere il target
-            new StackMoveCamera(
-               global.Blender.CamAq.From,
-               global.Blender.CamAq.To,
-               global.Blender.CamAq.FovY,
-               0.3, undefined
-            )
-            global.pickingTarget = [card]
-         }
-
-         // La mossa possibile è una sola. La eseguo, solo se non ci sono target da 
-         // cliccare. Se ce ne sono, anche se uno solo, lo lascio scegliere al
-         // giocatore
-         if( array_length(options) == 1 ) {
-            var option = options[0]
-            // Se non ci sono target possibili, esegui l'unica mossa possibile
-            if (array_length(option) <= 3 || is_undefined(option[3])) {
-               option[1]()
-               global.choiceMade = true
-               if global.multiplayer {
-                  // Send the message!
-                  networkSendPacket("move,"+string(sel_choice))
-               }
-            } else {
-               new StackMoveCamera(
-                  global.Blender.CamAq.From,
-                  global.Blender.CamAq.To,
-                  global.Blender.CamAq.FovY,
-                  0.3, undefined
-               )
-               global.pickingTarget = [card]
-            }
-         }
-      }
       // ------------------------------------------------------------------------------
       // Secondo click in poi, su carte 
       if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && 
@@ -140,6 +100,50 @@ if( !is_undefined(objectHover) ) {
             global.pickingTarget[@array_length(global.pickingTarget)] = card
          }
       }
+
+      // ------------------------------------------------------------------------------
+      // Primo click
+      if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
+         && is_undefined(global.pickingTarget) {
+
+         if( array_length(options) > 1) {
+            // Zoom nell'acquario, bisogna scegliere il target
+            new StackMoveCamera(
+               global.Blender.CamAq.From,
+               global.Blender.CamAq.To,
+               global.Blender.CamAq.FovY,
+               0.3, undefined
+            )
+            global.pickingTarget = [card]
+         }
+
+         // La mossa possibile è una sola. La eseguo, solo se non ci sono target da 
+         // cliccare. Se ce ne sono, anche se uno solo, lo lascio scegliere al
+         // giocatore
+         if( array_length(options) == 1 ) {
+            var option = options[0]
+            // Se non ci sono target possibili, esegui l'unica mossa possibile
+            if (array_length(option) <= 3 || is_undefined(option[3])) {
+               option[1]()
+               global.choiceMade = true
+               if global.multiplayer {
+                  // Send the message!
+                  networkSendPacket("move,"+string(sel_choice))
+               }
+            } else {
+               new StackMoveCamera(
+                  global.Blender.CamAq.From,
+                  global.Blender.CamAq.To,
+                  global.Blender.CamAq.FovY,
+                  0.3, undefined
+               )
+               global.pickingTarget = [card]
+            }
+         }
+      }
+      
+      
+      
    }
    // ---------------------------------------------------------------------------------
    // secondo click in poi, su acquari. Per ora gli effetti che coinvolgono gli acquari
@@ -154,7 +158,7 @@ if( !is_undefined(objectHover) ) {
       var a = global.options.Filter(
          function(option,args) { 
             if array_length(option) < 4 || is_array(option[3]) return false;
-            return option[3] == args[0] 
+            return ( option[3] == args[0] && option[2] == global.pickingTarget[0] )
          },
          [aquarium]
       )
