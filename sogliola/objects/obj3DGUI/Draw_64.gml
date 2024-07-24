@@ -4,7 +4,7 @@
 // 3d uses culling which prevents 2d graphics from being displayed, remove it
 gpu_set_cullmode(cull_noculling)
 
-if watching
+if !is_undefined(global.pickingTarget)
    draw_rectangle(0,0,100,100,false)
 
 
@@ -187,7 +187,8 @@ if( !is_undefined(objectHover) ) {
 }
 // ------------------------------------------------------------------------------------
 // Annullare un cardpicking in corso
-if !is_undefined(global.pickingTarget) && mouse_check_button_pressed(mb_right) {
+if !is_undefined(global.pickingTarget) && 
+   (mouse_check_button_pressed(mb_right) || keyboard_check_pressed(ord("S")) ){
    global.pickingTarget = undefined
    // Torno alla mano, al massimo non accade niente
    new StackMoveCamera(
@@ -238,7 +239,7 @@ global.options.foreach( function(option,ctx) {
 // +-----------------------------------------------------------------------------------------------+
 // | Passaggio da playign a watching aquarium                                                      |
 // +-----------------------------------------------------------------------------------------------+
-if keyboard_check_pressed(ord("W")) && !watching 
+if keyboard_check_pressed(ord("W")) && !watching  && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming {
    watching = true
    camTransition = true
