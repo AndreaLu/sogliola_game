@@ -50,8 +50,8 @@ if !drawing {
             offs -= 0.5
          }
          v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
-         v3SumIP([0.3*offs,0.1*offs,0],global.Blender.HndOp.Position,targetPos)
-         v3SumIP([0,offs,0],global.Blender.HndOp.Rotation,targetRot)
+         v3SumIP([0.3*offs,0,0],global.Blender.HndOp.Position,targetPos)
+         v3SumIP([0,3,0],global.Blender.HndOp.Rotation,targetRot)
          break
 
 
