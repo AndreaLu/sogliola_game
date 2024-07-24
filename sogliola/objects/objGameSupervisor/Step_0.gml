@@ -14,11 +14,12 @@ if startTurn {
    global.options.Clear()
    if( global.turnPlayer.deck.size > 0 ) {
       if global.turnPlayer == global.player {
+         global.disableUserInput = true
          new StackMoveCamera(
             global.Blender.CamDeck.From,
             global.Blender.CamDeck.To,
             global.Blender.CamDeck.FovY,
-            0.8, undefined 
+            0.8
          )
          global.options.Add( ["Draw", function() {
             new StackMoveCamera(
@@ -34,7 +35,10 @@ if startTurn {
                         if global.turnPlayer.deck.size > 0
                            global.turnPlayer.Draw()
                            global.choiceMade = true // PEZZA PEZZISSIMA
-                        } ) )
+                           global.disableUserInput = false
+                        }
+                        
+                         ) )
                      }
                   )
                }

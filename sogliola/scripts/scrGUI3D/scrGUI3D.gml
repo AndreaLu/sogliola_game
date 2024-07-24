@@ -1,3 +1,4 @@
+global.disableUserInput = false
 stack = new ds_list()
 function Stack(callback) {
    done = false

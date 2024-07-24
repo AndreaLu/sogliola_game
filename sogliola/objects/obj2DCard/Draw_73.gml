@@ -24,5 +24,4 @@ if( mouse_x >= x-w/2*scale && mouse_x <= x+w/2*scale &&
    if( is_instanceof(card,FishCard) ) {
       draw_text(vx,dy,"value: " + string(card.Val()) ); dy += 20
    }
-   
 }

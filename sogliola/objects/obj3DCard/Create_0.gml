@@ -40,6 +40,7 @@ global.zooming = false // true if a card is in zoom mode
 global.zoomCamTransition = false 
 
 setZoom = function() {
+   if global.disableUserInput return;
    if global.zooming return;
 
    static camTo = [0,0,0]

@@ -6,6 +6,8 @@ gpu_set_cullmode(cull_noculling)
 
 if !is_undefined(global.pickingTarget)
    draw_rectangle(0,0,100,100,false)
+if global.disableUserInput
+   draw_rectangle(100,0,200,100,false)
 
 
 /* debug: show the cards buffer */
@@ -18,14 +20,16 @@ var w = sprite_get_width(sprBack)
 var h = sprite_get_height(sprBack)
 
 
+
 // +===============================================================================================+
 // | Interazione con il player                                                                     |
 // +===============================================================================================+
 
-if( !is_undefined(objectHover) ) {
+if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
    
    if is_instanceof( objectHover, Card ) {
       card = objectHover
+      
       
       // ------------------------------------------------------------------------------
       // Zoom della carta in mano
@@ -107,14 +111,18 @@ if( !is_undefined(objectHover) ) {
       // Primo click
       if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
          && is_undefined(global.pickingTarget) {
-
+         
+         
          if( array_length(options) > 1) {
+            global.disableUserInput = true
             // Zoom nell'acquario, bisogna scegliere il target
             new StackMoveCamera(
                global.Blender.CamAq.From,
                global.Blender.CamAq.To,
                global.Blender.CamAq.FovY,
-               0.3, undefined
+               0.3, function() {
+                  global.disableUserInput = false
+               }
             )
             global.pickingTarget = [card]
          }
@@ -133,11 +141,14 @@ if( !is_undefined(objectHover) ) {
                   networkSendPacket("move,"+string(sel_choice))
                }
             } else {
+               global.disableUserInput = true
                new StackMoveCamera(
                   global.Blender.CamAq.From,
                   global.Blender.CamAq.To,
                   global.Blender.CamAq.FovY,
-                  0.3, undefined
+                  0.3, function() {
+                     global.disableUserInput = false
+                  }
                )
                global.pickingTarget = [card]
             }
@@ -188,14 +199,19 @@ if( !is_undefined(objectHover) ) {
 // ------------------------------------------------------------------------------------
 // Annullare un cardpicking in corso
 if !is_undefined(global.pickingTarget) && 
-   (mouse_check_button_pressed(mb_right) || keyboard_check_pressed(ord("S")) ){
+   (mouse_check_button_pressed(mb_right) || keyboard_check_pressed(ord("S")) 
+   && !global.disableUserInput ){
+   
    global.pickingTarget = undefined
+   global.disableUserInput = true
    // Torno alla mano, al massimo non accade niente
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
       global.Blender.CamHand.FovY,
-      0.3, undefined
+      0.3, function() {
+         global.disableUserInput = false
+      }
    )
 }
 
@@ -240,7 +256,7 @@ global.options.foreach( function(option,ctx) {
 // | Passaggio da playign a watching aquarium                                                      |
 // +-----------------------------------------------------------------------------------------------+
 if keyboard_check_pressed(ord("W")) && !watching  && is_undefined(global.pickingTarget)
-   && global.turnPlayer == global.player && !global.zooming {
+   && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
    watching = true
    camTransition = true
    new StackMoveCamera(
