@@ -272,3 +272,87 @@ function v3SlerpIP(v,w,t,z) {
    v3LC2IP(v,tmp,cos(theta),sin(theta),z)
    //result = [v0[i] * math.cos(theta) + relative_vec[i] * math.sin(theta) for i in range(len(v0))]
 }
+
+function mat2quat(m) {
+    var trace = m[0] + m[5] + m[10]
+    var s,qx,qy,qz,qw
+    if trace > 0 {
+        s = sqrt(trace + 1.0) * 2  # s = 4 * qw
+        qw = 0.25 * s
+        qx = (m[9] - m[6]) / s
+        qy = (m[2] - m[8]) / s
+        qz = (m[4] - m[1]) / s
+    } else if (m[0] > m[5] and m[0] > m[10]) {
+        s = sqrt(1.0 + m[0] - m[5] - m[10]) * 2 
+        qw = (m[9] - m[6]) / s
+        qx = 0.25 * s
+        qy = (m[1] + m[4]) / s
+        qz = (m[2] + m[8]) / s
+    } else if (m[5] > m[10]) {
+        s = sqrt(1.0 + m[5] - m[0] - m[10]) * 2
+        qw = (m[2] - m[8]) / s
+        qx = (m[1] + m[4]) / s
+        qy = 0.25 * s
+        qz = (m[6] + m[9]) / s
+    } else {
+        s = sqrt(1.0 + m[10] - m[0] - m[5]) * 2
+        qw = (m[4] - m[1]) / s
+        qx = (m[2] + m[8]) / s
+        qy = (m[6] + m[9]) / s
+        qz = 0.25 * s
+    }
+    return [qw, qx, qy, qz]
+}
+
+function quat2mat(q) {
+    var qw = q[0]
+    var qx = q[1]
+    var qy = q[2]
+    var qz = q[3]
+    
+    var m = array_create(16,0)// [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+    m[@15] = 1
+    
+    m[@0] = 1 - 2 * (qy * qy + qz * qz)
+    m[@1] = 2 * (qx * qy - qz * qw)
+    m[@2] = 2 * (qx * qz + qy * qw)
+    
+    m[@4] = 2 * (qx * qy + qz * qw)
+    m[@5] = 1 - 2 * (qx * qx + qz * qz)
+    m[@6] = 2 * (qy * qz - qx * qw)
+    
+    m[@8] = 2 * (qx * qz - qy * qw)
+    m[@9] = 2 * (qy * qz + qx * qw)
+    m[@10] = 1 - 2 * (qx * qx + qy * qy)
+    
+    return m
+}
+
+
+function slerp(q1, q2, t) {
+    var dot = q1[0]*q2[0] + q1[1]*q2[1] + q1[2]*q2[2] + q1[3]*q2[3]
+
+    if dot < 0 {
+        q2 = [-q2[0], -q2[1], -q2[2], -q2[3]]
+        dot = -dot
+    }
+    
+    if( dot > 0.9995 ) {
+        var result = [q1[0] + t*(q2[0] - q1[0]),
+                  q1[1] + t*(q2[1] - q1[1]),
+                  q1[2] + t*(q2[2] - q1[2]),
+                  q1[3] + t*(q2[3] - q1[3])]
+        var result_norm = sqrt(result[0]*result[0] + result[1]*result[1] + result[2]*result[2] + result[3]*result[3])
+        return [result[0]/result_norm, result[1]/result_norm, result[2]/result_norm, result[3]/result_norm]
+    }
+    var theta_0 = arccos(dot)
+    var sin_theta_0 = sqrt(1.0 - dot*dot)
+    var theta = theta_0 * t
+    var sin_theta = sin(theta)
+    var sin_theta_1 = sin(theta_0 - theta)
+    
+    var s0 = sin_theta_1 / sin_theta_0
+    var s1 = sin_theta / sin_theta_0
+    
+    return [s0*q1[0] + s1*q2[0], s0*q1[1] + s1*q2[1], s0*q1[2] + s1*q2[2], s0*q1[3] + s1*q2[3]]
+}

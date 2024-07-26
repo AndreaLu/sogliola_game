@@ -13,7 +13,16 @@ if startTurn {
 
    global.options.Clear()
    if( global.turnPlayer.deck.size > 0 ) {
+      // Rendi la pesca automatica
+      // global.turnPlayer.deck.At(0)
+      
+      
+
       if global.turnPlayer == global.player {
+         new StackCardDrawAnim(
+            global.turnPlayer.deck.At(0).guiCard,
+            undefined
+         )
          new StackMoveCamera(
             global.Blender.CamDeck.From,
             global.Blender.CamDeck.To,

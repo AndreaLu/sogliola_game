@@ -1,11 +1,43 @@
 global.disableUserInput = false
 stack = new ds_list()
+
 function Stack(callback) {
    done = false
    Update = function() {}
    Callback = callback
    global.stack.Add(self)
 }
+// guiCard: obj3DCard reference of the card to be ANIMATED!!!!
+function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
+   obj = guiCard
+   time = 0
+   duration = 3
+   _callback = callback
+
+   obj.drawing = true
+   startPos = v3Copy(guiCard.position)
+   endPos = v3Sum(startPos,[0,0,0.6])
+   // 180,0,rand
+   startrot = v3Copy(obj.rot)
+   
+   Update = function() {
+      time += deltaTime()/1000000
+      var p = time/duration
+      v3LC2IP(startPos,endPos,1-p,p,obj.position)
+      obj.rot[@0] = lerp(startrot[0],0,p)
+      obj.rot[@1] = lerp(startrot[1],180,p)
+      obj.rot[@2] = lerp(startrot[2],0,p)
+      done = p >= duration
+   }
+
+   Callback = function() {
+      obj.drawing = false
+      if !is_undefined(_callback)
+         _calback()
+   }
+}
+
+
 // location: new position of the camera
 // target: new target position of the camera (lookAt)
 // fov: new Fov for the camera
