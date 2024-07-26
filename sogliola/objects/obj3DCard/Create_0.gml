@@ -1,10 +1,27 @@
+zero3=[0,0,0]
+uno3=[1,1,1]
+
 meshCard = mesh3DGLoad("graphics/card.obj.3dg")
 meshBack = mesh3DGLoad("graphics/back.obj.3dg")
-scale =[0.2,0.2,0.2]
+
+// card struct associated with this object
+// Similarly, the card has a guiCard to reference
+// this object
 card = undefined
+
+// used when the card is in the deck
+randomrot = random_range(-5,5);
+
+// +----------------------------------------------------------------------+
+// | 3D Movement variables                                                |
+// +----------------------------------------------------------------------+
 position = [0,0,0]
 scale = [1,1,1]
-rot = [0,0,0]
+mat = matrix_build_identity()
+targetPos = [0,0,0]
+targetMat = matrix_build_identity()
+targetScal = [1,1,1]
+
 // ghost is needed to fix the mousehover glitch issue
 // we draw a hidden card in the original position (not hovered)
 // only in the clickbuffer to extend the hover region
@@ -12,24 +29,18 @@ ghost = {
    position : [0,0,0],
    scale : [0,0,0],
    rot : [0,0,0],
+   mat : matrix_build_identity(),
    targetPos : [0,0,0],
-   targetRot : [0,0,0],
-   targetScal : [1,1,1]
+   targetScal : [1,1,1],
+   targetMat : matrix_build_identity()
 }
-targetPos = [0,0,0]
-targetRot= [0,0,0]
-targetScal = [1,1,1]
-zero3=[0,0,0]
-uno3=[1,1,1]
-
-drawing = false // true if the drawing animation is running
-
-randomrot = random_range(-5,5);
+global.drawing = false
 
 
-// +----------------------------------------------------------------------------+
-// | Zoom della carta in mano                                                   |
-// +----------------------------------------------------------------------------+
+
+// +----------------------------------------------------------------------+
+// | Card Zoom                                                            |
+// +----------------------------------------------------------------------+
 prevMouseHover = false
 mouseHover = false
 cardZoom = false
@@ -71,3 +82,6 @@ setZoom = function() {
    global.zooming = true
    
 }
+
+
+world = matrix_build_identity()

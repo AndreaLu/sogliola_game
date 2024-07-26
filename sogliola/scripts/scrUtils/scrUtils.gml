@@ -8,6 +8,25 @@ while( !file_text_eof(file) )
 file_text_close(file)
 Blender = json_parse(json)
 
+// Crea le matrici di rotazione per ogni mesh
+structs = [
+    Blender.HndPl,
+    Blender.HndOp,
+    Blender.DckPl,
+    Blender.DckOp,
+    Blender.AqPl,
+    Blender.AqOp,
+    Blender.Ocean
+]
+for(var i=0;i<array_length(structs);i++) {
+    var stru = structs[i]
+    stru.Mat = matBuildCBM(
+        stru.Transform.j,
+        stru.Transform.i,
+        stru.Transform.k,
+    )
+}
+
 // This struct holds the informatino the 3D camera uses
 // TODO: add fov info
 

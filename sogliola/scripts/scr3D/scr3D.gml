@@ -91,7 +91,7 @@ function v3CrossIP(v,w,z) {
 function v3Cross(v,w) {
 	return [
 		v[1]*w[2]-v[2]*w[1],
-		v[0]*w[2]-v[2]*w[0],
+		v[2]*w[0]-v[0]*w[2],
 		v[0]*w[1]-v[1]*w[0],
 	];
 }
@@ -136,6 +136,68 @@ function matBuildRot(axis,angle) {
 function matBuild(pos, rot, scale) {
 	return matrix_build(pos[0],pos[1],pos[2], rot[0],rot[1],rot[2], scale[0],scale[1],scale[2])
 }
+
+
+function mat3IPInvert(argument0) {
+
+	var mat = argument0
+	var a00 = mat[0],
+	    a01 = mat[1],
+	    a02 = mat[2],
+	    a10 = mat[3],
+	    a11 = mat[4],
+	    a12 = mat[5],
+	    a20 = mat[6],
+	    a21 = mat[7],
+	    a22 = mat[8],
+	    det = a00*a11*a22+a10*a21*a02+a20*a01*a12
+	        -a00*a21*a12-a20*a11*a02-a10*a01*a22;
+	if (det == 0) {
+		return undefined;
+	}
+	else {
+		mat[@8] = (a00*a11-a01*a10)/det;
+		mat[@0] = (a11*a22-a12*a21)/det;
+		mat[@1] = (a02*a21-a01*a22)/det;
+		mat[@2] = (a01*a12-a02*a11)/det;
+		mat[@3] = (a12*a20-a10*a22)/det;
+		mat[@4] = (a00*a22-a02*a20)/det;
+		mat[@5] = (a02*a10-a00*a12)/det;
+		mat[@6] = (a10*a21-a11*a20)/det;
+		mat[@7] = (a01*a20-a00*a21)/det;
+	}
+}
+
+
+
+function matBuildCBM(forwardB, rightB, upB) {
+	// Creates the matrix that transforms base A into base B
+	var af = global.FORWARD, ar = global.RIGHT, au = global.UP
+	var bf = forwardB, br = rightB, bu = upB
+	var A0 = [af[0], ar[0], au[0],
+	          af[1], ar[1], au[1],
+		      af[2], ar[2], au[2]]
+	mat3IPInvert(A0)
+	var t0 = vec3Mat3( [bf[0], br[0], bu[0]], A0 ) // t00,t10,t20
+	var t1 = vec3Mat3( [bf[1], br[1], bu[1]], A0 ) // t01,t11,t21
+	var t2 = vec3Mat3( [bf[2], br[2], bu[2]], A0 ) // t02,t12,t22
+	return [t0[0], t1[0], t2[0], 0,
+		    t0[1], t1[1], t2[1], 0,
+			t0[2], t1[2], t2[2], 0,
+			    0,     0,     0, 1]
+}
+
+
+function vec3Mat3(v, m) {
+	var result = array_create(3,0)
+	var vector=v, matrix=m;
+	result[@0] = vector[0]*matrix[0] + vector[1]*matrix[3] + vector[2]*matrix[6]
+	result[@1] = vector[0]*matrix[1] + vector[1]*matrix[4] + vector[2]*matrix[7]
+	result[@2] = vector[0]*matrix[2] + vector[1]*matrix[5] + vector[2]*matrix[8]
+	return result
+}
+
+
 // Loads a 3DC mesh file (collision mesh) and returns the mesh. The mesh is just an array of real numbers
 // which are the x,y,z components of each vertex of each triangle in the mesh
 function mesh3DCLoad(fname) {
@@ -329,7 +391,7 @@ function quat2mat(q) {
 }
 
 
-function slerp(q1, q2, t) {
+function quatSlerp(q1, q2, t) {
     var dot = q1[0]*q2[0] + q1[1]*q2[1] + q1[2]*q2[2] + q1[3]*q2[3]
 
     if dot < 0 {

@@ -264,7 +264,7 @@ global.options.foreach( function(option,ctx) {
 },self)
 
 // +-----------------------------------------------------------------------------------------------+
-// | Passaggio da playign a watching aquarium                                                      |
+// | Passaggio da playing a watching aquarium                                                      |
 // +-----------------------------------------------------------------------------------------------+
 if inputManager.keys.W && !watching  && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
