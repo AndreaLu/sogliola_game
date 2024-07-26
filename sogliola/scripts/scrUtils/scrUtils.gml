@@ -10,15 +10,16 @@ Blender = json_parse(json)
 
 // This struct holds the informatino the 3D camera uses
 // TODO: add fov info
+
+//v3SetIP(global.Blender.CamHand.From,global.camera.From)
+//v3SetIP(global.Blender.CamHand.To,global.camera.To)
 global.camera = {
-   From:[1,0,0],
-   To:[0,1,0],
-   Up:[0,0,1],
-   FOV:90
+   From: v3Copy(Blender.CamHand.From),
+   To:   v3Copy(Blender.CamHand.To),
+   Up:   [0,0,1],
+   FOV:  Blender.CamHand.FovY
 }
-v3SetIP(global.Blender.CamHand.From,global.camera.From)
-v3SetIP(global.Blender.CamHand.To,global.camera.To)
-global.camera.fov = global.Blender.CamHand.FovY
+
 
 
 
