@@ -1,6 +1,6 @@
 
 if surface_exists(sf) && !global.zooming && !camTransition {
-   var color = surface_getpixel(sf,window_mouse_get_x(),window_mouse_get_y())
+   var color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
    // Codifica clickbuffer:
    // se il colore è un rosso, si tratta di una carta
    // se il colore è blu 1 è acquario del player, blu 0.5 acquario opponent

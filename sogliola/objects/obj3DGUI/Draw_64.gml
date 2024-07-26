@@ -1,9 +1,10 @@
-
-
+inputManager.Update()
 
 // 3d uses culling which prevents 2d graphics from being displayed, remove it
 gpu_set_cullmode(cull_noculling)
 
+
+draw_text(0,200,inputManager.playbackFrame)
 if !is_undefined(global.pickingTarget)
    draw_rectangle(0,0,100,100,false)
 if global.disableUserInput
@@ -14,7 +15,6 @@ if global.disableUserInput
 if keyboard_check(vk_escape) && global.debugMode
    draw_surface(sf,0,0)
 
-//draw_sprite(sprCat,0,window_mouse_get_x(),window_mouse_get_y())
 
 var w = sprite_get_width(sprBack)
 var h = sprite_get_height(sprBack)
@@ -36,7 +36,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 
       if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
-         if mouse_check_button_pressed(mb_right) {
+         if inputManager.keys.MBR {
             card.guiCard.setZoom()
          }
       }
@@ -51,7 +51,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       // ------------------------------------------------------------------------------
       // Secondo click in poi, su carte 
-      if !watching && !global.zooming && mouse_check_button_pressed(mb_left) && 
+      if !watching && !global.zooming && inputManager.keys.MBL && 
          !is_undefined(global.pickingTarget) {
          // Trova tutte le mosse restanti che hanno come target tutti gli elementi
          // attualmente presenti in pickingTarget, oltre alla carta attuale
@@ -93,11 +93,15 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
                // Send the message!
                networkSendPacket("move,"+string(sel_choice))
             }
+            global.disableUserInput = true
             new StackMoveCamera(
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
                global.Blender.CamHand.FovY,
-               0.3, function() {global.pickingTarget = undefined}
+               0.3, function() {
+                  global.pickingTarget = undefined
+                  global.disableUserInput = false
+               }
             )
          }
          else if array_length(options) > 1 {
@@ -109,7 +113,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 
       // ------------------------------------------------------------------------------
       // Primo click
-      if !watching && !global.zooming && mouse_check_button_pressed(mb_left)
+      if !watching && !global.zooming && inputManager.keys.MBL
          && is_undefined(global.pickingTarget) {
          
          
@@ -164,7 +168,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
    // sorgere carte con più target, di cui almeno uno acquario, dovrò correggere..
    if is_instanceof( objectHover, Aquarium ) &&
       !is_undefined(global.pickingTarget) &&
-      mouse_check_button_pressed(mb_left) {
+      inputManager.keys.MBL {
       // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
       // passando il mouse
       aquarium = objectHover
@@ -187,11 +191,15 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
                // Send the message!
                networkSendPacket("move,"+string(sel_choice))
             }
+            global.disableUserInput = true
             new StackMoveCamera(
                global.Blender.CamHand.From,
                global.Blender.CamHand.To,
                global.Blender.CamHand.FovY,
-               0.3, function() { global.pickingTarget = undefined }
+               0.3, function() { 
+                  global.pickingTarget = undefined
+                  global.disableUserInput = false
+               }
             )
       }
    }
@@ -199,8 +207,8 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 // ------------------------------------------------------------------------------------
 // Annullare un cardpicking in corso
 if !is_undefined(global.pickingTarget) && 
-   (mouse_check_button_pressed(mb_right) || keyboard_check_pressed(ord("S")) 
-   && !global.disableUserInput ){
+   (inputManager.keys.MBR || inputManager.keys.S) 
+   && !global.disableUserInput  && global.stack.size == 0 {
    
    global.pickingTarget = undefined
    global.disableUserInput = true
@@ -230,11 +238,14 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
          option[1](option[3])
       else
          option[1]()
+      global.disableUserInput = true
       new StackMoveCamera(
          global.Blender.CamOpponent.From,
          global.Blender.CamOpponent.To,
          global.Blender.CamOpponent.FovY,
-         0.3, undefined
+         0.3, function() {
+            global.disableUserInput = false
+         }
       )
       global.choiceMade = true
       if global.multiplayer {
@@ -255,10 +266,11 @@ global.options.foreach( function(option,ctx) {
 // +-----------------------------------------------------------------------------------------------+
 // | Passaggio da playign a watching aquarium                                                      |
 // +-----------------------------------------------------------------------------------------------+
-if keyboard_check_pressed(ord("W")) && !watching  && is_undefined(global.pickingTarget)
+if inputManager.keys.W && !watching  && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
    watching = true
    camTransition = true
+   global.disableUserInput = true
    new StackMoveCamera(
       global.Blender.CamAq.From,
       global.Blender.CamAq.To,
@@ -270,15 +282,18 @@ if keyboard_check_pressed(ord("W")) && !watching  && is_undefined(global.picking
                time_source_units_seconds, function() {
                obj3DGUI.watchingBack = false
                obj3DGUI.camTransition = false
+               global.disableUserInput = false
             })
          )
       }
    )
 }
 
-if watching && keyboard_check_pressed(ord("S")) && !watchingBack && !global.zooming {
+if watching && inputManager.keys.S && !watchingBack && !global.zooming 
+&& global.stack.size == 0 {
    watchingBack = true
    camTransition = true
+   global.disableUserInput = true
    new StackMoveCamera(
       global.Blender.CamHand.From,
       global.Blender.CamHand.To,
@@ -291,6 +306,7 @@ if watching && keyboard_check_pressed(ord("S")) && !watchingBack && !global.zoom
                time_source_units_seconds, function() {
                obj3DGUI.watching = false
                obj3DGUI.camTransition = false
+               global.disableUserInput = false
             })
          )
          
@@ -302,8 +318,12 @@ var cursor = 0;
 if (mouse_check_button(mb_any)){
    cursor=1
 }
-draw_sprite_ext(sprCursor,cursor,window_mouse_get_x(),window_mouse_get_y(), 2,2, 0, c_white, 1)
+draw_sprite_ext(sprCursor,cursor,inputManager.mouse.X,inputManager.mouse.Y, 2,2, 0, c_white, 1)
 
+
+if inputManager.playbackFrame == 1097 {
+   breakpoint()
+}
 
 // Disegno di debug per l'acquario protetto
 if global.player.aquarium.protected
@@ -312,3 +332,5 @@ if global.opponent.aquarium.protected
    draw_text(400,80,"acquario avversario protetto")
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
+
+

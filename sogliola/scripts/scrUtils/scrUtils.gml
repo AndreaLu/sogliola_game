@@ -306,3 +306,9 @@ function networkSendPacket( _msg ) {
    buffer_write(buffer,buffer_string,_msg)
    network_send_raw(global.client,buffer,string_length(_msg)+1)
 }
+
+function deltaTime() {
+   if global.debugMode
+      return 1000000/room_speed
+   return delta_time;
+}

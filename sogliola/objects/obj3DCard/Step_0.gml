@@ -170,11 +170,15 @@ if cardZoom {
    if mouse_check_button_pressed(mb_right) && !global.zoomCamTransition  {
       obj3DGUI.objectHover = undefined
       cardZoom = false
+      global.disableUserInput = true
       new StackMoveCamera(
          global.Blender.CamHand.From,
          global.Blender.CamHand.To,
          global.Blender.CamHand.FovY,
-         0.3,function () { global.zooming = false }
+         0.3,function () { 
+            global.zooming = false
+            global.disableUserInput = false
+         }
       )
    }
 }

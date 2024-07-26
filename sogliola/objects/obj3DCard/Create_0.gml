@@ -61,9 +61,10 @@ setZoom = function() {
       1,3.5,
       camFrom
    )
-   
+   global.disableUserInput = true
    new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,function () {
       global.zoomCamTransition = false
+      global.disableUserInput = false
    })
 
    cardZoom = true

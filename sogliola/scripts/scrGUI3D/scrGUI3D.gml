@@ -30,7 +30,7 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
    v3NormalizeIP(_dirB,_dirB)
 
    Update = function() {
-      t = min(t+delta_time/(1000000*dur),1)
+      t = min(t+deltaTime()/(1000000*dur),1)
       done = (t == 1)
       var cc = sin(t*pi-pi/2)*0.5+0.5
       var c = sin(cc*pi-pi/2)*0.5+0.5
@@ -78,7 +78,7 @@ function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(un
    
    Update = function() {
       // incrementa t 
-      t += delta_time/1000000
+      t += deltaTime()/1000000
       progress = clamp(t/dur,0,1)
       done = (progress == 1)
       
