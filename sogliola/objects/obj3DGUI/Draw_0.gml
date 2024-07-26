@@ -10,7 +10,7 @@ if !surface_exists(sfDummy)
 // +-----------------------------------------------------------------------------------------------+
 // | shaClickBuffer                                                                                |
 // +-----------------------------------------------------------------------------------------------+
-if !global.drawing {
+
 // durante il summon, nascondi le carte sogliola in modo da non ostruire l'acquario
 // nel click buffer. 
 var onlyDrawAquarium = false
@@ -60,7 +60,6 @@ shader_reset()
 surface_set_target_ext(1,sfDummy)
 
 
-}
 // +-----------------------------------------------------------------------------------------------+
 // | sha                                                                                           |
 // +-----------------------------------------------------------------------------------------------+
@@ -71,7 +70,7 @@ draw_clear(c_dkgrey)
 shader_set(sha)
 
 shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
-if !global.drawing {
+
 var bobbing = sin(current_time/600)*0.05;
 matrix_set(matrix_world,matBuild([0,0,bobbing],[0,0,0],[1,1,1]))
 vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
@@ -79,15 +78,13 @@ matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
-}
+
 
 with( obj3DCard ) {
-   if( !global.drawing || drawing ) {
-      if !is_undefined(card) {
-         matrix_set(matrix_world,mat)
-         vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
-         vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
-      }
+   if !is_undefined(card) {
+      matrix_set(matrix_world,mat)
+      vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
+      vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
    }
 }
 
@@ -99,7 +96,6 @@ shader_reset()
 // | shaOcean                                                                                      |
 // +-----------------------------------------------------------------------------------------------+
 
-if !global.drawing {
 
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 shader_set(shaOcean);
@@ -132,4 +128,3 @@ matrix_set(matrix_world,matrix_build_identity())
 
 shader_reset()
 
-}

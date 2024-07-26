@@ -34,8 +34,6 @@ ghost = {
    targetScal : [1,1,1],
    targetMat : matrix_build_identity()
 }
-global.drawing = false
-
 
 
 // +----------------------------------------------------------------------+

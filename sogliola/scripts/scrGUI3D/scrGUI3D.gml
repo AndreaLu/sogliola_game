@@ -39,7 +39,6 @@ function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
    endQuat = mat2quat(endMat)
 
    obj.drawing = true
-   global.drawing = true
    startPos = v3Copy(guiCard.position)
    endPos = v3Sum(startPos,[0,0,2])
    pos = [0,0,0]
@@ -58,12 +57,6 @@ function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
       )
    }
 
-   Callback = function() {
-      obj.drawing = false
-      global.drawing = false
-      if !is_undefined(_callback)
-         _callback()
-   }
 }
 
 

@@ -17,7 +17,7 @@ if startTurn {
       // global.turnPlayer.deck.At(0)
       
       if global.turnPlayer == global.player {
-
+         global.disableUserInput = true
          new StackMoveCamera(
             global.Blender.CamDeck.From,
             global.Blender.CamDeck.To,
@@ -37,34 +37,12 @@ if startTurn {
                   global.Blender.CamHand.From,
                   global.Blender.CamHand.To,
                   global.Blender.CamHand.FovY,
-                  0.8
+                  0.8, function() {
+                     global.disableUserInput = false
+                  }
                )
             }
          )
-         /*
-         global.options.Add( ["Draw", function() {
-            new StackMoveCamera(
-               global.Blender.CamHand.From,
-               global.Blender.CamHand.To,
-               global.Blender.CamHand.FovY,
-               0.8, function() {
-                  new StackBlenderAnimLerpPos(
-                     global.Blender.AnimCardDraw.Action,
-                     3, global.turnPlayer.deck.At(0).guiCard,
-                     function() {
-                        global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
-                        if global.turnPlayer.deck.size > 0
-                           global.turnPlayer.Draw()
-                           global.choiceMade = true // PEZZA PEZZISSIMA
-                        }
-                        
-                         ) )
-                     }
-                  )
-               }
-            )
-         }, global.turnPlayer.deck.At(0)])
-         */
       } else {
          global.options.Add( ["Draw", function() {
             global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
