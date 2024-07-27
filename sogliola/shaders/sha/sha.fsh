@@ -1,10 +1,17 @@
-//
+// GLSL
 // Simple passthrough fragment shader with toon shading and alpha cutoff
 //
 varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying vec3 v_vNormal;
 varying vec3 v_vLightDir;
+uniform float uSel;
+uniform float u_Time; 
+
+float smooth(in float e0,in float e1,in float v) {
+   float _t = clamp( (v - e0) / (e1 - e0), 0.0, 1.0);
+   return( _t * _t * (3.0 - 2.0 * _t));
+}
 
 void main()
 {
@@ -36,8 +43,12 @@ void main()
     // Colore base moltiplicato per il coefficiente quantizzato
     vec3 toonColor = coeff * baseColor.rgb;
     
+    // Colore di selezione
+    vec2 uv = v_vTexcoord;
+    float aa = uSel;//smooth(0.0,0.1,uv.x)*uSel;
+    aa *= 0.5*(sin(u_Time*6.0)+1.0)*0.2;
     // Primo render target: colore toon
     //gl_FragColor= vec4(toonColor, 1.0 );
-    gl_FragData[0] = vec4(toonColor, 1.0 );
+    gl_FragData[0] = vec4(toonColor + vec3(aa), 1.0 );
     gl_FragData[1] = vec4(0.0,0.0,0.0,0.0);
 }

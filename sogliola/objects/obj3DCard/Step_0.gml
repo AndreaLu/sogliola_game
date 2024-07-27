@@ -1,11 +1,19 @@
+// +----------------------------------------------------------------------+
+// | Step Event                                                           |
+// +----------------------------------------------------------------------+
+/*
+   This is where the card reacts to the game
+ */
+ 
 if is_undefined(card) exit
 
 var pos
 
 switch( card.location ) {
-//#region    | 1. Compute Target Transform |
-//#region    |    1.1 Hand                 |
-//#region    |       1.1.1 Player          |
+//            ______________________________
+//#region    | 1.0 Compute Target Transform |
+//#region    |    1.1 Hand                  |
+//#region    |       1.1.1 Player           |
    case global.player.hand:
       // ------------------------------------------------------------------
       // Rendered Card
@@ -55,7 +63,7 @@ switch( card.location ) {
 
       break
    //#endregion
-//#region    |       1.1.2 Opponent        |
+//#region    |       1.1.2 Opponent         |
    case global.opponent.hand:
       pos = global.opponent.hand._cards.Index(card)
       offs = pos-global.opponent.hand.size/2
@@ -69,8 +77,8 @@ switch( card.location ) {
       targetMat = global.Blender.HndOp.Mat
       break
    //#endregion
-//#endregion |                             |
-//#region    |    1.2 Aquarium             |
+//#endregion |                              |
+//#region    |    1.2 Aquarium              |
    /* AQUARIUM */
    case global.player.aquarium:
       pos = global.player.aquarium._cards.Index(card)
@@ -95,7 +103,7 @@ switch( card.location ) {
       targetMat = global.Blender.AqOp.Mat
       break;
 //#endregion
-//#region    |    1.3 Deck                 |
+//#region    |    1.3 Deck                  |
    case global.opponent.deck:
       pos = global.opponent.deck.size-1-global.opponent.deck._cards.Index(card)
       v3SetIP(obj3DGUI.TargetDkOpScal,targetScal)
@@ -111,7 +119,7 @@ switch( card.location ) {
       targetMat = global.Blender.DckPl.Mat
       break;
 //#endregion
-//#region    |    1.4 Ocean                |
+//#region    |    1.4 Ocean                 |
    case global.ocean:
       pos = global.ocean.size-1-global.ocean._cards.Index(card)
       v3SetIP(obj3DGUI.TargetOceanScal,targetScal)
@@ -120,7 +128,7 @@ switch( card.location ) {
       targetMat = global.Blender.Ocean.Mat
       break;
 //#endregion
-//#region    |    1.5 Other                |
+//#region    |    1.5 Other                 |
    default:
       targetPos[@0] = 0
       targetPos[@1] = 0
@@ -136,7 +144,7 @@ switch( card.location ) {
 
 }
 //#endregion
-//#region    |    1.6 Ghost                |
+//#region    |    1.6 Ghost                 |
 // Disable ghosts when the card is not in the player hand
 // TODO: can be improved just by disabling draw now that ghosts
 // are rendered in a separate buffer
@@ -151,9 +159,9 @@ if card.location != global.player.hand {
    ghost.targetMat = matrix_build_identity()
 }
 //#endregion
-//#endregion |                             |
-//#region    | 2. Rendering Interpolation  |
-//#region    |    2.1 Rendering            |
+//#endregion |                              |
+//#region    | 2.0 Rendering Interpolation  |
+//#region    |    2.1 Rendering             |
 v3LerpIP(position,targetPos,lerpSpeed,position)
 v3LerpIP(scale,targetScal,lerpSpeed,scale)
 v3LerpIP(rot,targetRot,lerpSpeed,rot)
@@ -179,7 +187,7 @@ mat = matrix_multiply(
 //   mat_tmp
 //)
 //#endregion
-//#region    |    2.2 Ghost                |
+//#region    |    2.2 Ghost                 |
 v3LerpIP(ghost.position,ghost.targetPos,lerpSpeed,ghost.position)
 v3LerpIP(ghost.scale,ghost.targetScal,lerpSpeed,ghost.scale)
 v3LerpIP(ghost.rot,ghost.targetRot,lerpSpeed,ghost.rot)
@@ -190,14 +198,14 @@ ghost.mat = matrix_multiply(
    matBuild(ghost.position,zero3,ghost.scale)
 )
 //#endregion
-//#region    |    2.3 System               |
+//#region    |    2.3 System                |
 // The first iteration of the step event has lerpSpeed to 1 to
 // make all the cards immediately reach their target values, now
 // put it back to a reasonable values
 lerpSpeed = 0.06
 //#endregion |                             |
-//#endregion |                             |
-//#region    | 3. MouseHover / Zoom        |
+//#endregion |                              |
+//#region    | 3.0 MouseHover / Zoom        |
 var objHov = obj3DGUI.objectHover
 if ( !is_undefined(objHov) && objHov == card && 
      objHov.location == global.player.hand && canHover ) {
@@ -240,5 +248,18 @@ if cardZoom {
    }
 }
 //#endregion
-
+//#region    | 4.0 Highlight                |
+if( !is_undefined(global.pickingTarget) && 
+   array_length(global.pickingTarget) == 1 ) {
+   var a = global.options.Filter(
+      function(option,args) {
+         if array_length(option) < 4 || is_array(option[3])
+            return false;
+         return ( option[3] == args[0] && option[2] == global.pickingTarget[0] )
+      }, [card]
+   )
+   selected = !is_undefined(a)
+}
+//#endregion |                              |
+//           |______________________________|
 

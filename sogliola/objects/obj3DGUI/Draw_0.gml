@@ -1,18 +1,21 @@
-
+// +----------------------------------------------------------------------+
+// | Draw Event                                                           |
+// +----------------------------------------------------------------------+
+/*
+   All game rendering happens here
+*/
 if !surface_exists(sf)
    sf = surface_create(room_width,room_height)
 
 if !surface_exists(sfDummy)
    sfDummy = surface_create(room_width,room_height)
 
+//            _________________________________________
+//#region    | 1.0 Click Buffer      (shaClickBuffer)  |
 
 
-// +-----------------------------------------------------------------------------------------------+
-// | shaClickBuffer                                                                                |
-// +-----------------------------------------------------------------------------------------------+
-
-// durante il summon, nascondi le carte sogliola in modo da non ostruire l'acquario
-// nel click buffer. 
+// durante il summon, nascondi le carte sogliola in modo da non ostruire
+// l'acquario nel click buffer. 
 var onlyDrawAquarium = false
 if !is_undefined(global.pickingTarget) {
    // Filtra le opzioni possibili
@@ -59,16 +62,16 @@ vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
 shader_reset()
 surface_set_target_ext(1,sfDummy)
 
-
-// +-----------------------------------------------------------------------------------------------+
-// | sha                                                                                           |
-// +-----------------------------------------------------------------------------------------------+
-
+//#endregion |                                         |
+//#region    | 2.0 Regular Rendering (sha)             |
 
 draw_clear(c_dkgrey)
 
 shader_set(sha)
-
+shader_set_uniform_f(
+   shader_get_uniform(sha, "u_Time"),
+   current_time / 1000.0
+);
 shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
 
 var bobbing = sin(current_time/600)*0.05;
@@ -83,20 +86,22 @@ vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
 with( obj3DCard ) {
    if !is_undefined(card) {
+      shader_set_uniform_f(
+         shader_get_uniform(sha, "uSel"),
+         selected ? 1.0 : 0.0
+      );
       matrix_set(matrix_world,mat)
       vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
    }
 }
+shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)
 
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
 
-
-// +-----------------------------------------------------------------------------------------------+
-// | shaOcean                                                                                      |
-// +-----------------------------------------------------------------------------------------------+
-
+//#endregion |                                         |
+//#region    | 3.0 Ocean             (shaOcean)        |
 
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 shader_set(shaOcean);
@@ -108,13 +113,43 @@ vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprWater,0));
 
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
-
-// +-----------------------------------------------------------------------------------------------+
-// | shaTable                                                                                      |
-// +-----------------------------------------------------------------------------------------------+
-
-
+//#endregion |                                         |
+//#region    | 4.0 Aquarium          (shaTable)        |
+//#region    |    4.1 Highlights                       |
+// Determine wether the aquariums should be highlighted
+// if there is an option available with source card the
+// current picking target source and with target the
+// aquarium, then highlight it.
+var plAqSel = 0
+var opAqSel = 0
+if( !is_undefined(global.pickingTarget) && 
+   array_length(global.pickingTarget) == 1 ) {
+   var a = global.options.Filter(
+      function(option) {
+         if array_length(option) < 4 || is_array(option[3])
+            return false;
+         return ( option[3] == global.player.aquarium 
+            && option[2] == global.pickingTarget[0] )
+      }, undefined
+   )
+   if !is_undefined(a) plAqSel = 1
+   var a = global.options.Filter(
+      function(option) {
+         if array_length(option) < 4 || is_array(option[3])
+            return false;
+         return ( option[3] == global.opponent.aquarium 
+            && option[2] == global.pickingTarget[0] )
+      }, undefined
+   )
+   if !is_undefined(a) opAqSel = 1
+}
+//#endregion
+//#region    |    4.2 Rendering                        |
 shader_set(shaTable);
+
+
+shader_set_uniform_f(shader_get_uniform(shaTable, "plAqSel"), plAqSel);
+shader_set_uniform_f(shader_get_uniform(shaTable, "opAqSel"), opAqSel);
 var sAlpha = shader_get_sampler_index(shaTable, "t_Alpha");
 var sMask = shader_get_sampler_index(shaTable, "t_Mask");
 
@@ -128,4 +163,6 @@ vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
 matrix_set(matrix_world,matrix_build_identity())
 
 shader_reset()
-
+//#endregion |                                         |
+//#endregion |                                         |
+//           |_________________________________________|
