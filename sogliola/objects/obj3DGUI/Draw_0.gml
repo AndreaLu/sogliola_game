@@ -38,12 +38,12 @@ if !onlyDrawAquarium {
             shader_get_uniform(shaClickBuffer,"cardCol"),
             [(card.index+1)/255,0,0]
          );
-         matrix_set(matrix_world,matBuild(position,rot,scale))
+         matrix_set(matrix_world,mat)
          vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
          vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
          // draw the ghost card
          if card.location == global.player.hand && !global.zooming {
-            matrix_set(matrix_world,matBuild(ghost.position,ghost.rot,ghost.scale))
+            matrix_set(matrix_world,ghost.mat)
             vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
             vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
          }
@@ -58,7 +58,6 @@ vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
 
 shader_reset()
 surface_set_target_ext(1,sfDummy)
-
 
 
 // +-----------------------------------------------------------------------------------------------+
@@ -83,7 +82,7 @@ vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
 with( obj3DCard ) {
    if !is_undefined(card) {
-      matrix_set(matrix_world,matBuild(position,rot,scale))
+      matrix_set(matrix_world,mat)
       vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
    }
@@ -122,6 +121,7 @@ texture_set_stage(sAlpha, sprite_get_texture(sprAlpha, 0));
 texture_set_stage(sMask, sprite_get_texture(sprWaterMask, 0));
 shader_set_uniform_f(shader_get_uniform(shaTable, "u_Time"), current_time / 1000.0);
 vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
+
 
 
 matrix_set(matrix_world,matrix_build_identity())

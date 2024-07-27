@@ -13,35 +13,36 @@ if startTurn {
 
    global.options.Clear()
    if( global.turnPlayer.deck.size > 0 ) {
+      // Rendi la pesca automatica
+      // global.turnPlayer.deck.At(0)
+      
       if global.turnPlayer == global.player {
+         global.disableUserInput = true
          new StackMoveCamera(
             global.Blender.CamDeck.From,
             global.Blender.CamDeck.To,
             global.Blender.CamDeck.FovY,
-            0.8
-         )
-         global.options.Add( ["Draw", function() {
-            new StackMoveCamera(
-               global.Blender.CamHand.From,
-               global.Blender.CamHand.To,
-               global.Blender.CamHand.FovY,
-               0.8, function() {
-                  new StackBlenderAnimLerpPos(
-                     global.Blender.AnimCardDraw.Action,
-                     3, global.turnPlayer.deck.At(0).guiCard,
-                     function() {
-                        global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
-                        if global.turnPlayer.deck.size > 0
+            0.8,
+            function() {
+               global.supervisor.StartEvent(
+                  new EventDraw(global.supervisor, function(_evt) {
+                        if global.turnPlayer.deck.size > 0 {
                            global.turnPlayer.Draw()
                            global.choiceMade = true // PEZZA PEZZISSIMA
                         }
-                        
-                         ) )
                      }
                   )
-               }
-            )
-         }, global.turnPlayer.deck.At(0)])
+               )
+               new StackMoveCamera(
+                  global.Blender.CamHand.From,
+                  global.Blender.CamHand.To,
+                  global.Blender.CamHand.FovY,
+                  0.8, function() {
+                     global.disableUserInput = false
+                  }
+               )
+            }
+         )
       } else {
          global.options.Add( ["Draw", function() {
             global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {

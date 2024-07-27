@@ -91,7 +91,7 @@ function v3CrossIP(v,w,z) {
 function v3Cross(v,w) {
 	return [
 		v[1]*w[2]-v[2]*w[1],
-		v[0]*w[2]-v[2]*w[0],
+		v[2]*w[0]-v[0]*w[2],
 		v[0]*w[1]-v[1]*w[0],
 	];
 }
@@ -136,6 +136,68 @@ function matBuildRot(axis,angle) {
 function matBuild(pos, rot, scale) {
 	return matrix_build(pos[0],pos[1],pos[2], rot[0],rot[1],rot[2], scale[0],scale[1],scale[2])
 }
+
+
+function mat3IPInvert(argument0) {
+
+	var mat = argument0
+	var a00 = mat[0],
+	    a01 = mat[1],
+	    a02 = mat[2],
+	    a10 = mat[3],
+	    a11 = mat[4],
+	    a12 = mat[5],
+	    a20 = mat[6],
+	    a21 = mat[7],
+	    a22 = mat[8],
+	    det = a00*a11*a22+a10*a21*a02+a20*a01*a12
+	        -a00*a21*a12-a20*a11*a02-a10*a01*a22;
+	if (det == 0) {
+		return undefined;
+	}
+	else {
+		mat[@8] = (a00*a11-a01*a10)/det;
+		mat[@0] = (a11*a22-a12*a21)/det;
+		mat[@1] = (a02*a21-a01*a22)/det;
+		mat[@2] = (a01*a12-a02*a11)/det;
+		mat[@3] = (a12*a20-a10*a22)/det;
+		mat[@4] = (a00*a22-a02*a20)/det;
+		mat[@5] = (a02*a10-a00*a12)/det;
+		mat[@6] = (a10*a21-a11*a20)/det;
+		mat[@7] = (a01*a20-a00*a21)/det;
+	}
+}
+
+
+
+function matBuildCBM(forwardB, rightB, upB) {
+	// Creates the matrix that transforms base A into base B
+	var af = global.FORWARD, ar = global.RIGHT, au = global.UP
+	var bf = forwardB, br = rightB, bu = upB
+	var A0 = [af[0], ar[0], au[0],
+	          af[1], ar[1], au[1],
+		      af[2], ar[2], au[2]]
+	mat3IPInvert(A0)
+	var t0 = vec3Mat3( [bf[0], br[0], bu[0]], A0 ) // t00,t10,t20
+	var t1 = vec3Mat3( [bf[1], br[1], bu[1]], A0 ) // t01,t11,t21
+	var t2 = vec3Mat3( [bf[2], br[2], bu[2]], A0 ) // t02,t12,t22
+	return [t0[0], t1[0], t2[0], 0,
+		    t0[1], t1[1], t2[1], 0,
+			t0[2], t1[2], t2[2], 0,
+			    0,     0,     0, 1]
+}
+
+
+function vec3Mat3(v, m) {
+	var result = array_create(3,0)
+	var vector=v, matrix=m;
+	result[@0] = vector[0]*matrix[0] + vector[1]*matrix[3] + vector[2]*matrix[6]
+	result[@1] = vector[0]*matrix[1] + vector[1]*matrix[4] + vector[2]*matrix[7]
+	result[@2] = vector[0]*matrix[2] + vector[1]*matrix[5] + vector[2]*matrix[8]
+	return result
+}
+
+
 // Loads a 3DC mesh file (collision mesh) and returns the mesh. The mesh is just an array of real numbers
 // which are the x,y,z components of each vertex of each triangle in the mesh
 function mesh3DCLoad(fname) {
@@ -271,4 +333,88 @@ function v3SlerpIP(v,w,t,z) {
    // Perform the slerp
    v3LC2IP(v,tmp,cos(theta),sin(theta),z)
    //result = [v0[i] * math.cos(theta) + relative_vec[i] * math.sin(theta) for i in range(len(v0))]
+}
+
+function mat2quat(m) {
+    var trace = m[0] + m[5] + m[10]
+    var s,qx,qy,qz,qw
+    if trace > 0 {
+        s = sqrt(trace + 1.0) * 2  # s = 4 * qw
+        qw = 0.25 * s
+        qx = (m[9] - m[6]) / s
+        qy = (m[2] - m[8]) / s
+        qz = (m[4] - m[1]) / s
+    } else if (m[0] > m[5] and m[0] > m[10]) {
+        s = sqrt(1.0 + m[0] - m[5] - m[10]) * 2 
+        qw = (m[9] - m[6]) / s
+        qx = 0.25 * s
+        qy = (m[1] + m[4]) / s
+        qz = (m[2] + m[8]) / s
+    } else if (m[5] > m[10]) {
+        s = sqrt(1.0 + m[5] - m[0] - m[10]) * 2
+        qw = (m[2] - m[8]) / s
+        qx = (m[1] + m[4]) / s
+        qy = 0.25 * s
+        qz = (m[6] + m[9]) / s
+    } else {
+        s = sqrt(1.0 + m[10] - m[0] - m[5]) * 2
+        qw = (m[4] - m[1]) / s
+        qx = (m[2] + m[8]) / s
+        qy = (m[6] + m[9]) / s
+        qz = 0.25 * s
+    }
+    return [qw, qx, qy, qz]
+}
+
+function quat2mat(q) {
+    var qw = q[0]
+    var qx = q[1]
+    var qy = q[2]
+    var qz = q[3]
+    
+    var m = array_create(16,0)// [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+    m[@15] = 1
+    
+    m[@0] = 1 - 2 * (qy * qy + qz * qz)
+    m[@1] = 2 * (qx * qy - qz * qw)
+    m[@2] = 2 * (qx * qz + qy * qw)
+    
+    m[@4] = 2 * (qx * qy + qz * qw)
+    m[@5] = 1 - 2 * (qx * qx + qz * qz)
+    m[@6] = 2 * (qy * qz - qx * qw)
+    
+    m[@8] = 2 * (qx * qz - qy * qw)
+    m[@9] = 2 * (qy * qz + qx * qw)
+    m[@10] = 1 - 2 * (qx * qx + qy * qy)
+    
+    return m
+}
+
+
+function quatSlerp(q1, q2, t) {
+    var dot = q1[0]*q2[0] + q1[1]*q2[1] + q1[2]*q2[2] + q1[3]*q2[3]
+
+    if dot < 0 {
+        q2 = [-q2[0], -q2[1], -q2[2], -q2[3]]
+        dot = -dot
+    }
+    
+    if( dot > 0.9995 ) {
+        var result = [q1[0] + t*(q2[0] - q1[0]),
+                  q1[1] + t*(q2[1] - q1[1]),
+                  q1[2] + t*(q2[2] - q1[2]),
+                  q1[3] + t*(q2[3] - q1[3])]
+        var result_norm = sqrt(result[0]*result[0] + result[1]*result[1] + result[2]*result[2] + result[3]*result[3])
+        return [result[0]/result_norm, result[1]/result_norm, result[2]/result_norm, result[3]/result_norm]
+    }
+    var theta_0 = arccos(dot)
+    var sin_theta_0 = sqrt(1.0 - dot*dot)
+    var theta = theta_0 * t
+    var sin_theta = sin(theta)
+    var sin_theta_1 = sin(theta_0 - theta)
+    
+    var s0 = sin_theta_1 / sin_theta_0
+    var s1 = sin_theta / sin_theta_0
+    
+    return [s0*q1[0] + s1*q2[0], s0*q1[1] + s1*q2[1], s0*q1[2] + s1*q2[2], s0*q1[3] + s1*q2[3]]
 }

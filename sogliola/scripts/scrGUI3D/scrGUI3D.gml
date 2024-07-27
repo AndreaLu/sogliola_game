@@ -1,11 +1,65 @@
 global.disableUserInput = false
 stack = new ds_list()
+
+FORWARD = [0,1,0]
+RIGHT = [1,0,0]
+UP = [0,0,1]
+
 function Stack(callback) {
    done = false
    Update = function() {}
    Callback = callback
    global.stack.Add(self)
 }
+// guiCard: obj3DCard reference of the card to be ANIMATED!!!!
+function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
+   obj = guiCard
+   time = 0
+   duration = 3
+   _callback = callback
+
+   var f = [0,1,0]
+   var u = [0,0,-1]
+   var r = v3Cross(f,u)
+
+   var f2 = v3Copy(global.Blender.HndPl.Transform.j)
+   var u2 = v3Copy(global.Blender.HndPl.Transform.k)
+   var r2 = v3Copy(global.Blender.HndPl.Transform.i)
+
+   startMat = matBuildCBM(
+      global.FORWARD,global.RIGHT,global.UP,
+      f,r,u
+   )
+   startQuat = mat2quat(startMat)
+   endMat = matBuildCBM(
+      global.FORWARD,global.RIGHT,global.UP,
+      f2,r2,u2
+      //global.Blender.HndPl.Transform.i,global.Blender.HndPl.Transform.j,global.Blender.HndPl.Transform.k
+   )
+   endQuat = mat2quat(endMat)
+
+   obj.drawing = true
+   startPos = v3Copy(guiCard.position)
+   endPos = v3Sum(startPos,[0,0,2])
+   pos = [0,0,0]
+   
+   Update = function() {
+      time += deltaTime()/1000000
+      var p = time/duration
+      done = (p >= 1)
+
+      v3LerpIP(startPos,endPos,p,pos)
+
+      var quat = quatSlerp(startQuat,endQuat,p)
+      obj.world = matrix_multiply(
+         quat2mat(quat),
+         matBuild(pos,[0,0,0],[1,1,1])
+      )
+   }
+
+}
+
+
 // location: new position of the camera
 // target: new target position of the camera (lookAt)
 // fov: new Fov for the camera
