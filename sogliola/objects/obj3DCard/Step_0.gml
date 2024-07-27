@@ -1,42 +1,41 @@
 if is_undefined(card) exit
 
-
-
 var pos
-//#region Compute Target Transform
-// +----------------------------------------------------------------------+
-// | Compute Target Transform                                             |
-// +----------------------------------------------------------------------+
-switch( card.location ) {
 
-   //#region Hand
-   /* HAND */
-   //#region Player
+switch( card.location ) {
+//#region    | 1. Compute Target Transform |
+//#region    |    1.1 Hand                 |
+//#region    |       1.1.1 Player          |
    case global.player.hand:
-      
-      //#region hand card
+      // ------------------------------------------------------------------
+      // Rendered Card
+      // ------------------------------------------------------------------
+
       // Calculate the offset (wrt. middle of the hand)
       pos = global.player.hand._cards.Index(card)
       offs = pos-global.player.hand.size/2
       if( frac(global.player.hand.size/2) == 0 ) {
          offs -= 0.5
       }
-
-      v3ScaleIP(cardZoom ? 1.2 : 1,[1,1,1], targetScal)
+      // Target Rot/Scal/Pos/Mat
+      v3Set(targetRot,0,0,0)
+      v3ScaleIP(cardZoom ? 3 : 1,[1,1,1], targetScal)
       v3LC3IP(
          global.Blender.HndPl.Position,
          global.Blender.HndPl.Transform.j,
          [1,0,0],
          1,  // posizione di partenza
-         (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6) : 0,//mousehover
+         (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6) : 0,
          0.4*offs, // offset carta in mano
          targetPos
       )
       targetMat = cardZoom ?
          global.Blender.HndPlZoom.Mat :
          global.Blender.HndPl.Mat
-      //#endregion
-      //#region hand ghost card
+
+      // ------------------------------------------------------------------
+      // Ghost Card
+      // ------------------------------------------------------------------
       //targetRot = [0,0,0]
       //v3Set(targetRot,  0,0,cardZoom ? 0 : 0.3)
       // Ghost values
@@ -53,10 +52,10 @@ switch( card.location ) {
       
       ghost.targetRot = [0,0,0]
       ghost.targetMat = global.Blender.HndPl.Mat
-      //#endregion
+
       break
    //#endregion
-   //#region Opponent
+//#region    |       1.1.2 Opponent        |
    case global.opponent.hand:
       pos = global.opponent.hand._cards.Index(card)
       offs = pos-global.opponent.hand.size/2
@@ -70,8 +69,8 @@ switch( card.location ) {
       targetMat = global.Blender.HndOp.Mat
       break
    //#endregion
-   //#endregion
-
+//#endregion |                             |
+//#region    |    1.2 Aquarium             |
    /* AQUARIUM */
    case global.player.aquarium:
       pos = global.player.aquarium._cards.Index(card)
@@ -81,26 +80,22 @@ switch( card.location ) {
       var xbobbing = cos(t)*0.1;
       v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
       v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqPl.Position,targetPos)
-      v3SumIP([0,0,xbobbing*3],zero3,targetRot)
-      //targetRot = [0,0,0]
+      v3Set(targetRot,0,0,xbobbing*13)
       targetMat = global.Blender.AqPl.Mat
-      break
-   
+      break;
    case global.opponent.aquarium:
       pos = global.opponent.aquarium._cards.Index(card)
       offs = pos-global.opponent.aquarium.size/2+0.5
       var t = current_time/1000+0.5*offs
-      var bobbing = cos(t)*0.02;
-      var xbobbing = sin(t)*0.1;
+      var bobbing = sin(t)*0.02;
+      var xbobbing = cos(t)*0.1;
       v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
       v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqOp.Position,targetPos)
-      v3SumIP([0,0,xbobbing*3],zero3,targetRot)
-      //targetRot = [0,0,0]
+      v3Set(targetRot,0,0,xbobbing*13)
       targetMat = global.Blender.AqOp.Mat
-      break
-
-
-   /* DECK */
+      break;
+//#endregion
+//#region    |    1.3 Deck                 |
    case global.opponent.deck:
       pos = global.opponent.deck.size-1-global.opponent.deck._cards.Index(card)
       v3SetIP(obj3DGUI.TargetDkOpScal,targetScal)
@@ -115,9 +110,8 @@ switch( card.location ) {
       v3SumIP([0,0,randomrot],zero3,targetRot)
       targetMat = global.Blender.DckPl.Mat
       break;
-   
-   
-   /* OCEAN */
+//#endregion
+//#region    |    1.4 Ocean                |
    case global.ocean:
       pos = global.ocean.size-1-global.ocean._cards.Index(card)
       v3SetIP(obj3DGUI.TargetOceanScal,targetScal)
@@ -125,6 +119,8 @@ switch( card.location ) {
       v3SumIP([180,0,0],zero3,targetRot)
       targetMat = global.Blender.Ocean.Mat
       break;
+//#endregion
+//#region    |    1.5 Other                |
    default:
       targetPos[@0] = 0
       targetPos[@1] = 0
@@ -139,7 +135,8 @@ switch( card.location ) {
       ghost.targetMat = matrix_build_identity()
 
 }
-
+//#endregion
+//#region    |    1.6 Ghost                |
 // Disable ghosts when the card is not in the player hand
 // TODO: can be improved just by disabling draw now that ghosts
 // are rendered in a separate buffer
@@ -154,52 +151,53 @@ if card.location != global.player.hand {
    ghost.targetMat = matrix_build_identity()
 }
 //#endregion
-
+//#endregion |                             |
+//#region    | 2. Rendering Interpolation  |
+//#region    |    2.1 Rendering            |
 v3LerpIP(position,targetPos,lerpSpeed,position)
 v3LerpIP(scale,targetScal,lerpSpeed,scale)
 v3LerpIP(rot,targetRot,lerpSpeed,rot)
 
-//targetMat = matrix_multiply(
-//   matrix_build(0,0,0, ),
-//   targetMat
-//)
+targetMat2 = matrix_multiply(
+   matBuild(zero3,rot,uno3),
+   targetMat
+)
+// TODO: possible improvement: keep in memory the quat and 
+// interpolate it, only compute the targetMat quat
 var q0 = mat2quat(mat)
-var q1 = mat2quat(targetMat)
-//mat =    matrix_multiply(
-//      matrix_build(0,0,0,0,0,0,1.1,1.1,1.1),
-//      quat2mat(quatSlerp(q0,q1,lerpSpeed/1.3))
-//   )
-var a = quat2mat(quatSlerp(q0,q1,lerpSpeed))
+var q1 = mat2quat(targetMat2)
 
-
-var mat2 = matrix_multiply(
-   a,
+mat = matrix_multiply(
+   quat2mat(quatSlerp(q0,q1,lerpSpeed)),
    matBuild(position,zero3,uno3),
 )
-mat = mat2
+// TODO: for some reason, applying the scale in this way
+// makes the card go crazy, whereas in the test3d room it works..
+// suspect some memory accumulation effect
 //mat = matrix_multiply(
-//   matrix_multiply(
-//      matrix_build(0,0,0,0,0,0,1.1,1.1,1.1),
-//      quat2mat(quatSlerp(q0,q1,lerpSpeed/1.3))
-//   ),
-//   matBuild(position,rot,[1,1,1])
+//   matBuild(zero3,zero3,scale),
+//   mat_tmp
 //)
-
-
+//#endregion
+//#region    |    2.2 Ghost                |
 v3LerpIP(ghost.position,ghost.targetPos,lerpSpeed,ghost.position)
 v3LerpIP(ghost.scale,ghost.targetScal,lerpSpeed,ghost.scale)
 v3LerpIP(ghost.rot,ghost.targetRot,lerpSpeed,ghost.rot)
 q0 = mat2quat(ghost.mat)
 q1 = mat2quat(ghost.targetMat)
 ghost.mat = matrix_multiply(
-   quat2mat(quatSlerp(q0,q1,lerpSpeed/1.3)),
-   matBuild(ghost.position,[0,0,0],ghost.scale)
+   quat2mat(quatSlerp(q0,q1,lerpSpeed)),
+   matBuild(ghost.position,zero3,ghost.scale)
 )
-
-
-// +----------------------------------------------------------------------+
-// | Mousehover/Zoom                                                      |
-// +----------------------------------------------------------------------+
+//#endregion
+//#region    |    2.3 System               |
+// The first iteration of the step event has lerpSpeed to 1 to
+// make all the cards immediately reach their target values, now
+// put it back to a reasonable values
+lerpSpeed = 0.06
+//#endregion |                             |
+//#endregion |                             |
+//#region    | 3. MouseHover / Zoom        |
 var objHov = obj3DGUI.objectHover
 if ( !is_undefined(objHov) && objHov == card && 
      objHov.location == global.player.hand && canHover ) {
@@ -224,7 +222,6 @@ if is_undefined(objHov) || !is_instanceof(objHov,Card) && canUnhover {
    canUnhover = false
 }
 
-
 // Uscire dalla modalità card zoom
 if cardZoom {
    if obj3DGUI.inputManager.keys.MBR && !global.zoomCamTransition  {
@@ -242,11 +239,6 @@ if cardZoom {
       )
    }
 }
-
-// The first iteration of the step event has lerpSpeed to 1 to
-// make all the cards immediately reach their target values, now
-// put it back to a reasonable values
-lerpSpeed = 0.06
-
+//#endregion
 
 

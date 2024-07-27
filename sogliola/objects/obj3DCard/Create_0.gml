@@ -10,7 +10,7 @@ meshBack = mesh3DGLoad("graphics/back.obj.3dg")
 card = undefined
 
 // used when the card is in the deck
-randomrot = random_range(-0.41,0.41);
+randomrot = random_range(-5,5);
 
 //#region 3D Movement
 // +----------------------------------------------------------------------+
