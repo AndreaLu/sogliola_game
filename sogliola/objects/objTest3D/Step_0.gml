@@ -10,7 +10,7 @@ right2 = v3Cross(forward2,up2)
 
 mat = matrix_multiply(
    matBuildCBM(
-      global.FORWARD,global.RIGHT,global.UP,
+      //global.FORWARD,global.RIGHT,global.UP,
       forward,right,up
    ),
    matBuild(
@@ -20,7 +20,7 @@ mat = matrix_multiply(
 )
 quat = mat2quat(
    matBuildCBM(
-      global.FORWARD,global.RIGHT,global.UP,
+      //global.FORWARD,global.RIGHT,global.UP,
       forward,right,up
    )
 )
@@ -29,7 +29,7 @@ p = window_mouse_get_x() / window_get_width()
 mat2 = matrix_multiply(
 
    matBuildCBM(
-      global.FORWARD,global.RIGHT,global.UP,
+//global.FORWARD,global.RIGHT,global.UP,
       forward2,right2,up2
    ),
    matBuild(
@@ -39,7 +39,7 @@ mat2 = matrix_multiply(
 )
 quat2 = mat2quat(
    matBuildCBM(
-      global.FORWARD,global.RIGHT,global.UP,
+      //global.FORWARD,global.RIGHT,global.UP,
       forward2,right2,up2
    )
 )

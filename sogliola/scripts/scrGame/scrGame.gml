@@ -539,8 +539,6 @@ function CardScambioEquivalente(owner) : ActionCard(
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
-      if( controller == global.player )
-         show_debug_message("lol")
       var opp = Opponent(controller)
       if( opp.aquarium.size == 0 || controller.aquarium.size == 0 || opp.aquarium.protected ) return;
       controller.aquarium._cards.foreach( function(card,ctx) {

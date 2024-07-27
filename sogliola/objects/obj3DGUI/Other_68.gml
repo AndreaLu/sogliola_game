@@ -10,25 +10,7 @@ var buff = async_load[?"buffer"]
 var sz = async_load[?"size"]
 var json = buffer_read(buff,buffer_string)
 show_debug_message("Async: "+json)
-global.Blender = json_parse(json)
-
-structs = [
-    Blender.HndPl,
-    Blender.HndOp,
-    Blender.DckPl,
-    Blender.DckOp,
-    Blender.AqPl,
-    Blender.AqOp,
-    Blender.Ocean,
-]
-for(var i=0;i<array_length(structs);i++) {
-    var stru = structs[i]
-    stru.Mat = matBuildCBM(
-        stru.Transform.j,
-        stru.Transform.i,
-        stru.Transform.k,
-    )
-}
+loadBlenderFromJSON(json)
 
 v3SetIP(global.Blender.CamHand.From,global.camera.From)
 v3SetIP(global.Blender.CamHand.To,global.camera.To)

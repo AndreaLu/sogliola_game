@@ -1,31 +1,43 @@
 debugMode = true // TODO: setta false in produzione
 
+
+
+function loadBlenderFromJSON(json) {
+   global.Blender = json_parse(json)
+
+   // Crea le matrici di rotazione per ogni mesh
+   structs = [
+      global.Blender.HndPl,
+      global.Blender.HndPlZoom,
+      global.Blender.HndOp,
+      global.Blender.DckPl,
+      global.Blender.DckOp,
+      global.Blender.AqPl,
+      global.Blender.AqOp,
+      global.Blender.Ocean
+   ]
+   
+   
+   for(var i=0;i<array_length(structs);i++) {
+      var stru = structs[i]
+      stru.Mat =
+         matBuildCBM(
+            stru.Transform.j,
+            stru.Transform.i,
+            stru.Transform.k,
+         )
+      
+   }
+}
+
 // Load Blender File
 var json = ""
 var file = file_text_open_read("blender.json")
 while( !file_text_eof(file) )
    json += " "+file_text_readln(file)
 file_text_close(file)
-Blender = json_parse(json)
+loadBlenderFromJSON(json)
 
-// Crea le matrici di rotazione per ogni mesh
-structs = [
-    Blender.HndPl,
-    Blender.HndOp,
-    Blender.DckPl,
-    Blender.DckOp,
-    Blender.AqPl,
-    Blender.AqOp,
-    Blender.Ocean
-]
-for(var i=0;i<array_length(structs);i++) {
-    var stru = structs[i]
-    stru.Mat = matBuildCBM(
-        stru.Transform.j,
-        stru.Transform.i,
-        stru.Transform.k,
-    )
-}
 
 // This struct holds the informatino the 3D camera uses
 // TODO: add fov info
