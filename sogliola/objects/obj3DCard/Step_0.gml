@@ -249,16 +249,37 @@ if cardZoom {
 }
 //#endregion
 //#region    | 4.0 Highlight                |
-if( !is_undefined(global.pickingTarget) && 
-   array_length(global.pickingTarget) == 1 ) {
+/* 
+ TODO: performance improvement; selected could be setup only on mouse click..
+ not in the step event of this card. Otherwise, a check could be added
+ to make sure global.pickingTarget changed since last time
+ selected was setup
+*/
+selected = false
+if( !is_undefined(global.pickingTarget) ) {
    var a = global.options.Filter(
       function(option,args) {
-         if array_length(option) < 4 || is_array(option[3])
-            return false;
-         return ( option[3] == args[0] && option[2] == global.pickingTarget[0] )
+         if array_length(option) < 4 || option[2] != global.pickingTarget[0]
+            return false
+         
+         if( !is_array(option[3]) ) {
+            return ( option[3] == args[0] )
+         } else {
+            // if option[3] is an array (multiple targets), make sure
+            // that both args[0] is in the array but also every
+            // element of global.pickingTarget[1:]
+            if !array_contains(option[3], args[0]) return false;
+            for( var i=1;i<array_length(global.pickingTarget);i++) {
+               if !array_contains(option[3],global.pickingTarget[i])
+                  return false;
+            }
+            return true;
+         }
+         
       }, [card]
    )
    selected = !is_undefined(a)
+   if array_contains(global.pickingTarget,card) selected = false
 }
 //#endregion |                              |
 //           |______________________________|
