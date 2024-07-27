@@ -23,7 +23,8 @@ options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 
-
+//            ____________________________________
+//#region    | 1.0 Events                         |
 function Event(_src,_callback) constructor {
    src = _src
    callback = _callback
@@ -38,7 +39,8 @@ function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
-
+//#endregion |                 |
+//#region    | 2.0 Collections                    |
 function CardCollection(_owner) constructor {
    owner = _owner
    _cards = new ds_list()
@@ -83,7 +85,6 @@ function Deck(owner) : CardCollection(owner) constructor {
    }
 }
 
-
 function location_to_str( location ) {
    if location == global.player.deck        return "Player deck"
    if location == global.opponent.deck      return "Opponent deck"
@@ -105,7 +106,8 @@ function str_to_location( _str ) {
    if( _str == "The ocean" ) return global.ocean
    return undefined
 }
-
+//#endregion |                 |
+//#region    | 3.0 Actors                         |
 function Actor() constructor {
    
    static StartEvent = function( event ) {
@@ -156,7 +158,9 @@ function Player() : Actor() constructor {
    }
 }
 function Supervisor() : Actor() constructor {}
-
+//#endregion |                      |
+//#region    | 4.0 Cards                          |
+//#region    |    4.1 Base Classes                |
 function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  constructor {
    name = _name
    owner = _owner
@@ -262,15 +266,17 @@ enum CardType {
    FREE_SOGLIOLA,
    FURTO
 }
-// -----------------------------------------------------------------------------+
-// Card database                                                                |
-// -----------------------------------------------------------------------------+
+//#endregion
+//#region    |    4.2 Card Database               |
+//#region    |       4.2.01 Sogliola              |
 function CardSogliola(owner) : FishCard(
    "Sogliola", owner, undefined, undefined, sprSogliola, 5,
    "Ora è piatta; leggende narrano che un tempo non lo fosse. Che pesce nobile!",
    CardType.SOGLIOLA
 ) constructor {
 }
+//#endregion |                      |
+//#region    |       4.2.02 Pesca                 |
 function CardPesca(owner) : ActionCard(
    "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte",
    CardType.PESCA
@@ -280,6 +286,8 @@ function CardPesca(owner) : ActionCard(
          controller.Draw()
    }
 }
+//#endregion |                               |
+//#region    |       4.2.03 Pesca Abbondante      |
 function CardPescaAbbondante(owner) : ActionCard(
    "Pesca Abbondante", owner, undefined, undefined, sprPescaAbbondante,
    "Pesca 3 carte",
@@ -291,6 +299,8 @@ function CardPescaAbbondante(owner) : ActionCard(
          controller.Draw()
    }
 }
+//#endregion |                               |
+//#region    |       4.2.04 Pioggia               |
 function CardPioggia(owner) : ActionCard(
    "Pioggia di Pesci", owner, undefined, undefined, sprPioggiaDiPesci, 
    "Per questo turno, puoi giocare due carte Sogliola",
@@ -300,6 +310,8 @@ function CardPioggia(owner) : ActionCard(
       global.maxFishPlayable = 2
    }
 }
+//#endregion
+//#region    |       4.2.05 Sogliola Blob         | 
 function CardSogliolaBlob(owner) : FishEffectCard(
    "Sogliola Blob", owner, undefined, undefined, sprSogliolaBlob, -10,
    "Può essere giocato in ogni acquario",
@@ -318,6 +330,8 @@ function CardSogliolaBlob(owner) : FishEffectCard(
       }
    }
 }
+//#endregion
+//#region    |       4.2.06 Re Sogliola           |
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
    "+4 al valore per ogni altra sogliola nell'acquario",
@@ -336,6 +350,8 @@ function CardReSogliola(owner) : FishEffectCard(
       return tmpVal
    }
 }
+//#endregion
+//#region    |       4.2.07 Sogliola Diavolo Nero |
 function CardSogliolaDiavoloNero(owner) : FishEffectCard(
    "Sogliola Diavolo Nero", owner, undefined, undefined, sprSogliolaDiavoloNero,3,
    "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario",
@@ -356,6 +372,8 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
       }
    }
 }
+//#endregion
+//#region    |       4.2.08 Sogliola Pietra       |
 function CardSogliolaPietra(owner) : FishEffectCard(
    "Sogliola Pietra", owner, undefined, undefined, sprSogliolaPietra, 2,
    "Può essere giocata in ogni Acquario. Quando entra in un Acquario, Libera una sogliola casuale da quell'Acquario",
@@ -388,6 +406,8 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       global.ocean.Add(event.target)
    }
 }
+//#endregion
+//#region    |       4.2.09 Sogliola Volante      |
 function CardSogliolaVolante(owner) : FishEffectCard(
    "Sogliola Volante", owner, undefined, undefined, sprSogliolaVolante, 5,
    "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte",
@@ -406,8 +426,10 @@ function CardSogliolaVolante(owner) : FishEffectCard(
       controller.Draw()
    }
 }
+//#endregion |                                    |
+//#region    |       4.2.10 Sogliola Salmonata    |
 function CardSogliolaSalmone(owner) : FishEffectCard(
-   "SogliolaSalmone", owner, undefined, undefined, sprSogliolaSalmone, 5,
+   "Sogliola Salmonata", owner, undefined, undefined, sprSogliolaSalmone, 5,
    "Quando questa sogliola passa da un acquario alla mano, il proprietario dell'acquario pesca 2 carte",
    CardType.SOGLIOLA_SALMONE
 ) constructor {
@@ -426,6 +448,8 @@ function CardSogliolaSalmone(owner) : FishEffectCard(
       event.target.Draw()
    }
 }
+//#endregion |                                    |
+//#region    |       4.2.11 Free Sogliola         |
 function CardFreeSogliola(owner) : ActionCard(
    "Free Sogliola", owner, undefined, undefined, sprFreeSogliola,
    "Scegli una sogliola da un acquario e liberala nell'oceano",
@@ -468,6 +492,8 @@ function CardFreeSogliola(owner) : ActionCard(
       global.ocean.Add( self )
    }
 }
+//#endregion
+//#region    |       4.2.12 Furto                 |
 function CardFurto(owner) : ActionCard(
    "Furto", owner, undefined, undefined, sprFurto,
    "Ruba una sogliola da un acquario e aggiungila alla tua mano",
@@ -515,13 +541,16 @@ function CardFurto(owner) : ActionCard(
       global.ocean.Add( self )
    }
 }
+//#endregion
+//#region    |       4.2.13 Sogliola Giullare     |
 function CardSogliolaGiullare(owner) : FishEffectCard(
    "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
    "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato",
    CardType.SOGLIOLA_GIULLARE
 ) constructor {
-   
 }
+//#endregion
+//#region    |       4.2.14 Acquario Protetto     |
 function CardAcquarioProtetto(owner) : ActionCard(
    "Acquario Protetto", owner, undefined, undefined, sprAcquarioProtetto,
    "I pesci nel tuo Acquario sono protetti fino al tuo prossimo turno",
@@ -531,6 +560,8 @@ function CardAcquarioProtetto(owner) : ActionCard(
       controller.aquarium.protected = true
    }
 }
+//#endregion
+//#region    |       4.2.15 Scambio Equivalente   |
 function CardScambioEquivalente(owner) : ActionCard(
    "Scambio Equivalente", owner, undefined, undefined, sprScambioEquivalente,
    "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario",
@@ -564,3 +595,7 @@ function CardScambioEquivalente(owner) : ActionCard(
       global.ocean.Add(self)
    }
 }
+//#endregion |                                    |
+//#endregion |                                    |
+//#endregion |                                    |
+//           |____________________________________|
