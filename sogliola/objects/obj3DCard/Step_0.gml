@@ -63,9 +63,9 @@ switch( card.location ) {
          offs -= 0.5
       }
       v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
-      v3SumIP([0.3*offs,0.1*offs,0],global.Blender.HndOp.Position,targetPos)
+      v3SumIP([0.3*offs,0,0],global.Blender.HndOp.Position,targetPos)
       v3SumIP([0,offs,0],zero3,targetRot)
-      targetRot = [0,0,0]
+      targetRot = [0,3,0]
       targetMat = global.Blender.HndOp.Mat
       break
    //#endregion
@@ -169,7 +169,7 @@ var q1 = mat2quat(targetMat2)
 
 mat = matrix_multiply(
    quat2mat(quatSlerp(q0,q1,lerpSpeed)),
-   matBuild(position,zero3,uno3),
+   matBuild(position,zero3,uno3)
 )
 // TODO: for some reason, applying the scale in this way
 // makes the card go crazy, whereas in the test3d room it works..
