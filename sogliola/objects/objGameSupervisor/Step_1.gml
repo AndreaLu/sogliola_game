@@ -1,4 +1,10 @@
+// +----------------------------------------------------------------------+
+// | Begin Step Event                                                     |
+// +----------------------------------------------------------------------+
+// Index:
+// 1.0 Game Initialization
 
+//#region    | 1.0 Game Initialization |
 if gameInitialized || (room != room2DGame && room != room3DGame )
    exit
 
@@ -7,7 +13,9 @@ gameInitialized = true
 
 
 var seed = 8
-if !global.multiplayer && file_exists("savedata.json") && show_question("savedata exists, load it?") {
+
+if global.debugMode && !global.multiplayer && file_exists("savedata.json")
+   && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false
 } else {
@@ -115,3 +123,4 @@ if !global.multiplayer && file_exists("savedata.json") && show_question("savedat
 
    startTurn = true
 }
+//#endregion

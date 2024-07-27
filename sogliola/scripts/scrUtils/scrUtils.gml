@@ -305,15 +305,20 @@ function GameLoad() {
    global.srandom.value = globals[6]
 }
 
-function GameOver() {
-   var delta = getScore(global.player) - getScore(global.opponent)
-   if( delta > 0 )
-      show_message("game over: you win!")
-   else if( delta == 0 )
-      show_message("game over: draw!")
-   else
-      show_message("game over: you lose!")
-   game_end(0)
+function GameOver(msg) {
+   if !is_undefined(msg) {
+      show_message(msg)
+      game_end(0)
+   } else {
+      var delta = getScore(global.player) - getScore(global.opponent)
+      if( delta > 0 )
+         show_message("game over: you win!")
+      else if( delta == 0 )
+         show_message("game over: draw!")
+      else
+         show_message("game over: you lose!")
+      game_end(0)
+   }
 }
 
 function networkTypeString( _type ) {
