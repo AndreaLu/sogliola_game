@@ -1,48 +1,55 @@
+// +----------------------------------------------------------------------+
+// | Draw GUI Event                                                       |
+// +----------------------------------------------------------------------+
+/*
+   This is where the user interaction is taken care of
+ */
+
 inputManager.Update()
-
-// 3d uses culling which prevents 2d graphics from being displayed, remove it
-gpu_set_cullmode(cull_noculling)
-
-
-draw_text(0,200,inputManager.playbackFrame)
-if !is_undefined(global.pickingTarget)
-   draw_rectangle(0,0,100,100,false)
-if global.disableUserInput
-   draw_rectangle(100,0,200,100,false)
-
-
-/* debug: show the cards buffer */
-if keyboard_check(vk_escape) && global.debugMode
-   draw_surface(sf,0,0)
-
 
 var w = sprite_get_width(sprBack)
 var h = sprite_get_height(sprBack)
 
+// 3d uses culling which prevents 2d graphics from being displayed
+gpu_set_cullmode(cull_noculling)
 
-
-// +===============================================================================================+
-// | Interazione con il player                                                                     |
-// +===============================================================================================+
-
+//            _____________________________________________
+//#region    | 1.0 Display debug Info                      |
+if global.debugMode {
+   // Current keys playback frame
+   draw_text(0,200,inputManager.playbackFrame)
+   // Click Buffer
+   if keyboard_check(vk_escape) draw_surface(sf,0,0)
+   // Protected aquarium info
+   if global.player.aquarium.protected
+      draw_text(400,100,"acquario player protetto")
+   if global.opponent.aquarium.protected
+      draw_text(400,80,"acquario avversario protetto")
+   // Draw all the available moves
+   //drawY = 100
+   //draw_set_color(c_black)
+   //global.options.foreach( function(option,ctx) {
+   //   draw_text(100,ctx.drawY,option[0])
+   //   ctx.drawY += 20
+   //},self)
+}
+//#endregion
+//#region    | 2.0 Interazione con il Player               |
+//#region    |    2.1 Zoom della Carta                     |
 if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
-   
+  
    if is_instanceof( objectHover, Card ) {
       card = objectHover
       
-      
-      // ------------------------------------------------------------------------------
-      // Zoom della carta in mano
-
       if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
          if inputManager.keys.MBR {
             card.guiCard.setZoom()
          }
       }
-      // +-----------------------------------------------------------------------------------------+
-      // | Cardpicking                                                                             |
-      // +-----------------------------------------------------------------------------------------+
+//#endregion
+//#region    |    2.2 Card Picking                         |
+//#region    |       2.1.0 Secondo click in poi, su carte  | 
       var options = global.options.FilterAll(function(option,args) {
          var card = args[0]
          return (option[2] == card)
@@ -110,9 +117,9 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
             global.pickingTarget[@array_length(global.pickingTarget)] = card
          }
       }
+//#endregion
+//#region    |       2.1.1 Primo click                     | 
 
-      // ------------------------------------------------------------------------------
-      // Primo click
       if !watching && !global.zooming && inputManager.keys.MBL
          && is_undefined(global.pickingTarget) {
          
@@ -157,15 +164,15 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
                global.pickingTarget = [card]
             }
          }
-      }
-      
-      
-      
+      } 
    }
-   // ---------------------------------------------------------------------------------
-   // secondo click in poi, su acquari. Per ora gli effetti che coinvolgono gli acquari
-   // hanno un solo target possibile, quindi faccio gestione semplificata. Dovessero
-   // sorgere carte con più target, di cui almeno uno acquario, dovrò correggere..
+//#endregion
+//#region    |       2.1.2 Secondo click (su acquari)      | 
+
+   // secondo click in poi, su acquari. Per ora gli effetti che coinvolgono 
+   // gli acquari hanno un solo target possibile, quindi faccio gestione 
+   // semplificata. Dovessero sorgere carte con più target, di cui almeno
+   // uno acquario, dovrò correggere..
    if is_instanceof( objectHover, Aquarium ) &&
       !is_undefined(global.pickingTarget) &&
       inputManager.keys.MBL {
@@ -204,7 +211,8 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       }
    }
 }
-// ------------------------------------------------------------------------------------
+//#endregion
+//#region    |       2.1.3 Annullare un Card Picking       |
 // Annullare un cardpicking in corso
 if !is_undefined(global.pickingTarget) && 
    (inputManager.keys.MBR || inputManager.keys.S) 
@@ -222,11 +230,9 @@ if !is_undefined(global.pickingTarget) &&
       }
    )
 }
-
-
-// +-----------------------------------------------------------------------------------------------+
-// | Passare il turno                                                                              |
-// +-----------------------------------------------------------------------------------------------+
+//#endregion
+//#endregion |                                             |
+//#region    |    2.3 Passare il turno                     |
 if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
    var test = global.options.Filter( function(option) {
       return option[0] == "Pass the turn"
@@ -254,18 +260,8 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
       }
    }
 }
-
-
-drawY = 100
-draw_set_color(c_black)
-global.options.foreach( function(option,ctx) {
-   draw_text(100,ctx.drawY,option[0])
-   ctx.drawY += 20
-},self)
-
-// +-----------------------------------------------------------------------------------------------+
-// | Passaggio da playing a watching aquarium                                                      |
-// +-----------------------------------------------------------------------------------------------+
+//#endregion |                                             |
+//#region    |    2.4 W and S keys                         |
 if inputManager.keys.W && !watching  && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
    watching = true
@@ -313,23 +309,18 @@ if watching && inputManager.keys.S && !watchingBack && !global.zooming
       }
    )
 }
-
+//#endregion |                                             |
+//#region    | 3.0 Draw the Cursor                         |
 var cursor = 0;
 if (mouse_check_button(mb_any)){
    cursor=1
 }
 draw_sprite_ext(sprCursor,cursor,inputManager.mouse.X,inputManager.mouse.Y, 2,2, 0, c_white, 1)
+//#endregion |                                             |
+//#endregion |_____________________________________________|
+       
 
 
-if inputManager.playbackFrame == 1097 {
-   breakpoint()
-}
-
-// Disegno di debug per l'acquario protetto
-if global.player.aquarium.protected
-   draw_text(400,100,"acquario player protetto")
-if global.opponent.aquarium.protected
-   draw_text(400,80,"acquario avversario protetto")
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
 
