@@ -2,23 +2,22 @@
 1. - [sla] IA semplice (sort delle mosse in base al delta score con albero decisionale)
 2. - [sla] implementa attese con grafica catene
 3. - [sla] draw di testo e valore sulle carte
-4. - [sla] bottiglia di grog/latte/rum per passare il turno.
 
 # SECONDARI(ordinati per importanza)
+- [sla] bottiglia di grog/latte/rum per passare il turno.
 - [lod] animazione carta che viene sommersa oppure lanciata nell'oceano (free sogliola)
-- [sla] implementa controllo giullare in diavolo nero e sogliola pietra
 - [lod/sla] aggiungi carta medusa
 - [proposta] qualcosina sullo sfondo delle carte invece del monocolore
 - fai in modo che lo zoom non sposta la telecamera ma sposta la carta di fronte
   alla telecamera (o lo fa in modo molto subdolo)
-w- [lod] [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
+- [lod] [proposta] una tonalità leggermente diversa dello sfondo delle carte azione 
 - [lod/sla] protezione acquario
 - [lod/sla] qualcosa per mostrare il punteggio?
 - [sla] genera un seme lato server condiviso per entrambi i giocatori del match
 - [lod/sla] implementa il contesto - mondo 2d dall'alto stile pokemon
   col gatto che va in giro e sfida gli altri gatti del torneo guadagnando
   carte di volta in volta
-s
+
 # IMPROVEMENTS
 - eseugire una option tra le global.options dovrebbe essere fatto con una funzione
   globale, perché ci sono diverse linee di codice sempre uguali

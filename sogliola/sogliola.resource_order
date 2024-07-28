@@ -19,6 +19,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"Grafica Catene","order":2,"path":"notes/Grafica Catene/Grafica Catene.yy",},
     {"name":"Manuale Tecnico","order":1,"path":"notes/Manuale Tecnico/Manuale Tecnico.yy",},
     {"name":"obj2DCard","order":1,"path":"objects/obj2DCard/obj2DCard.yy",},
     {"name":"obj3DCard","order":1,"path":"objects/obj3DCard/obj3DCard.yy",},

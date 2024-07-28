@@ -1,0 +1,36 @@
+Attese con grafica catene
+Quando l'avversario attiva una carta (guarda dove viene eseguito 
+global.choiceMade = true)
+
+
+Quando qualunque giocatore gioca una carta, questa si sposta nell'area di showoff 
+e viene fatta l'animazione di target, se disponibile, con il cursore avversario.
+
+Si procede al codice regolare fino a compilare la chainRing in caso ci fossero effetti
+che si incatenano automaticamente.
+Attensione: quando si è completata la chainring non si esegue ancora, quindi le carte
+rimangono dove stanno.
+Se c'è una carta che si attiva automaticamente, è stata aggiunta alla chainRing.
+Se c'è una carta che si può attivare da parte dell'altro giocatore, questo è il momento
+per chiederlo e aggiungera alla chainRing
+
+Segue l'animazione 2d di chain in centro allo schermo (con solo la carta), SOLO se la chainRing 
+ha più di una carta o se non è una banale evocazione
+
+Se sono state aggiunte carte alal chainRing possiamo:
+- sollevarla leggermente dall'acquario se erano nell'acquario,
+o portarle alla zona showoff se erano nella mano
+
+segue animazione catena che si aggiunge la carta nuova
+
+
+Quando si gioca la carta si può vedere facendo una funzione executeOption
+per fare la mossa e sostituendo tutti i 4 punti dove si chiama option[1](..)
+
+
+
+Si manda la carta source di option in alto con una nuova pos su blender e si disegna
+un'animazioncina che, se c'è un target, lo evidenzia con il cursorino
+del micio avversario
+A questo punto potrei eseguire l'opzione. Ma fermare tutto subito dopo
+aver calcolato la chainring
