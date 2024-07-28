@@ -363,7 +363,17 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
       if( is_instanceof(event,EventSummon) && event.src == self ) {
          var opponent = Opponent(controller)
          if( opponent.aquarium.size > 0 && !opponent.aquarium.protected ) {
+            // Check if target is valid: if the opponent has "re sogliola"
+            // and "sogliola pagliaccio" cannot target the former
+            var hasClown = !is_undefiend(opponent.aquarium.Filter( 
+               function(card) { 
+                  return is_instanceof(card,CardSogliolaGiullare)
+               })
+            )
             var target = opponent.aquarium.Random()
+            while hasClown && is_instanceof(target, CardReSogliola) {
+               target = opponent.aquarium.Random()
+            }
             global.effectChainRing.Add( new EventSteal(self,Steal,target) )
          }
       }
@@ -394,8 +404,18 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       if( is_instanceof(event,EventSummon) && event.src == self) {
          var aquarium = event.opponent ? Opponent(controller).aquarium : controller.aquarium
          if( aquarium.size > 0 ) {
-            do var target = aquarium.Random()
-            until( target != self )
+
+            var hasClown = !is_undefiend(aquarium.Filter( 
+               function(card) { 
+                  return is_instanceof(card,CardSogliolaGiullare)
+               })
+            )
+            target = self
+            while ( (hasClown && is_instanceof(target, CardReSogliola)) || 
+               target == self ) {
+               target = aquarium.Random()
+            }
+            
             global.effectChainRing.Add( new EventFree(self,Free,target) )
          }
       }
