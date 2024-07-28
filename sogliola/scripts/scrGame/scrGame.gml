@@ -365,7 +365,7 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
          if( opponent.aquarium.size > 0 && !opponent.aquarium.protected ) {
             // Check if target is valid: if the opponent has "re sogliola"
             // and "sogliola pagliaccio" cannot target the former
-            var hasClown = !is_undefiend(opponent.aquarium.Filter( 
+            var hasClown = !is_undefined(opponent.aquarium._cards.Filter( 
                function(card) { 
                   return is_instanceof(card,CardSogliolaGiullare)
                })
@@ -405,7 +405,7 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          var aquarium = event.opponent ? Opponent(controller).aquarium : controller.aquarium
          if( aquarium.size > 0 ) {
 
-            var hasClown = !is_undefiend(aquarium.Filter( 
+            var hasClown = !is_undefined(aquarium._cards.Filter( 
                function(card) { 
                   return is_instanceof(card,CardSogliolaGiullare)
                })
