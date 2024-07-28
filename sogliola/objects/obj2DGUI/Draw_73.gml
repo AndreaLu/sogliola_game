@@ -23,15 +23,7 @@ if( true ) { // let the user pick it
    
       if keyboard_check_pressed(vk_enter) {
          var option = global.options.At(sel_choice)
-         if( array_length(option) > 3 && (!is_undefined(option[3])) )
-            option[1](option[3])
-         else
-            option[1]()
-         global.choiceMade = true
-         if global.multiplayer {
-            // Send the message!
-            networkSendPacket("move,"+string(sel_choice))
-         }
+         ExecuteOption(option,true)
       }
    }
 }

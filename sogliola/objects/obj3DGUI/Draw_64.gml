@@ -91,15 +91,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
          if array_length(options) == 1 {
             // Esegue la mossa
             var option = options[0]
-            if( array_length(option) > 3 && (!is_undefined(option[3])) )
-               option[1](option[3])
-            else
-               option[1]()
-            global.choiceMade = true
-            if global.multiplayer {
-               // Send the message!
-               networkSendPacket("move,"+string(sel_choice))
-            }
+            ExecuteOption(option,true)
             global.disableUserInput = true
             new StackMoveCamera(
                global.Blender.CamHand.From,
@@ -145,12 +137,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
             var option = options[0]
             // Se non ci sono target possibili, esegui l'unica mossa possibile
             if (array_length(option) <= 3 || is_undefined(option[3])) {
-               option[1]()
-               global.choiceMade = true
-               if global.multiplayer {
-                  // Send the message!
-                  networkSendPacket("move,"+string(sel_choice))
-               }
+               ExecuteOption(option,true)
             } else {
                global.disableUserInput = true
                new StackMoveCamera(
@@ -188,16 +175,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       )
       if !is_undefined(a) {
             // Esegue la mossa
-            var option = a
-            if( array_length(option) > 3 && (!is_undefined(option[3])) )
-               option[1](option[3])
-            else
-               option[1]()
-            global.choiceMade = true
-            if global.multiplayer {
-               // Send the message!
-               networkSendPacket("move,"+string(sel_choice))
-            }
+            ExecuteOption(a,true)
             global.disableUserInput = true
             new StackMoveCamera(
                global.Blender.CamHand.From,
@@ -240,10 +218,7 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
    if ! is_undefined(test) {
       // Esegui la mossa, l'unica possibile
       var option = test
-      if( array_length(option) > 3 && (!is_undefined(option[3])) )
-         option[1](option[3])
-      else
-         option[1]()
+      ExecuteOption(option,true)
       global.disableUserInput = true
       new StackMoveCamera(
          global.Blender.CamOpponent.From,
@@ -253,11 +228,6 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
             global.disableUserInput = false
          }
       )
-      global.choiceMade = true
-      if global.multiplayer {
-         // Send the message!
-         networkSendPacket("move,"+string(sel_choice))
-      }
    }
 }
 //#endregion |                                             |
@@ -317,7 +287,8 @@ if (mouse_check_button(mb_any)){
 }
 draw_sprite_ext(sprCursor,cursor,inputManager.mouse.X,inputManager.mouse.Y, 2,2, 0, c_white, 1)
 //#endregion |                                             |
-//#endregion |_____________________________________________|
+//#endregion |                                             |
+//           |_____________________________________________|
        
 
 

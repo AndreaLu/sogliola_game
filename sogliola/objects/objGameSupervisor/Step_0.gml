@@ -124,11 +124,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
          if canDraw choice = 0
          else choice = irandom(global.options.size-1)//global.srandom.IRandom(global.options.size-1)
          var option = global.options.At(choice)
-         if (array_length(option) > 3) && (!is_undefined(option[3]))
-            option[1](option[3])
-         else
-            option[1]()
-         global.choiceMade = true
+         ExecuteOption(option,false)
       }
    } else {
       // Online multiplayer.. 

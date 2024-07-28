@@ -39,6 +39,29 @@ function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
+function ExecuteOption(option,send) {
+   /* 
+      option = [
+         desc,
+         callback,
+         srcCard,
+         target(s) (optional, and can be an array)
+      ]
+    */
+   var callback = option[1]
+   var hasTarget = array_length(option) > 3 && !is_undefined(option[3])
+   if( hasTarget ) {
+      callback(option[3])
+   } else {
+      callback()
+   }
+   global.choiceMade = true
+   
+   if global.multiplayer && send {
+      // Send the message!
+      networkSendPacket("move,"+string(sel_choice))
+   }
+}
 //#endregion |                 |
 //#region    | 2.0 Collections                    |
 function CardCollection(_owner) constructor {

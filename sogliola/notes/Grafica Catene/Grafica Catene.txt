@@ -3,12 +3,13 @@ Quando l'avversario attiva una carta (guarda dove viene eseguito
 global.choiceMade = true)
 
 
-Quando qualunque giocatore gioca una carta, questa si sposta nell'area di showoff 
+Se l'avversariogioca una carta, questa si sposta nell'area di showoff
+Se a giocarla è il giocatore, ciò non succede
 e viene fatta l'animazione di target, se disponibile, con il cursore avversario.
 
 Si procede al codice regolare fino a compilare la chainRing in caso ci fossero effetti
 che si incatenano automaticamente.
-Attensione: quando si è completata la chainring non si esegue ancora, quindi le carte
+Attenzione: quando si è completata la chainring non si esegue ancora, quindi le carte
 rimangono dove stanno.
 Se c'è una carta che si attiva automaticamente, è stata aggiunta alla chainRing.
 Se c'è una carta che si può attivare da parte dell'altro giocatore, questo è il momento
