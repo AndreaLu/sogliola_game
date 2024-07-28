@@ -45,6 +45,7 @@
     {"name":"sprBottle","order":25,"path":"sprites/sprBottle/sprBottle.yy",},
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
     {"name":"sprCursor","order":21,"path":"sprites/sprCursor/sprCursor.yy",},
+    {"name":"sprCursorOp","order":26,"path":"sprites/sprCursorOp/sprCursorOp.yy",},
     {"name":"sprFreeSogliola","order":10,"path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},
     {"name":"sprFurto","order":12,"path":"sprites/sprFurto/sprFurto.yy",},
     {"name":"sprOcean","order":19,"path":"sprites/sprOcean/sprOcean.yy",},

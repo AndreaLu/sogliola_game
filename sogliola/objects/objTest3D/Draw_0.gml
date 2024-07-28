@@ -12,9 +12,21 @@ matrix_set(matrix_world,mat2)
 vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(sprSogliolaBlob,0));
 vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
 
+
 matrix_set(matrix_world,matrix_multiply(matrix_build(0,0,0,0,0,0,2,2,2),mat3))
 vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(sprSogliolaBlob,0));
 vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
 
+
+
+// Find 2D coordinates
+pos = [0,0]
+worldToScreenIP(xx,yy,zz, matrix_get(matrix_view), matrix_get(matrix_projection),pos)
+x = pos[0]
+y = pos[1]
+show_debug_message(pos)
+
 matrix_set(matrix_world,matrix_build_identity())
+
+
 shader_reset()

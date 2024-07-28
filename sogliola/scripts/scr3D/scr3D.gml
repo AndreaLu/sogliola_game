@@ -1,10 +1,10 @@
-function v3Copy(v) {
+function v3Copy(v) { // creates a new vector copy of v
    var w = array_create(3)
    v3SetIP(v,w)
    return w
 }
 // puts the vector v into w
-function v3SetIP(v,w) {
+function v3SetIP(v,w) { // w <- v
    w[@0] = v[0]
    w[@1] = v[1]
    w[@2] = v[2]
@@ -66,7 +66,7 @@ function v3LC4IP(v0,v1,v2,v3,a,b,c,d,z) {
 	return z;
 }
 
-function v3Set(v,_x,_y,_z) {
+function v3Set(v,_x,_y,_z) { // v <- x,y,z
 	v[@0] = _x;
 	v[@1] = _y;
 	v[@2] = _z;
@@ -417,4 +417,36 @@ function quatSlerp(q1, q2, t) {
     var s1 = sin_theta / sin_theta_0
     
     return [s0*q1[0] + s1*q2[0], s0*q1[1] + s1*q2[1], s0*q1[2] + s1*q2[2], s0*q1[3] + s1*q2[3]]
+}
+
+function worldToScreenIP(xx,yy,zz,view_mat,proj_mat,v) {
+	/// @param xx
+	/// @param yy
+	/// @param zz
+	/// @param view_mat
+	/// @param proj_mat
+	/*
+		Transforms a 3D world-space coordinate to a 2D window-space coordinate. Returns an array of the following format:
+		[xx, yy]
+		Returns [-1, -1] if the 3D point is not in view
+	
+		Script created by TheSnidr
+		www.thesnidr.com
+	*/
+
+	if (proj_mat[15] == 0) {   //This is a perspective projection
+		var w = view_mat[2] * xx + view_mat[6] * yy + view_mat[10] * zz + view_mat[14];
+		// If you try to convert the camera's "from" position to screen space, you will
+		// end up dividing by zero (please don't do that)
+		//if (w <= 0) return [-1, -1];
+		if (w == 0) return [-1, -1];
+		var cx = proj_mat[8] + proj_mat[0] * (view_mat[0] * xx + view_mat[4] * yy + view_mat[8] * zz + view_mat[12]) / w;
+		var cy = proj_mat[9] + proj_mat[5] * (view_mat[1] * xx + view_mat[5] * yy + view_mat[9] * zz + view_mat[13]) / w;
+	} else {    //This is an ortho projection
+		var cx = proj_mat[12] + proj_mat[0] * (view_mat[0] * xx + view_mat[4] * yy + view_mat[8]  * zz + view_mat[12]);
+		var cy = proj_mat[13] + proj_mat[5] * (view_mat[1] * xx + view_mat[5] * yy + view_mat[9]  * zz + view_mat[13]);
+	}
+
+	v[@0] = (0.5 + 0.5 * cx) * window_get_width()
+	v[@1] = (0.5 - 0.5 * cy) * window_get_height()
 }

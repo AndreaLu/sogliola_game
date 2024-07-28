@@ -25,6 +25,8 @@ targetMat = matrix_build_identity()
 targetScal = [1,1,1]
 targetRot = [0,0,0]
 world = matrix_build_identity()
+showingOff = false
+screenPos = [-1000,-1000]
 
 // ghost is needed to fix the mousehover glitch issue
 // we draw a hidden card in the original position (not hovered)

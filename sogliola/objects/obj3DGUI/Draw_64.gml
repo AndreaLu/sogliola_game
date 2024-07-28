@@ -1,5 +1,5 @@
 // +----------------------------------------------------------------------+
-// | Draw GUI Event                                                       |
+// | obj3DGUI: Draw GUI Event                                             |
 // +----------------------------------------------------------------------+
 /*
    This is where the user interaction is taken care of
@@ -281,17 +281,22 @@ if watching && inputManager.keys.S && !watchingBack && !global.zooming
 }
 //#endregion |                                             |
 //#region    | 3.0 Draw the Cursor                         |
-var cursor = 0;
-if (mouse_check_button(mb_any)){
-   cursor=1
-}
-draw_sprite_ext(sprCursor,cursor,inputManager.mouse.X,inputManager.mouse.Y, 2,2, 0, c_white, 1)
+draw_sprite_ext(
+   sprCursor,
+   mouse_check_button(mb_any) ? 1 : 0,        // subimg
+   inputManager.mouse.X,inputManager.mouse.Y, // x,y
+   2,2,0, c_white,1                           // scale,rot,col,alpha
+)
+draw_sprite_ext(
+   sprCursorOp,opponentCursor.subimg,opponentCursor.x,opponentCursor.y,
+   2,2,0,c_white, smoothstep(30,150,opponentCursor.y)
+)
 //#endregion |                                             |
 //#endregion |                                             |
 //           |_____________________________________________|
        
 
-
+draw_text(room_width-100,30,string([inputManager.mouse.X,inputManager.mouse.Y]))
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
 

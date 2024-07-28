@@ -70,11 +70,18 @@ switch( card.location ) {
       if( frac(global.player.hand.size/2) == 0 ) {
          offs -= 0.5
       }
-      v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
-      v3SumIP([0.3*offs,0,0],global.Blender.HndOp.Position,targetPos)
-      v3SumIP([0,offs,0],zero3,targetRot)
-      targetRot = [0,3,0]
-      targetMat = global.Blender.HndOp.Mat
+      if showingOff {
+         v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
+         v3SetIP(global.Blender.HndOpShowoff.Position,targetPos)
+         v3Set(targetRot,0,0,0)
+         targetMat = global.Blender.HndOpShowoff.Mat
+      } else {
+         v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
+         v3SumIP([0.3*offs,0,0],global.Blender.HndOp.Position,targetPos)
+         v3SumIP([0,3,0],zero3,targetRot)
+         //targetRot = [0,3,0]
+         targetMat = global.Blender.HndOp.Mat
+      }
       break
    //#endregion
 //#endregion |                              |

@@ -85,6 +85,12 @@ matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
 with( obj3DCard ) {
+   worldToScreenIP(
+      position[0],position[1],position[2],
+      matrix_get(matrix_view),
+      matrix_get(matrix_projection), 
+      screenPos
+   )
    if !is_undefined(card) {
       shader_set_uniform_f(
          shader_get_uniform(sha, "uSel"),

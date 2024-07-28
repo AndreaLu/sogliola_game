@@ -51,7 +51,7 @@ if startTurn {
                   new EventDraw(global.supervisor, function(_evt) {
                         if global.turnPlayer.deck.size > 0 {
                            global.turnPlayer.Draw()
-                           global.choiceMade = true // PEZZA PEZZISSIMA
+                           //global.choiceMade = true // PEZZA PEZZISSIMA
                         }
                      }
                   )
@@ -104,7 +104,7 @@ if startTurn {
 // If the game is multiplayer, this is not done here, but rather in the
 // async event (as we receive the move from the opponent)
 // If the game is singleplayer, this is where the IA performs its move
-if !global.choiceMade && (global.turnPlayer == global.opponent) {
+if !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution{
 
    if !global.multiplayer {
       // AI turn
@@ -123,7 +123,9 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
          
          if canDraw choice = 0
          else choice = irandom(global.options.size-1)//global.srandom.IRandom(global.options.size-1)
+         
          var option = global.options.At(choice)
+
          ExecuteOption(option,false)
       }
    } else {

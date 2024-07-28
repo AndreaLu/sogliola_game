@@ -44,11 +44,13 @@ quat2 = mat2quat(
    )
 )
 
+xx = -3+6*p
+yy = 0
+zz = sin(theta)
 mat3 = matrix_multiply(
    quat2mat(quatSlerp(quat,quat2,p)),
       matBuild(
-      [-3+6*p,0,sin(theta)],
+      [xx,yy,zz],
       [0,0,0],[1,1,1]
    )
 )
-

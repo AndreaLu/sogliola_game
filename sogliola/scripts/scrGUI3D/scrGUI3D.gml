@@ -5,9 +5,11 @@ FORWARD = [0,1,0]
 RIGHT = [1,0,0]
 UP = [0,0,1]
 
-function Stack(callback) {
+function Stack(callback) constructor {
    done = false
-   Update = function() {}
+   Update = function() {
+      done = true
+   }
    Callback = callback
    global.stack.Add(self)
 }
@@ -96,6 +98,46 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
    }
 }
 
+function StackWait(time,callback) : Stack(callback) constructor {
+   t = 0
+   duration = time
+   Update = function() {
+      t += deltaTime()/1000000
+      done = t >= duration
+   }
+}
+function StackAnimOppCursor(destX,destY) : Stack(undefined) constructor {
+
+   startX = obj3DGUI.opponentCursor.x
+   startY = obj3DGUI.opponentCursor.y
+   dstX = destX
+   dstY = destY
+   maxSpeed = 5
+   t = 0
+
+   Update = function() {
+      t += deltaTime()/1000000
+      // Lerpa il cursore verso la destinazione con una maxspeed
+      var curX = obj3DGUI.opponentCursor.x
+      var curY = obj3DGUI.opponentCursor.y
+      var newX = lerp(curX,dstX,0.05)
+      var newY = lerp(curY,dstY,0.05)
+      /*if point_distance(newX,newY,curX,curY) >= maxSpeed {
+         var v = [newX-curX,newY-curY,0]
+         v3NormalizeIP(v,v)
+         curX = curX + v[0]*maxSpeed
+         curY = curY + v[1]*maxSpeed
+      } else {
+         curX = newX
+         curY = newY
+      }*/
+      obj3DGUI.opponentCursor.x = newX
+      obj3DGUI.opponentCursor.y = newY
+
+      done = point_distance(newX,newY,dstX,dstY) <= 0.01
+      
+   }
+}
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
 function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(undefined) constructor {
    

@@ -122,6 +122,13 @@ inputManager = {
    }
 }
 
+
+opponentCursor = {
+   x : window_get_width()/2,
+   y : 0,
+   subimg : 0
+}
+
 inputManager.Init()
 
 TargetAqPlScal  = [1,1,1]

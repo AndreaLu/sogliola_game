@@ -5,11 +5,15 @@ debugMode = true // TODO: setta false in produzione
 function loadBlenderFromJSON(json) {
    global.Blender = json_parse(json)
 
+   // TODO: possibile miglioramento, aggiungi una prorpietà type
+   // alle struct exportate e esegui questa operazione automaticamente
+   // per ogni oggetto di tipo mesh
    // Crea le matrici di rotazione per ogni mesh
    structs = [
       global.Blender.HndPl,
       global.Blender.HndPlZoom,
       global.Blender.HndOp,
+      global.Blender.HndOpShowoff,
       global.Blender.DckPl,
       global.Blender.DckOp,
       global.Blender.AqPl,
@@ -348,4 +352,9 @@ function deltaTime() {
    if global.debugMode
       return 1000000/room_speed
    return delta_time;
+}
+
+function smoothstep(edge0,edge1,x){
+   var t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+   return t * t * (3.0 - 2.0 * t);
 }

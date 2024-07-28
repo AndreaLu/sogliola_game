@@ -39,7 +39,10 @@ function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
+global.waitingExecution = false
 function ExecuteOption(option,send) {
+   global.waitingExecution = true
+   show_debug_message( "ExecuteOption: " + option[0] )
    /* 
       option = [
          desc,
@@ -49,18 +52,74 @@ function ExecuteOption(option,send) {
       ]
     */
    var callback = option[1]
+   var sourceCard = option[2]
    var hasTarget = array_length(option) > 3 && !is_undefined(option[3])
-   if( hasTarget ) {
-      callback(option[3])
-   } else {
-      callback()
+   var targets = hasTarget ? option[3] : undefined
+   global.args = [hasTarget,callback,targets,option[0]]
+
+
+   // If the opponent plays a card, this goes to the showoff area
+   if global.turnPlayer == global.opponent && option[0] != "Draw" && option[0] != "Pass the turn" {
+      sourceCard.guiCard.showingOff = true
+
+      // Give time for the card to reach the showoff region
+      new StackWait(0.5) // wait for 0.5 seconds
+      // Animazione target, se disponibile, con il cursore avversario
+      cursorMoved = false
+      if !is_undefined(targets) {
+         if !is_array(targets) targets = [targets]
+         for(var i=0;i<array_length(targets);i++) {
+            var target = targets[i]
+            var posX,posY
+            if is_instanceof(target,Card) {
+               
+               posX = sourceCard.guiCard.screenPos[0]
+               posY = sourceCard.guiCard.screenPos[1]
+            }
+            if is_instanceof(target,Aquarium) {
+               if target == global.player.aquarium {
+                  posX=232
+                  posY=303
+               } else {
+                  posX=187
+                  posY=491
+               }
+            }
+            new StackAnimOppCursor(posX,posY) 
+            new StackWait(0.2)
+            repeat(2) {
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new StackWait(0.2)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
+            new StackWait(0.1)
+            }
+            // cursor click!
+         }
+         new StackAnimOppCursor(window_get_width()/2,0)
+      }
    }
-   global.choiceMade = true
+
+   
+   new Stack( function() {
+      show_debug_message("done execute option" + global.args[3])
+      var hasTarget = global.args[0]
+      var callback = global.args[1]
+      var targets = global.args[2]
+      if( hasTarget ) {
+         callback(targets)
+      } else {
+         callback()
+      }
+      global.choiceMade = true
+      global.waitingExecution = false
+   },)
+   
    
    if global.multiplayer && send {
       // Send the message!
       networkSendPacket("move,"+string(sel_choice))
    }
+   
 }
 //#endregion |                 |
 //#region    | 2.0 Collections                    |
