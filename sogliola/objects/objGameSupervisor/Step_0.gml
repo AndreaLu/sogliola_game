@@ -1,12 +1,28 @@
 // +----------------------------------------------------------------------+
 // | Step Event                                                           |
 // +----------------------------------------------------------------------+
-// This is where the game is managed
+/*
+   - Turn initialization
+      Here, the initialization of the turn happens (1.0). This is when the
+      variable startTurn is set to true, which happens when a player passes
+      the turn. the "pass the turn" option sets global.turnPassed to true,
+      which in turns make startTurn true just for a frame.
+   - Player/Opponent Move
+      After the initialization, if it's the players turn, this step
+      does nothing but wait for the user decision. When it finally comes,
+      global.choiceMade is set to true so this event can run the required
+      steps (2.3), which includes the propagation of a new TurnMain Event
+      to repopulate the global.options array
+      If it's the opponent's turn, this event calculate the move with the
+      IA (2.1) or waits for the multiplayer partner to pick a move
+   - Endgame
+      This event also calculates the endgame condition (2.3)
+*/
 
 
 if( room != room2DGame && room != room3DGame ) exit
-//            __________________________
-//#region    | 1.0 Start of the Turn    |
+//            ___________________________
+//#region    | 1.0 Start of the Turn     |
 var playerDrawing = false // pezza per fissare il wrong gameend
 if startTurn {
    // Inizializza tutto per questo turno
@@ -82,8 +98,8 @@ if startTurn {
 
 }
 //#endregion |                       |
-//#region    | 2.0 Making a Move        |
-//#region    |    2.1 Opponents move    |
+//#region    | 2.0 Making a Move         |
+//#region    |    2.1 Opponents move     |
 // We need to make a move for the opponent.
 // If the game is multiplayer, this is not done here, but rather in the
 // async event (as we receive the move from the opponent)
@@ -120,7 +136,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
    }
 }
 //#endregion
-//#region    |    2.2 Player move       |
+//#region    |    2.2 Player move        |
 /* 
    The player move does not happen here. Rather, when the player clicks
    on cards or whatnot, the move is made selecting one among the 
@@ -130,7 +146,7 @@ if !global.choiceMade && (global.turnPlayer == global.opponent) {
    is set to true
 */
 //#endregion
-//#region    |    2.3 Endgame Condition |
+//#region    |    2.3 ChoiceMade/Endgame |
 if( global.options.size == 1 && startTurn && !playerDrawing) {
    if( global.onePlayerFinished ) GameOver()
    global.onePlayerFinished = true
@@ -158,4 +174,4 @@ if global.choiceMade {
    }
 }
 //#endregion
-//#endregion |__________________________|
+//#endregion |___________________________|
