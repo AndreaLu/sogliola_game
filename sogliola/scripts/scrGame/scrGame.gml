@@ -194,7 +194,7 @@ function Actor() constructor {
    
    static StartEvent = function( event ) {
 
-      global.effectChainRing.Add( event )
+      global.effectChainRing.Add( [self,event] )
 
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
@@ -206,17 +206,21 @@ function Actor() constructor {
          for( var j=0; j< ring.size; j++) {
             var _event = ring.At(j)
             for( var k=global.effectListeners.size-1; k>=0; k--) {
-               global.effectListeners.At(k).listener( _event )
+               global.effectListeners.At(k).listener( _event[1] )
             }
          }
       }
       
       // Ora la effectChain è stata popolata correttamente...
       // La eseguo a ritroso
+      show_message("chain ring size: " + string(global.effectChain.size))
+
       for(var i=global.effectChain.size-1;i>=0;i--) {
          var ring = global.effectChain.At(i)
+
          for( var j=0;j<ring.size; j++) {
-            _event = ring.At(j)
+            _event = ring.At(j)[1]
+            var srcCard = ring.At(j)[0]
             if !is_undefined( _event.callback ) 
                _event.callback(_event)
          }
@@ -456,7 +460,7 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
             while hasClown && is_instanceof(target, CardReSogliola) {
                target = opponent.aquarium.Random()
             }
-            global.effectChainRing.Add( new EventSteal(self,Steal,target) )
+            global.effectChainRing.Add( [self,new EventSteal(self,Steal,target)] )
          }
       }
       Steal = function(event) {
@@ -498,7 +502,7 @@ function CardSogliolaPietra(owner) : FishEffectCard(
                target = aquarium.Random()
             }
             
-            global.effectChainRing.Add( new EventFree(self,Free,target) )
+            global.effectChainRing.Add( [self,new EventFree(self,Free,target)] )
          }
       }
    }
@@ -520,7 +524,7 @@ function CardSogliolaVolante(owner) : FishEffectCard(
       _listener( event )
       if breakpoints breakpoint()
       if( is_instanceof(location,Aquarium) && is_instanceof(event,EventFree) && event.target == self ) {
-         global.effectChainRing.Add( new EventDraw(self,Draw) ) 
+         global.effectChainRing.Add( [self,new EventDraw(self,Draw)] ) 
       }
    }
    Draw = function(_evt) {
@@ -541,7 +545,7 @@ function CardSogliolaSalmone(owner) : FishEffectCard(
       if( is_instanceof(location,Aquarium) && is_instanceof(event,EventSteal) && event.target == self ) {
          var evt = new EventDraw(self,Draw)
          evt.target = ( location == global.player.aquarium ) ? global.player : global.opponent
-         global.effectChainRing.Add( evt ) 
+         global.effectChainRing.Add( [self,evt] ) 
       }
    }
    
