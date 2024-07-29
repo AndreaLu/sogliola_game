@@ -228,8 +228,11 @@ function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
 
    Callback = function() {
       // Sblocca i cambiamenti grafici di location
-      for(var i=0;i<array_length(card);i++)
-         card[i].guiCard.locationLock = false
+      new StackWait(0.4, function(card) {
+         for(var i=0;i<array_length(card);i++)
+            card[i].guiCard.locationLock = false
+         },
+      card)
    }
 }
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
