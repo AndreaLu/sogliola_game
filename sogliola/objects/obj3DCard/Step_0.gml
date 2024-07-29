@@ -6,10 +6,13 @@
  */
  
 if is_undefined(card) exit
+if !locationLock {
+   guiLocation = card.location
+}
 
 var pos
 
-switch( card.location ) {
+switch( guiLocation ) {
 //            ______________________________
 //#region    | 1.0 Compute Target Transform |
 //#region    |    1.1 Hand                  |

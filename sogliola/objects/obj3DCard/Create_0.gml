@@ -4,6 +4,8 @@ uno3=[1,1,1]
 meshCard = mesh3DGLoad("graphics/card.obj.3dg")
 meshBack = mesh3DGLoad("graphics/back.obj.3dg")
 
+locationLock = false
+guiLocation = undefined
 // card struct associated with this object
 // Similarly, the card has a guiCard to reference
 // this object

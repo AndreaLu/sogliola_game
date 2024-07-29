@@ -104,7 +104,16 @@ if startTurn {
 // If the game is multiplayer, this is not done here, but rather in the
 // async event (as we receive the move from the opponent)
 // If the game is singleplayer, this is where the IA performs its move
-if !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution{
+
+
+// If there are some cards with locationLock set to true, wait
+// for them
+global.locationLock = false
+with obj3DCard {
+   if locationLock
+      global.locationLock = true 
+}
+if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution{
 
    if !global.multiplayer {
       // AI turn

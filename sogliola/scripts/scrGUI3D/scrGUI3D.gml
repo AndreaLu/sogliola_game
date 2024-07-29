@@ -146,7 +146,8 @@ function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
    card = _card
    if !is_array(card)
       card = [card]
-   
+   for(var i=0;i<array_length(card);i++)
+      card[i].guiCard.locationLock = true
    t = 0
    phase = 0
    dur0 = 0.4
@@ -223,6 +224,12 @@ function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
       }
       surface_reset_target()
       draw_surface(sf,0,0)
+   }
+
+   Callback = function() {
+      // Sblocca i cambiamenti grafici di location
+      for(var i=0;i<array_length(card);i++)
+         card[i].guiCard.locationLock = false
    }
 }
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
