@@ -170,7 +170,7 @@ table = mesh3DGLoad("./graphics/table.obj.3dg")
 cat = mesh3DGLoad("./graphics/cat.obj.3dg")
 tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 bottle = mesh3DGLoad("./graphics/bottle.obj.3dg")
-
+radio = mesh3DGLoad("./graphics/radio.obj.3dg")
 
 
 // Queste due variabili servono alla gestione del passaggio

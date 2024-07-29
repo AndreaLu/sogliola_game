@@ -83,6 +83,7 @@ vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
+vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
