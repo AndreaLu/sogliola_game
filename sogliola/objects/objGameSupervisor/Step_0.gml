@@ -51,7 +51,7 @@ if startTurn {
                   new EventDraw(global.supervisor, function(_evt) {
                         if global.turnPlayer.deck.size > 0 {
                            global.turnPlayer.Draw()
-                           //global.choiceMade = true // PEZZA PEZZISSIMA
+                           global.choiceMade = true // PEZZA PEZZISSIMA
                         }
                      }
                   )
