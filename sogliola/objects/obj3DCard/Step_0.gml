@@ -95,7 +95,12 @@ switch( card.location ) {
       var xbobbing = cos(t)*0.1;
       v3SetIP(obj3DGUI.TargetAqPlScal,targetScal)
       v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqPl.Position,targetPos)
-      v3Set(targetRot,0,0,xbobbing*13)
+      var yRot = 0, zRot = 0;
+	  if (global.radioOn) {
+		yRot = sin(t*10)*120;
+		zRot = cos(t*15)*30
+	  }
+      v3Set(targetRot,0,yRot,xbobbing*13+zRot)
       targetMat = global.Blender.AqPl.Mat
       break;
    case global.opponent.aquarium:
@@ -106,7 +111,12 @@ switch( card.location ) {
       var xbobbing = cos(t)*0.1;
       v3SetIP(obj3DGUI.TargetAqOpScal,targetScal)
       v3SumIP([offs+xbobbing,0,bobbing],global.Blender.AqOp.Position,targetPos)
-      v3Set(targetRot,0,0,xbobbing*13)
+	  var yRot = 0, zRot = 0;
+	  if (global.radioOn) {
+		yRot = sin(t*10)*120;
+		zRot = cos(t*15)*30;
+	  }
+      v3Set(targetRot,0,yRot,xbobbing*13+zRot)
       targetMat = global.Blender.AqOp.Mat
       break;
 //#endregion
