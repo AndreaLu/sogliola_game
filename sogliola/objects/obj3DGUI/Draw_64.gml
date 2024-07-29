@@ -293,8 +293,21 @@ draw_sprite_ext(
 )
 //#endregion |                                             |
 //#endregion |                                             |
+
+//#region    | 4.0 Stack                                   |
+if global.stack.size > 0 {
+   var stackChain = global.stack.At(0)
+   stackChain.Update()
+   if stackChain.done {
+      if !is_undefined(stackChain.Callback) {
+         stackChain.Callback(stackChain.cbArgs)
+      }
+      global.stack.RemoveAt(0)
+   }
+}
+//#endregion |                                             |
 //           |_____________________________________________|
-       
+
 
 draw_text(room_width-100,30,string([inputManager.mouse.X,inputManager.mouse.Y]))
 // restore culling for next 3d rendering

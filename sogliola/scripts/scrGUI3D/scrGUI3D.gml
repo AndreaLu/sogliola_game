@@ -5,12 +5,13 @@ FORWARD = [0,1,0]
 RIGHT = [1,0,0]
 UP = [0,0,1]
 
-function Stack(callback) constructor {
+function Stack(callback,args) constructor {
    done = false
    Update = function() {
       done = true
    }
    Callback = callback
+   cbArgs = args
    global.stack.Add(self)
 }
 // guiCard: obj3DCard reference of the card to be ANIMATED!!!!
@@ -98,7 +99,7 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
    }
 }
 
-function StackWait(time,callback) : Stack(callback) constructor {
+function StackWait(time,callback,args) : Stack(callback,args) constructor {
    t = 0
    duration = time
    Update = function() {
@@ -136,6 +137,92 @@ function StackAnimOppCursor(destX,destY) : Stack(undefined) constructor {
 
       done = point_distance(newX,newY,dstX,dstY) <= 0.01
       
+   }
+}
+
+function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
+
+
+   card = _card
+   if !is_array(card)
+      card = [card]
+   
+   t = 0
+   phase = 0
+   dur0 = 0.4
+   dur1 = 0.4
+   dur2 = 0.4
+   y0=window_get_height()/2
+   w = window_get_width()
+   h = window_get_height()
+   hh = 20
+   sw = sprite_get_width(card[0].sprite)
+   sh = sprite_get_height(card[0].sprite)
+   N=8
+   
+   sf = surface_create(w,h)
+   
+   Update = function() {
+      if !surface_exists(sf)
+          sf = surface_create(w,h)
+      surface_set_target(sf)
+      draw_clear_alpha(c_white,0)
+      t += deltaTime()/1000000
+      var al = array_length(card)
+      switch(phase) {
+         case( 0 ):
+            draw_set_color(c_black)
+            for( var i=0;i<N;i++) {
+               draw_rectangle(w - t/dur0*w +40*i ,y0-hh*(N/2-i),w,y0-hh*(N/2-i-1),false)
+            }
+            if t >= dur0*1.2 {
+               phase = 1
+               t = 0
+            }
+            gpu_set_blendmode(bm_add) // TODO: usa blendmode ext per togliere dove non ci sono ancora i rect
+            for( var i=0;i<al;i+=1){
+               draw_sprite_ext(card[i].sprite,0, w/2 - (sw+10)*((al-1)/2)+(sw+10)*i,   h/2,1.2,1.2,0,c_white,  1)//smoothstep(0,dur1*0.4,t) )
+            }
+            
+            gpu_set_blendmode(bm_normal)
+            break
+         case( 1 ): // Card appearance
+            draw_rectangle(0,y0-hh*N/2,w,y0-hh*(N/2-N),false)
+            gpu_set_blendmode(bm_add)
+            for( var i=0;i<al;i+=1){
+               draw_sprite_ext(card[i].sprite,0,  w/2-(sw+10)*((al-1)/2)+(sw+10)*i,     h/2,1.2,1.2,0,c_white, 1)//smoothstep(0,dur1*0.4,t) )
+            }
+            gpu_set_blendmode(bm_normal)
+            if t >= dur1 {
+               phase = 2
+               t = 0
+            }
+            break
+         case( 2 ):
+            
+            for( var i=0;i<N;i++) {
+               draw_rectangle(0,y0-hh*(N/2-i), w - t/dur2*w +40*i ,y0-hh*(N/2-i-1),false)
+            }
+            for( var i=0;i<al;i+=1){
+               draw_sprite_ext(card[i].sprite,0, w/2-(sw+10)*((al-1)/2)+(sw+10)*i,h/2,1.2,1.2,0,c_white,1)
+            }
+            var bm = gpu_get_blendmode_ext();
+            bm[0] = bm_one;
+            bm[1] = bm_zero;
+            gpu_set_blendmode_ext(bm);
+            for( var i=0;i<N;i++) {
+               draw_set_alpha(0)
+               draw_rectangle( w - t/dur2*w +40*i,y0-hh*(N/2-i),w ,y0-hh*(N/2-i-1),false)
+               draw_set_alpha(1)
+            }
+            bm[0] = bm_src_alpha
+            bm[1] = bm_inv_src_alpha
+            gpu_set_blendmode_ext(bm); 
+            done = (t >= dur1)
+            break
+      }
+      surface_reset_target()
+      draw_surface(sf,0,0)
    }
 }
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)

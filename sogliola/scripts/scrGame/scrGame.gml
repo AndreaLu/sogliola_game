@@ -4,7 +4,7 @@ allCards = new ds_list() // tutte le carte esistenti si inseriscono automaticame
 effectListeners = new ds_list()
 // list of listeners:
 // that is instances that implement thel listener(event) callback
-
+chainCallback = undefined
 effectChain = new ds_list()      //
 effectChainRing = new ds_list()  // list of effects that triggered simultaneously (will need to sort them out into the effectChain)
 // options will contain all of the moves that the player can make
@@ -96,6 +96,7 @@ function ExecuteOption(option,send) {
             // cursor click!
          }
          new StackAnimOppCursor(window_get_width()/2,0)
+         global.chainCallback = sourceCard
       }
    }
 
@@ -195,7 +196,7 @@ function Actor() constructor {
    static StartEvent = function( event ) {
 
       global.effectChainRing.Add( [self,event] )
-
+      
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
       while( global.effectChainRing.size  > 0 ) {
@@ -213,24 +214,39 @@ function Actor() constructor {
       
       // Ora la effectChain è stata popolata correttamente...
       // La eseguo a ritroso
-      show_message("chain ring size: " + string(global.effectChain.size))
-
       for(var i=global.effectChain.size-1;i>=0;i--) {
          var ring = global.effectChain.At(i)
+         if ring.size > 1 {
+            var cards = []
+            for( var k=0;k<ring.size;k+=1) {
+               var cc =ring.At(k)[0]
+               if is_instanceof(cc,Card)
+                  cards[@array_length(cards)] = cc
+            }
+            new stackDisplayCardActivation(cards)
+            global.chainCallback = undefined
+         } else if !is_undefined(global.chainCallback) {
+            new StackDisplayCardActivation(global.chainCallback)
+            global.chainCallback = undefined
+         }
 
          for( var j=0;j<ring.size; j++) {
             _event = ring.At(j)[1]
             var srcCard = ring.At(j)[0]
-            if !is_undefined( _event.callback ) 
+            if !is_undefined( _event.callback ) {
+               //if is_instanceof(srcCard,Card)
+               //   new StackDisplayCardActivation(srcCard)
                _event.callback(_event)
+            }
          }
       }
-      
+
       // Cleanup the effect chain
       global.effectChain.rofeach( function(ring) {
          ring.Destroy()
       })
       global.effectChain.Clear()
+
       
    }
 }

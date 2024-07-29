@@ -15,14 +15,3 @@ if surface_exists(sf) && !global.zooming && !camTransition {
    }
 }
 
-if global.stack.size > 0 {
-   var stackChain = global.stack.At(0)
-   stackChain.Update()
-   if stackChain.done {
-      if !is_undefined(stackChain.Callback) {
-         stackChain.Callback()
-      }
-      global.stack.RemoveAt(0)
-   }
-}
-
