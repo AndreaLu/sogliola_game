@@ -127,11 +127,13 @@ opponentCursor = {
    x : window_get_width()/2,
    y : 0,
    subimg : 0,
+   alpha : 0,
    Draw : function() {
+      alpha =  smoothstep(30,150,y)
       draw_sprite_ext(
          sprCursorOp,subimg,x,y, // Sprite,subimg,x,y
          2,2,0,c_white,          // XScale, yScale, rot, color1
-         smoothstep(30,150,y)    // Alpha
+         alpha   // Alpha
       )
    }
 }

@@ -91,8 +91,17 @@ function ExecuteOption(option,send) {
             new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
             // cursor click!
          }
-         new StackAnimOppCursor(0,20,2)
+         new StackAnimOppCursor(0,20,2,true)
+
+         if( is_instanceof(sourceCard,ActionCard) ) {
+            new StackDisplayCardActivation(sourceCard)
+         } else {
          global.chainCallback = sourceCard
+         }
+      } else {
+         if( is_instanceof(sourceCard,ActionCard) ) {
+            new StackDisplayCardActivation(sourceCard)
+         }
       }
    }
 

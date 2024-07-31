@@ -107,7 +107,7 @@ function StackWait(time,callback,args) : Stack(callback,args) constructor {
       done = t >= duration
    }
 }
-function StackAnimOppCursor(destX,destY,destZ) : Stack(undefined) constructor {
+function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) constructor {
 
    startX = obj3DGUI.opponentCursor.x
    startY = obj3DGUI.opponentCursor.y
@@ -116,7 +116,7 @@ function StackAnimOppCursor(destX,destY,destZ) : Stack(undefined) constructor {
    dstZ = destZ
    maxSpeed = 5
    dest = [0,0,0]
-
+   goBack = is_undefined(back) ? false : back
    Update = function() {
       worldToScreenIP(dstX,dstY,dstZ, global.matView, global.matProjection, dest)
       // Lerpa il cursore verso la destinazione con una maxspeed
@@ -128,7 +128,7 @@ function StackAnimOppCursor(destX,destY,destZ) : Stack(undefined) constructor {
       done = point_distance(
          obj3DGUI.opponentCursor.x,
          obj3DGUI.opponentCursor.y,
-         dest[0],dest[1]) <= 0.01
+         dest[0],dest[1]) <= 0.01 || (goBack && obj3DGUI.opponentCursor.alpha == 0)
    }
 }
 
