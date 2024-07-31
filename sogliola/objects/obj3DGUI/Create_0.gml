@@ -209,6 +209,3 @@ global.pickingTarget = undefined
 // Rimuovo il cursore (disegno la sprite custom)
 window_set_cursor(cr_none);
 
-
-//
-global.surfSprite = -1

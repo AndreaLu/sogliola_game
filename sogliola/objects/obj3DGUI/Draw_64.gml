@@ -291,7 +291,7 @@ opponentCursor.Draw()
 
 //#endregion |                                             |
 //#endregion |                                             |
-
+//#region    | 4.0 Stack                                   |
 
 if global.stack.size > 0 {
    var stackChain = global.stack.At(0)
@@ -303,35 +303,35 @@ if global.stack.size > 0 {
       global.stack.RemoveAt(0)
    }
 }
-
-//           |_____________________________________________|
-
-
-draw_text(room_width-100,30,string([inputManager.mouse.X,inputManager.mouse.Y]))
-
-if (global.surfSprite = -1){
-	var w = 192;
-	var h = 256;
-	global.surfSprite = surface_create(w, h);
-	surface_set_target(global.surfSprite);
-	draw_clear_alpha(#30172c, 0);
-	draw_sprite_ext(sprSogliolaDiavoloNero, 0, w/2, h/2, 2, 2, 0, c_white, 1);
-	draw_set_color(#30172c);
-	draw_set_halign(fa_center);
-	draw_set_valign(fa_middle);
-	draw_set_font(fntCards);
-	draw_text(w/2,h*0.06,
-		"Sogliola Diavolo Nero");
-	draw_text_ext(w/2,h/2+h*0.16,
-		"Quando entra nell'acquario, ruba una sogliola casuale dall'acquario avversario e la aggiunge al tuo",
-		12, w*0.94);
-	draw_set_font(fntValue);
-	draw_text(w/2,h*0.88,
-		"-10");
-	surface_reset_target();
+//#endregion |                                             |
+//#region    | 5.0 Generating text surface                 |
+with(obj3DCard) {
+   if !is_undefined(card) {
+      if !is_instanceof(card.location,Deck) {
+         if (!surface_exists(surfSprite)) {
+            var w = 192;
+            var h = 256;
+            surfSprite = surface_create(w, h);
+            surface_set_target(surfSprite);
+            draw_clear_alpha(#30172c, 0);
+            draw_sprite_ext(card.sprite, 0, w/2, h/2, 2, 2, 0, c_white, 1);
+            draw_set_color(#30172c);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_font(fntCards);
+            draw_text(w/2,h*0.06,card.name);
+            draw_text_ext(w/2,h/2+h*0.16,card.desc,12, w*0.94);
+            if is_instanceof(card,FishCard) {
+               draw_set_font(fntValue);
+               draw_text(w/2,h*0.88,string(card.Val()));
+            }
+            surface_reset_target();
+         }
+      }
+   }
 }
-
-draw_surface(global.surfSprite, 0, 0);
+//#endregion |                                             |
+//           |_____________________________________________|
 
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)

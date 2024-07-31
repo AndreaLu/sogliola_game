@@ -100,11 +100,9 @@ with( obj3DCard ) {
          selected ? 1.0 : 0.0
       );
       matrix_set(matrix_world,mat)
-	  if (global.surfSprite != -1){
-		vertex_submit(meshCard,pr_trianglelist,surface_get_texture(global.surfSprite));
-	  }
+      if surface_exists(surfSprite)
+         vertex_submit(meshCard,pr_trianglelist,surface_get_texture(surfSprite));
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
-
    }
 }
 shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)

@@ -3,7 +3,6 @@ uno3=[1,1,1]
 
 meshCard = mesh3DGLoad("graphics/card.obj.3dg")
 meshBack = mesh3DGLoad("graphics/back.obj.3dg")
-meshCardText = mesh3DGLoad("graphics/cardText.obj.3dg")
 
 locationLock = false
 guiLocation = undefined
@@ -109,3 +108,5 @@ setZoom = function() {
 // can be selected as a target during the activation of a card
 selected = false 
 lerpSpeed = 1
+
+surfSprite = -1
