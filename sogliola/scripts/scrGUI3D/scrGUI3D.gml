@@ -107,36 +107,28 @@ function StackWait(time,callback,args) : Stack(callback,args) constructor {
       done = t >= duration
    }
 }
-function StackAnimOppCursor(destX,destY) : Stack(undefined) constructor {
+function StackAnimOppCursor(destX,destY,destZ) : Stack(undefined) constructor {
 
    startX = obj3DGUI.opponentCursor.x
    startY = obj3DGUI.opponentCursor.y
    dstX = destX
    dstY = destY
+   dstZ = destZ
    maxSpeed = 5
-   t = 0
+   dest = [0,0,0]
 
    Update = function() {
-      t += deltaTime()/1000000
+      worldToScreenIP(dstX,dstY,dstZ, global.matView, global.matProjection, dest)
       // Lerpa il cursore verso la destinazione con una maxspeed
       var curX = obj3DGUI.opponentCursor.x
       var curY = obj3DGUI.opponentCursor.y
-      var newX = lerp(curX,dstX,0.05)
-      var newY = lerp(curY,dstY,0.05)
-      /*if point_distance(newX,newY,curX,curY) >= maxSpeed {
-         var v = [newX-curX,newY-curY,0]
-         v3NormalizeIP(v,v)
-         curX = curX + v[0]*maxSpeed
-         curY = curY + v[1]*maxSpeed
-      } else {
-         curX = newX
-         curY = newY
-      }*/
-      obj3DGUI.opponentCursor.x = newX
-      obj3DGUI.opponentCursor.y = newY
+      obj3DGUI.opponentCursor.x = lerp(curX,dest[0],0.05)
+      obj3DGUI.opponentCursor.y = lerp(curY,dest[1],0.05)
 
-      done = point_distance(newX,newY,dstX,dstY) <= 0.01
-      
+      done = point_distance(
+         obj3DGUI.opponentCursor.x,
+         obj3DGUI.opponentCursor.y,
+         dest[0],dest[1]) <= 0.01
    }
 }
 

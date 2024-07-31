@@ -72,30 +72,26 @@ function ExecuteOption(option,send) {
             var target = targets[i]
             var posX,posY
             if is_instanceof(target,Card) {
-               
-               posX = sourceCard.guiCard.screenPos[0]
-               posY = sourceCard.guiCard.screenPos[1]
+               pos = target.guiCard.position
             }
             if is_instanceof(target,Aquarium) {
                if target == global.player.aquarium {
-                  posX=232
-                  posY=303
+                  pos = global.Blender.TrgtPl.Position
                } else {
-                  posX=187
-                  posY=491
+                  pos = global.Blender.TrgtOp.Position
                }
             }
-            new StackAnimOppCursor(posX,posY) 
-            new StackWait(0.2)
-            repeat(2) {
+            new StackAnimOppCursor(pos[0],pos[1],pos[2]) 
             new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
-            new StackWait(0.2)
+            new StackWait(0.1)
             new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
             new StackWait(0.1)
-            }
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new StackWait(0.1)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
             // cursor click!
          }
-         new StackAnimOppCursor(window_get_width()/2,0)
+         new StackAnimOppCursor(0,20,2)
          global.chainCallback = sourceCard
       }
    }
@@ -425,9 +421,9 @@ function CardSogliolaBlob(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon,self,global.player.aquarium] )
+               global.options.Add( ["Summon "+name,Summon,self,controller.aquarium] )
             if global.turnOpponent.aquarium.size < 8
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,global.opponent.aquarium])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,Opponent(controller).aquarium])
          }
       }
    }
@@ -496,9 +492,9 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon,self,global.player.aquarium] )
+               global.options.Add( ["Summon "+name,Summon,self,controller.aquarium] )
             if global.turnOpponent.aquarium.size < 8 && !global.turnOpponent.aquarium.protected
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,global.opponent.aquarium])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,Opponent(controller).aquarium])
          }
       }
       

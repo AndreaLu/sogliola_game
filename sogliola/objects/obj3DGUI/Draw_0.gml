@@ -64,7 +64,10 @@ surface_set_target_ext(1,sfDummy)
 
 //#endregion |                                         |
 //#region    | 2.0 Regular Rendering (sha)             |
-
+global.matView = matrix_get(matrix_view)
+global.matView[0] = global.matView[0] 
+global.matProjection = matrix_get(matrix_projection)
+global.matProjection[0] = global.matProjection[0]
 draw_clear(c_dkgrey)
 
 shader_set(sha)

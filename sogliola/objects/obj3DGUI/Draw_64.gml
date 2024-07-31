@@ -287,14 +287,12 @@ draw_sprite_ext(
    inputManager.mouse.X,inputManager.mouse.Y, // x,y
    2,2,0, c_white,1                           // scale,rot,col,alpha
 )
-draw_sprite_ext(
-   sprCursorOp,opponentCursor.subimg,opponentCursor.x,opponentCursor.y,
-   2,2,0,c_white, smoothstep(30,150,opponentCursor.y)
-)
+opponentCursor.Draw()
+
 //#endregion |                                             |
 //#endregion |                                             |
 
-//#region    | 4.0 Stack                                   |
+
 if global.stack.size > 0 {
    var stackChain = global.stack.At(0)
    stackChain.Update()
@@ -305,7 +303,7 @@ if global.stack.size > 0 {
       global.stack.RemoveAt(0)
    }
 }
-//#endregion |                                             |
+
 //           |_____________________________________________|
 
 

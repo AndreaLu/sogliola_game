@@ -43,6 +43,7 @@
     {"$GMIncludedFile":"","%Name":"ocean.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"ocean.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"ocean.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"ocean.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.blend","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"scene.blend1","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend1","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"table.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"table.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
