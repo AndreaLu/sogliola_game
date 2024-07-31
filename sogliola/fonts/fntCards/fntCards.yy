@@ -130,7 +130,7 @@
   "regenerateBitmap":false,
   "resourceType":"GMFont",
   "resourceVersion":"2.0",
-  "sampleText":"Quando entra nell'acquario, ruba una sogliola casuale dall'acquario avversario e la aggiunge al tuo",
+  "sampleText":"Sogliola Diavolo Nero",
   "sdfSpread":6,
   "size":7.0,
   "styleName":"Bold",
