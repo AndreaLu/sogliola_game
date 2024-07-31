@@ -81,7 +81,7 @@ switch( guiLocation ) {
    case global.opponent.hand:
       pos = global.opponent.hand._cards.Index(card)
       offs = pos-global.opponent.hand.size/2
-      if( frac(global.player.hand.size/2) == 0 ) {
+      if( frac(global.opponen.hand.size/2) == 0 ) {
          offs -= 0.5
       }
       if showingOff {
