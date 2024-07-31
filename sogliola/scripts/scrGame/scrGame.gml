@@ -221,6 +221,7 @@ function Actor() constructor {
       // La eseguo a ritroso
       for(var i=global.effectChain.size-1;i>=0;i--) {
          var ring = global.effectChain.At(i)
+         var evt = ring.At(0)[1]
          if ring.size > 1 {
             var cards = []
             for( var k=0;k<ring.size;k+=1) {
@@ -230,9 +231,9 @@ function Actor() constructor {
             }
             new stackDisplayCardActivation(true,cards)
             global.chainCallback = undefined
-         } else if !is_undefined(global.chainCallback) {
-            new StackDisplayCardActivation(true,global.chainCallback)
-            global.chainCallback = undefined
+         //} //else if !is_undefined(global.chainCallback) && !is_instanceof(evt,EventSummon) {
+           // new StackDisplayCardActivation(true,global.chainCallback)
+           // global.chainCallback = undefined
          } else {
             var src = ring.At(0)
             src = src[0]

@@ -1,11 +1,10 @@
 # IMPORTANTI(da fare in giornate dedicate)
 1. - [sla] IA semplice (sort delle mosse in base al delta score con albero decisionale)
 - quando l'avversario passai l turno e non si pesca, la telecamera non torna alla mano tua
-- quando si attivano le carte azione, non si vede l'animazione 2d (solo in certe, tipo quella di pesca)
-- fai che non è hoverable quando il turno è avversario
+- fai che la mano è hoverable quando il turno è avversario
 - le carte di pesca devono introdurre delle pause tra le carte pescate
-- quando si attivano le carte azione, non c'è pausa tra l'animazione 2D e l'effetto
 - quando l'avversario usa furto, la carta va in showoff per qualche motivo
+- quando si stealla, e si fa il lock, il pos cambia comunque e la carta si sposta
 
 
 
