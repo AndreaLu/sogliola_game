@@ -22,27 +22,38 @@ switch( guiLocation ) {
       // Rendered Card
       // ------------------------------------------------------------------
 
-      // Calculate the offset (wrt. middle of the hand)
-      pos = global.player.hand._cards.Index(card)
-      offs = pos-global.player.hand.size/2
-      if( frac(global.player.hand.size/2) == 0 ) {
-         offs -= 0.5
+      if !cardZoom  {// Calculate the offset (wrt. middle of the hand)
+         pos = global.player.hand._cards.Index(card)
+         offs = pos-global.player.hand.size/2
+         if( frac(global.player.hand.size/2) == 0 ) {
+            offs -= 0.5
+         }
+         // Target Rot/Scal/Pos/Mat
+         v3Set(targetRot,0,0,0)
+         v3ScaleIP(cardZoom ? 3 : 1,[1,1,1], targetScal)
+         v3LC3IP(
+            global.Blender.HndPl.Position,
+            global.Blender.HndPl.Transform.j,
+            [1,0,0],
+            1,  // posizione di partenza
+            (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6) : 0,
+            0.4*offs, // offset carta in mano
+            targetPos
+         )
+         targetMat = cardZoom ?
+            global.Blender.HndPlZoom.Mat :
+            global.Blender.HndPl.Mat
+
+      } else {
+         v3Set(targetRot,0,0,0)
+         tmp = [0,0,0]
+         v3Set(targetScal,1,1,1)
+         v3SubIP(global.Blender.CamHand.To,global.Blender.CamHand.From,tmp)
+         v3NormalizeIP(tmp,tmp)
+         v3LC2IP(global.Blender.CamHand.From,tmp,1,3,targetPos)
+         targetMat = global.Blender.HndPlZoom.Mat
+
       }
-      // Target Rot/Scal/Pos/Mat
-      v3Set(targetRot,0,0,0)
-      v3ScaleIP(cardZoom ? 3 : 1,[1,1,1], targetScal)
-      v3LC3IP(
-         global.Blender.HndPl.Position,
-         global.Blender.HndPl.Transform.j,
-         [1,0,0],
-         1,  // posizione di partenza
-         (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6) : 0,
-         0.4*offs, // offset carta in mano
-         targetPos
-      )
-      targetMat = cardZoom ?
-         global.Blender.HndPlZoom.Mat :
-         global.Blender.HndPl.Mat
 
       // ------------------------------------------------------------------
       // Ghost Card
@@ -172,10 +183,12 @@ if card.location != global.player.hand {
 //#endregion |                              |
 //#region    | 2.0 Rendering Interpolation  |
 //#region    |    2.1 Rendering             |
+
+
+
 v3LerpIP(position,targetPos,lerpSpeed,position)
 v3LerpIP(scale,targetScal,lerpSpeed,scale)
 v3LerpIP(rot,targetRot,lerpSpeed,rot)
-
 targetMat2 = matrix_multiply(
    matBuild(zero3,rot,uno3),
    targetMat
@@ -189,6 +202,11 @@ mat = matrix_multiply(
    quat2mat(quatSlerp(q0,q1,lerpSpeed)),
    matBuild(position,zero3,uno3)
 )
+zoomTime = 0
+startPos = v3Copy(position)
+
+
+
 // TODO: for some reason, applying the scale in this way
 // makes the card go crazy, whereas in the test3d room it works..
 // suspect some memory accumulation effect
@@ -246,10 +264,10 @@ if cardZoom {
       obj3DGUI.objectHover = undefined
       cardZoom = false
       global.disableUserInput = true
-      new StackMoveCamera(
-         global.Blender.CamHand.From,
-         global.Blender.CamHand.To,
-         global.Blender.CamHand.FovY,
+      new StackWait(
+         //global.Blender.CamHand.From,
+         //global.Blender.CamHand.To,
+         //global.Blender.CamHand.FovY,
          0.3,function () { 
             global.zooming = false
             global.disableUserInput = false

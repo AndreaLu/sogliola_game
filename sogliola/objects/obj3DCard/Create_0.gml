@@ -90,7 +90,13 @@ setZoom = function() {
    // Perform the camera transition
    global.zoomCamTransition = true
    global.disableUserInput = true
-   new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,
+   //new StackMoveCamera(camFrom,camTo,global.camera.FOV,0.5,
+   //   function () {
+   //      global.zoomCamTransition = false
+   //      global.disableUserInput = false
+   //   }
+   //)
+   new StackWait(1,
       function () {
          global.zoomCamTransition = false
          global.disableUserInput = false

@@ -42,9 +42,7 @@
     {"$GMIncludedFile":"","%Name":"converter.py","CopyToMask":-1,"filePath":"datafiles/graphics","name":"converter.py","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"ocean.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"ocean.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"ocean.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"ocean.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"radio.obj.3dc","CopyToMask":-1,"filePath":"datafiles/graphics","name":"radio.obj.3dc","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.blend","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"scene.blend1","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.blend1","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"scene.obj.3dg","CopyToMask":-1,"filePath":"datafiles/graphics","name":"scene.obj.3dg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"table.obj","CopyToMask":-1,"filePath":"datafiles/graphics","name":"table.obj","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -55,7 +53,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.6.1.160",
+    "IDEVersion":"2024.6.2.162",
   },
   "name":"sogliola",
   "resources":[
