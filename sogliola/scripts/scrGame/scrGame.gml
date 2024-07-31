@@ -94,13 +94,13 @@ function ExecuteOption(option,send) {
          new StackAnimOppCursor(0,20,2,true)
 
          if( is_instanceof(sourceCard,ActionCard) ) {
-            new StackDisplayCardActivation(sourceCard)
+            new StackDisplayCardActivation(true,sourceCard)
          } else {
-         global.chainCallback = sourceCard
+            global.chainCallback = sourceCard
          }
       } else {
          if( is_instanceof(sourceCard,ActionCard) ) {
-            new StackDisplayCardActivation(sourceCard)
+            new StackDisplayCardActivation(true,sourceCard)
          }
       }
    }
@@ -228,11 +228,24 @@ function Actor() constructor {
                if is_instanceof(cc,Card)
                   cards[@array_length(cards)] = cc
             }
-            new stackDisplayCardActivation(cards)
+            new stackDisplayCardActivation(true,cards)
             global.chainCallback = undefined
          } else if !is_undefined(global.chainCallback) {
-            new StackDisplayCardActivation(global.chainCallback)
+            new StackDisplayCardActivation(true,global.chainCallback)
             global.chainCallback = undefined
+         } else {
+            var src = ring.At(0)
+            src = src[0]
+            var evt = ring.At(0)[1]
+            if (is_instanceof(evt,EventSteal) && is_instanceof(src,CardSogliolaDiavoloNero)) || 
+               (is_instanceof(evt,EventFree) && is_instanceof(src,CardSogliolaPietra) ) {
+               evt.target.guiCard.locationLock = true
+               new StackDisplayCardActivation(false,src, function(args) {
+                  new StackWait(0.25, function(args) {
+                     args[0].locationLock = false
+                  }, args)
+               },[evt.target.guiCard])
+            }
          }
 
          for( var j=0;j<ring.size; j++) {

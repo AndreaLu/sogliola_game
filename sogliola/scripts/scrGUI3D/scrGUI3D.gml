@@ -132,14 +132,15 @@ function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) construct
    }
 }
 
-function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
+function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callback,cbargs) constructor {
 
 
    card = _card
    if !is_array(card)
       card = [card]
-   for(var i=0;i<array_length(card);i++)
-      card[i].guiCard.locationLock = true
+   if doLock
+      for(var i=0;i<array_length(card);i++)
+         card[i].guiCard.locationLock = true
    t = 0
    phase = 0
    dur0 = 0.4
@@ -218,13 +219,19 @@ function StackDisplayCardActivation(_card) : Stack(undefined) constructor {
       draw_surface(sf,0,0)
    }
 
+   _callback = Callback
    Callback = function() {
       // Sblocca i cambiamenti grafici di location
-      new StackWait(0.4, function(card) {
+      new StackWait(0.4, function(args) {
+         card = args[0]
+         cb = args[1]
+         cbargs = args[2]
          for(var i=0;i<array_length(card);i++)
             card[i].guiCard.locationLock = false
+         if !is_undefined(cb)
+            cb(cbargs)
          },
-      card)
+      [card,_callback,cbArgs])
    }
 }
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
