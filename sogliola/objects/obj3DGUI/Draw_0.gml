@@ -29,6 +29,8 @@ if !is_undefined(global.pickingTarget) {
 }
 
 
+
+
 surface_set_target_ext(1,sf)
 shader_set(shaClickBuffer)
 draw_clear(c_dkgray)
@@ -54,9 +56,17 @@ if !onlyDrawAquarium {
    }
 }
 
+
+
 matrix_set(matrix_world,matrix_build_identity())
 shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),1)
 vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
+shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),0)
+shader_set_uniform_f_array(
+   shader_get_uniform(shaClickBuffer,"cardCol"),
+   [0,255,0]
+);
+vertex_submit(radio,pr_trianglelist,-1);
 
 
 shader_reset()
@@ -78,14 +88,19 @@ shader_set_uniform_f(
 shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
 
 var bobbing = sin(current_time/600)*0.05;
+if (global.radioOn) {
+	bobbing = sin(current_time/60)*0.1;
+}
 matrix_set(matrix_world,matBuild([0,0,bobbing],[0,0,0],[1,1,1]))
 vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
+vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
+
 
 with( obj3DCard ) {
    worldToScreenIP(

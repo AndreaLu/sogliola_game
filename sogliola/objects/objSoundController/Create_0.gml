@@ -2,3 +2,4 @@
 //Puoi scrivere il tuo codice in questo editor
 changed = false;
 current = 0;
+global.radioOn = false;

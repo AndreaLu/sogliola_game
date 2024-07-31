@@ -23,6 +23,8 @@ options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 
+function Radio() constructor {}
+radio = new Radio()
 //            ____________________________________
 //#region    | 1.0 Events                         |
 function Event(_src,_callback) constructor {

@@ -179,6 +179,7 @@ table = mesh3DGLoad("./graphics/table.obj.3dg")
 cat = mesh3DGLoad("./graphics/cat.obj.3dg")
 tablewater = mesh3DGLoad("./graphics/tablewater.obj.3dg")
 bottle = mesh3DGLoad("./graphics/bottle.obj.3dg")
+radio = mesh3DGLoad("./graphics/radio.obj.3dg")
 
 
 
@@ -208,4 +209,4 @@ global.pickingTarget = undefined
 
 // Rimuovo il cursore (disegno la sprite custom)
 window_set_cursor(cr_none);
-
+tt = 0
