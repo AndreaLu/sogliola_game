@@ -48,7 +48,7 @@ if !onlyDrawAquarium {
          if card.location == global.player.hand && !global.zooming {
             matrix_set(matrix_world,ghost.mat)
             vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
-            vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+			vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
          }
       }
    }
@@ -97,8 +97,11 @@ with( obj3DCard ) {
          selected ? 1.0 : 0.0
       );
       matrix_set(matrix_world,mat)
-      vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
+	  if (global.surfSprite != -1){
+		vertex_submit(meshCard,pr_trianglelist,surface_get_texture(global.surfSprite));
+	  }
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+
    }
 }
 shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)
@@ -172,3 +175,4 @@ shader_reset()
 //#endregion |                                         |
 //#endregion |                                         |
 //           |_________________________________________|
+
