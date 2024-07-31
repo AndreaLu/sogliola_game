@@ -128,7 +128,7 @@ function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) construct
       done = point_distance(
          obj3DGUI.opponentCursor.x,
          obj3DGUI.opponentCursor.y,
-         dest[0],dest[1]) <= 0.01 || (goBack && obj3DGUI.opponentCursor.alpha == 0)
+         dest[0],dest[1]) <= 1 || (goBack && obj3DGUI.opponentCursor.alpha == 0)
    }
 }
 
