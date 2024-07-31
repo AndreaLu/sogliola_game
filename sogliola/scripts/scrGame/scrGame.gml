@@ -4,14 +4,27 @@ allCards = new ds_list() // tutte le carte esistenti si inseriscono automaticame
 effectListeners = new ds_list()
 // list of listeners:
 // that is instances that implement thel listener(event) callback
-
+chainCallback = undefined
 effectChain = new ds_list()      //
 effectChainRing = new ds_list()  // list of effects that triggered simultaneously (will need to sort them out into the effectChain)
+// options will contain all of the moves that the player can make
+// It is a list of arrays, each has this structure
+// [ desc, callback, src, arguments ]
+// desc: string description of the move
+// callback: function that will be called if and when the move is actually
+// performed by the user
+// src: card struct that added this move. can be undefiend
+// args: arguments (can be an array) that will be given to the callback
+// can be absent or even undefined. in both cases it will not be passed to the
+// callback. Generally (always?) this is used for the targets of an effect
+// the card effect is put in the callback and the targets of the effect
+// are passed as the array
 options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 
-
+//            ____________________________________
+//#region    | 1.0 Events                         |
 function Event(_src,_callback) constructor {
    src = _src
    callback = _callback
@@ -26,7 +39,103 @@ function EventAction(_src,_cb) : Event(_src,_cb) constructor {} // si attiva una
 function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _target } // effetto che muove una sogliola dall'aquario alla mano avversaria
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
+global.waitingExecution = false
+function ExecuteOption(option,send) {
+   global.waitingExecution = true
+   show_debug_message( "ExecuteOption: " + option[0] )
+   /* 
+      option = [
+         desc,
+         callback,
+         srcCard,
+         target(s) (optional, and can be an array)
+      ]
+    */
+   var callback = option[1]
+   var sourceCard = option[2]
+   var hasTarget = array_length(option) > 3 && !is_undefined(option[3])
+   var targets = hasTarget ? option[3] : undefined
+   global.args = [hasTarget,callback,targets,option[0]]
 
+
+   // If the opponent plays a card, this goes to the showoff area
+   if global.turnPlayer == global.opponent && option[0] != "Draw" && option[0] != "Pass the turn" {
+      sourceCard.guiCard.showingOff = true
+
+      // Give time for the card to reach the showoff region
+      new StackWait(0.5) // wait for 0.5 seconds
+      // Animazione target, se disponibile, con il cursore avversario
+      cursorMoved = false
+      if !is_undefined(targets) {
+         if !is_array(targets) targets = [targets]
+         for(var i=0;i<array_length(targets);i++) {
+            var target = targets[i]
+            var posX,posY
+            if is_instanceof(target,Card) {
+               pos = target.guiCard.position
+            }
+            if is_instanceof(target,Aquarium) {
+               if target == global.player.aquarium {
+                  pos = global.Blender.TrgtPl.Position
+               } else {
+                  pos = global.Blender.TrgtOp.Position
+               }
+            }
+            new StackAnimOppCursor(pos[0],pos[1],pos[2]) 
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new StackWait(0.1)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
+            new StackWait(0.1)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new StackWait(0.1)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
+            // cursor click!
+         }
+         new StackAnimOppCursor(0,20,2,true)
+
+         if( is_instanceof(sourceCard,ActionCard) ) {
+            new StackDisplayCardActivation(true,sourceCard)
+         } else {
+            global.chainCallback = sourceCard
+         }
+      } else {
+         if( is_instanceof(sourceCard,ActionCard) ) {
+            new StackDisplayCardActivation(true,sourceCard)
+         }
+      }
+      new StackWait(0.1,function(card) {
+         card.showingOff = false
+      },sourceCard.guiCard)
+   }
+
+   
+   new Stack( function() {
+      show_debug_message("done execute option" + global.args[3])
+      
+      var hasTarget = global.args[0]
+      var callback = global.args[1]
+      var targets = global.args[2]
+      if( hasTarget ) {
+         callback(targets)
+      } else {
+         callback()
+      }
+      global.choiceMade = true
+      global.waitingExecution = false
+      
+   },)
+
+
+   
+   
+   if global.multiplayer && send {
+      // Send the message!
+      networkSendPacket("move,"+string(sel_choice))
+   }
+   
+}
+//#endregion |                 |
+//#region    | 2.0 Collections                    |
 function CardCollection(_owner) constructor {
    owner = _owner
    _cards = new ds_list()
@@ -71,8 +180,7 @@ function Deck(owner) : CardCollection(owner) constructor {
    }
 }
 
-
-function location_str( location ) {
+function location_to_str( location ) {
    if location == global.player.deck        return "Player deck"
    if location == global.opponent.deck      return "Opponent deck"
    if location == global.player.hand        return "Player hand"
@@ -83,7 +191,7 @@ function location_str( location ) {
    return "undefined"
 }
 
-function location_str_location( _str ) {
+function str_to_location( _str ) {
    if( _str == "Player deck" ) return global.player.deck
    if( _str == "Opponent deck" ) return global.opponent.deck
    if( _str == "Player hand" ) return global.player.hand
@@ -93,13 +201,14 @@ function location_str_location( _str ) {
    if( _str == "The ocean" ) return global.ocean
    return undefined
 }
-
+//#endregion |                 |
+//#region    | 3.0 Actors                         |
 function Actor() constructor {
    
    static StartEvent = function( event ) {
 
-      global.effectChainRing.Add( event )
-
+      global.effectChainRing.Add( [self,event] )
+      
       // Se qualcuno vuole aggiungersi alla chain, mette tutto in
       // global.effectChainRing
       while( global.effectChainRing.size  > 0 ) {
@@ -110,7 +219,7 @@ function Actor() constructor {
          for( var j=0; j< ring.size; j++) {
             var _event = ring.At(j)
             for( var k=global.effectListeners.size-1; k>=0; k--) {
-               global.effectListeners.At(k).listener( _event )
+               global.effectListeners.At(k).listener( _event[1] )
             }
          }
       }
@@ -119,18 +228,51 @@ function Actor() constructor {
       // La eseguo a ritroso
       for(var i=global.effectChain.size-1;i>=0;i--) {
          var ring = global.effectChain.At(i)
+         var evt = ring.At(0)[1]
+         if ring.size > 1 {
+            var cards = []
+            for( var k=0;k<ring.size;k+=1) {
+               var cc =ring.At(k)[0]
+               if is_instanceof(cc,Card)
+                  cards[@array_length(cards)] = cc
+            }
+            new stackDisplayCardActivation(true,cards)
+            global.chainCallback = undefined
+         //} //else if !is_undefined(global.chainCallback) && !is_instanceof(evt,EventSummon) {
+           // new StackDisplayCardActivation(true,global.chainCallback)
+           // global.chainCallback = undefined
+         } else {
+            var src = ring.At(0)
+            src = src[0]
+            var evt = ring.At(0)[1]
+            if (is_instanceof(evt,EventSteal) && is_instanceof(src,CardSogliolaDiavoloNero)) || 
+               (is_instanceof(evt,EventFree) && is_instanceof(src,CardSogliolaPietra) ) {
+               evt.target.guiCard.locationLock = true
+               new StackDisplayCardActivation(false,src, function(args) {
+                  new StackWait(0.25, function(args) {
+                     args[0].locationLock = false
+                  }, args)
+               },[evt.target.guiCard])
+            }
+         }
+
          for( var j=0;j<ring.size; j++) {
-            _event = ring.At(j)
-            if !is_undefined( _event.callback ) 
+            _event = ring.At(j)[1]
+            var srcCard = ring.At(j)[0]
+            if !is_undefined( _event.callback ) {
+               //if is_instanceof(srcCard,Card)
+               //   new StackDisplayCardActivation(srcCard)
                _event.callback(_event)
+            }
          }
       }
-      
+
       // Cleanup the effect chain
       global.effectChain.rofeach( function(ring) {
          ring.Destroy()
       })
       global.effectChain.Clear()
+
       
    }
 }
@@ -144,7 +286,9 @@ function Player() : Actor() constructor {
    }
 }
 function Supervisor() : Actor() constructor {}
-
+//#endregion |                      |
+//#region    | 4.0 Cards                          |
+//#region    |    4.1 Base Classes                |
 function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  constructor {
    name = _name
    owner = _owner
@@ -169,7 +313,7 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
          type,
          owner == global.player ? 0 : 1,
          controller == global.player ? 0 : 1,
-         location_str( location ),
+         location_to_str( location ),
       ]
       return json_stringify( data) 
    }
@@ -178,7 +322,7 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
       var data = json_parse( json )
       owner =  (data[1] == 0 ) ? global.player : global.opponent
       controller = (data[2] == 0 ) ? global.player : global.opponent
-      location = location_str_location( data[3] )
+      location = str_to_location( data[3] )
    }
    breakpoints = false
 }
@@ -205,7 +349,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
              global.turnPlayer.aquarium.size < 8 ) {
-            global.options.Add( ["Summon "+name,Summon] ) 
+            global.options.Add( ["Summon target"+name,Summon, self, global.turnPlayer.aquarium] ) 
          }
       }
    } 
@@ -217,7 +361,7 @@ function ActionCard(_name,_owner, _controller, _location, _sprite, _effectText, 
    listener = function( event ) {
       if( is_instanceof(event, EventTurnMain) ) {
          if( location == global.turnPlayer.hand ) {
-            global.options.Add( ["Activate "+name,Activate] ) 
+            global.options.Add( ["Activate "+name,Activate,self] ) 
          }
       }
    }
@@ -250,15 +394,17 @@ enum CardType {
    FREE_SOGLIOLA,
    FURTO
 }
-// -----------------------------------------------------------------------------+
-// Card database                                                                |
-// -----------------------------------------------------------------------------+
+//#endregion
+//#region    |    4.2 Card Database               |
+//#region    |       4.2.01 Sogliola              |
 function CardSogliola(owner) : FishCard(
    "Sogliola", owner, undefined, undefined, sprSogliola, 5,
-   "Ora è piatta; leggende narrano che un tempo non lo fosse. Che pesce nobile!",
+   "",
    CardType.SOGLIOLA
 ) constructor {
 }
+//#endregion |                      |
+//#region    |       4.2.02 Pesca                 |
 function CardPesca(owner) : ActionCard(
    "Pesca", owner, undefined, undefined, sprPesca, "Pesca 2 carte",
    CardType.PESCA
@@ -268,6 +414,8 @@ function CardPesca(owner) : ActionCard(
          controller.Draw()
    }
 }
+//#endregion |                               |
+//#region    |       4.2.03 Pesca Abbondante      |
 function CardPescaAbbondante(owner) : ActionCard(
    "Pesca Abbondante", owner, undefined, undefined, sprPescaAbbondante,
    "Pesca 3 carte",
@@ -279,18 +427,22 @@ function CardPescaAbbondante(owner) : ActionCard(
          controller.Draw()
    }
 }
+//#endregion |                               |
+//#region    |       4.2.04 Pioggia               |
 function CardPioggia(owner) : ActionCard(
    "Pioggia di Pesci", owner, undefined, undefined, sprPioggiaDiPesci, 
-   "Per questo turno, puoi giocare due carte Sogliola",
+   "Per questo turno, puoi giocare un'altra Sogliola.",
    CardType.PIOGGIA
 ) constructor {
    Effect = function() {
-      global.maxFishPlayable = 2
+      global.maxFishPlayable += 1
    }
 }
+//#endregion
+//#region    |       4.2.05 Sogliola Blob         | 
 function CardSogliolaBlob(owner) : FishEffectCard(
    "Sogliola Blob", owner, undefined, undefined, sprSogliolaBlob, -10,
-   "Può essere giocato in ogni acquario",
+   "Puo' essere giocato in ogni acquario",
    CardType.SOGLIOLA_BLOB
 ) constructor {
    // Override the listener
@@ -299,13 +451,15 @@ function CardSogliolaBlob(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon] )
+               global.options.Add( ["Summon "+name,Summon,self,controller.aquarium] )
             if global.turnOpponent.aquarium.size < 8
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,Opponent(controller).aquarium])
          }
       }
    }
 }
+//#endregion
+//#region    |       4.2.06 Re Sogliola           |
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
    "+3 al valore per ogni altra sogliola nell'acquario",
@@ -324,9 +478,11 @@ function CardReSogliola(owner) : FishEffectCard(
       return tmpVal
    }
 }
+//#endregion
+//#region    |       4.2.07 Sogliola Diavolo Nero |
 function CardSogliolaDiavoloNero(owner) : FishEffectCard(
    "Sogliola Diavolo Nero", owner, undefined, undefined, sprSogliolaDiavoloNero,3,
-   "Quando questa carta entra in un acquario, ruba una soglila casuale dall'acquario avversario",
+   "Quando entra nell'acquario, ruba una sogliola casuale dall'acquario avversario e la aggiunge al tuo",
    CardType.SOGLIOLA_DIAVOLO_NERO
 ) constructor {
    _listener = listener
@@ -335,8 +491,18 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
       if( is_instanceof(event,EventSummon) && event.src == self ) {
          var opponent = Opponent(controller)
          if( opponent.aquarium.size > 0 && !opponent.aquarium.protected ) {
+            // Check if target is valid: if the opponent has "re sogliola"
+            // and "sogliola pagliaccio" cannot target the former
+            var hasClown = !is_undefined(opponent.aquarium._cards.Filter( 
+               function(card) { 
+                  return is_instanceof(card,CardSogliolaGiullare)
+               })
+            )
             var target = opponent.aquarium.Random()
-            global.effectChainRing.Add( new EventSteal(self,Steal,target) )
+            while hasClown && is_instanceof(target, CardReSogliola) {
+               target = opponent.aquarium.Random()
+            }
+            global.effectChainRing.Add( [self,new EventSteal(self,Steal,target)] )
          }
       }
       Steal = function(event) {
@@ -344,9 +510,11 @@ function CardSogliolaDiavoloNero(owner) : FishEffectCard(
       }
    }
 }
+//#endregion
+//#region    |       4.2.08 Sogliola Pietra       |
 function CardSogliolaPietra(owner) : FishEffectCard(
    "Sogliola Pietra", owner, undefined, undefined, sprSogliolaPietra, 2,
-   "Può essere giocata in ogni Acquario. Quando entra in un Acquario, Libera una sogliola casuale da quell'Acquario",
+   "Giocabile in ogni acquario. Quando entra nell'acquario, libera un'altra sogliola casuale",
    CardType.SOGLIOLA_PIETRA
 ) constructor {
    listener = function( event ) {
@@ -354,9 +522,9 @@ function CardSogliolaPietra(owner) : FishEffectCard(
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
             if global.turnPlayer.aquarium.size < 8
-               global.options.Add( ["Summon "+name,Summon] )
+               global.options.Add( ["Summon "+name,Summon,self,controller.aquarium] )
             if global.turnOpponent.aquarium.size < 8 && !global.turnOpponent.aquarium.protected
-               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent ])
+               global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,Opponent(controller).aquarium])
          }
       }
       
@@ -364,9 +532,19 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       if( is_instanceof(event,EventSummon) && event.src == self) {
          var aquarium = event.opponent ? Opponent(controller).aquarium : controller.aquarium
          if( aquarium.size > 0 ) {
-            do var target = aquarium.Random()
-            until( target != self )
-            global.effectChainRing.Add( new EventFree(self,Free,target) )
+
+            var hasClown = !is_undefined(aquarium._cards.Filter( 
+               function(card) { 
+                  return is_instanceof(card,CardSogliolaGiullare)
+               })
+            )
+            target = self
+            while ( (hasClown && is_instanceof(target, CardReSogliola)) || 
+               target == self ) {
+               target = aquarium.Random()
+            }
+            
+            global.effectChainRing.Add( [self,new EventFree(self,Free,target)] )
          }
       }
    }
@@ -376,9 +554,11 @@ function CardSogliolaPietra(owner) : FishEffectCard(
       global.ocean.Add(event.target)
    }
 }
+//#endregion
+//#region    |       4.2.09 Sogliola Volante      |
 function CardSogliolaVolante(owner) : FishEffectCard(
    "Sogliola Volante", owner, undefined, undefined, sprSogliolaVolante, 5,
-   "Quando questa sogliola passa dall'Acquario all'oceano, il proprietario dell'acquario pesca 2 carte",
+   "Quando questa sogliola viene liberata nell'oceano, pesca 2 carte.",
    CardType.SOGLIOLA_VOLANTE
 ) constructor {
    _listener = listener
@@ -386,7 +566,7 @@ function CardSogliolaVolante(owner) : FishEffectCard(
       _listener( event )
       if breakpoints breakpoint()
       if( is_instanceof(location,Aquarium) && is_instanceof(event,EventFree) && event.target == self ) {
-         global.effectChainRing.Add( new EventDraw(self,Draw) ) 
+         global.effectChainRing.Add( [self,new EventDraw(self,Draw)] ) 
       }
    }
    Draw = function(_evt) {
@@ -394,9 +574,11 @@ function CardSogliolaVolante(owner) : FishEffectCard(
       controller.Draw()
    }
 }
+//#endregion |                                    |
+//#region    |       4.2.10 Sogliola Salmonata    |
 function CardSogliolaSalmone(owner) : FishEffectCard(
-   "SogliolaSalmone", owner, undefined, undefined, sprSogliolaSalmone, 5,
-   "Quando questa sogliola passa da un acquario alla mano, il proprietario dell'acquario pesca 2 carte",
+   "Sogliola Salmonata", owner, undefined, undefined, sprSogliolaSalmone, 4,
+   "Quando questa sogliola viene rubata, pesca 2 carte.",
    CardType.SOGLIOLA_SALMONE
 ) constructor {
    _listener = listener
@@ -405,7 +587,7 @@ function CardSogliolaSalmone(owner) : FishEffectCard(
       if( is_instanceof(location,Aquarium) && is_instanceof(event,EventSteal) && event.target == self ) {
          var evt = new EventDraw(self,Draw)
          evt.target = ( location == global.player.aquarium ) ? global.player : global.opponent
-         global.effectChainRing.Add( evt ) 
+         global.effectChainRing.Add( [self,evt] ) 
       }
    }
    
@@ -414,6 +596,8 @@ function CardSogliolaSalmone(owner) : FishEffectCard(
       event.target.Draw()
    }
 }
+//#endregion |                                    |
+//#region    |       4.2.11 Free Sogliola         |
 function CardFreeSogliola(owner) : ActionCard(
    "Free Sogliola", owner, undefined, undefined, sprFreeSogliola,
    "Scegli una sogliola da un acquario e liberala nell'oceano",
@@ -431,7 +615,7 @@ function CardFreeSogliola(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Free '"+target.name+"' own", Activate, target] )
+         global.options.Add(["Free '"+target.name+"' own", Activate, self, target] )
       }
       
       // Check if Sogliola Giullare is in the Aquarium
@@ -443,7 +627,7 @@ function CardFreeSogliola(owner) : ActionCard(
          for( var i=0;i<opp.aquarium.size;i++;) {
             var target = opp.aquarium.At(i)
             if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-            global.options.Add(["Free '"+target.name+"' opponent", Activate, target] )
+            global.options.Add(["Free '"+target.name+"' opponent", Activate, self, target] )
          }
       }
    }
@@ -456,6 +640,8 @@ function CardFreeSogliola(owner) : ActionCard(
       global.ocean.Add( self )
    }
 }
+//#endregion
+//#region    |       4.2.12 Furto                 |
 function CardFurto(owner) : ActionCard(
    "Furto", owner, undefined, undefined, sprFurto,
    "Ruba una sogliola da un acquario e aggiungila alla tua mano",
@@ -466,7 +652,9 @@ function CardFurto(owner) : ActionCard(
    listener = function( event ) {
       if( location != global.turnPlayer.hand ) return;
       if( !is_instanceof(event,EventTurnMain) ) return;
+      
       if( global.player.aquarium.size + global.opponent.aquarium.size == 0) return;
+      
       
       // Check if Sogliola Giullare is in the Aquarium
       var giullare = controller.aquarium._cards.Filter(
@@ -476,7 +664,7 @@ function CardFurto(owner) : ActionCard(
       for( var i=0;i<controller.aquarium.size;i++;) {
          var target = controller.aquarium.At(i)
          if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-         global.options.Add(["Activate Steal on '"+target.name+"' own", Activate, target] )
+         global.options.Add(["Activate Steal on '"+target.name+"' own", Activate, self, target] )
       }
       
       var opponent = Opponent(controller)
@@ -487,7 +675,7 @@ function CardFurto(owner) : ActionCard(
          for( var i=0;i<opponent.aquarium.size;i++;) {
             var target = opponent.aquarium.At(i)
             if( giullare and is_instanceof(target,CardReSogliola) ) continue;
-            global.options.Add(["Activate Steal on '"+target.name+"' opponent", Activate, target] )
+            global.options.Add(["Activate Steal on '"+target.name+"' opponent", Activate, self, target] )
          }
       }
    }
@@ -501,26 +689,30 @@ function CardFurto(owner) : ActionCard(
       global.ocean.Add( self )
    }
 }
+//#endregion
+//#region    |       4.2.13 Sogliola Giullare     |
 function CardSogliolaGiullare(owner) : FishEffectCard(
    "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
-   "Se si trova in un Acquario col Re Sogliola, quest'ultimo non può essere rubato né liberato",
+   "Se si trova in un Acquario col Re Sogliola, quest'ultimo non puo' essere Rubato né Liberato",
    CardType.SOGLIOLA_GIULLARE
 ) constructor {
-   
 }
+//#endregion
+//#region    |       4.2.14 Acquario Protetto     |
 function CardAcquarioProtetto(owner) : ActionCard(
    "Acquario Protetto", owner, undefined, undefined, sprAcquarioProtetto,
-   "I pesci nel tuo Acquario sono protetti fino al tuo prossimo turno",
+   "I pesci nel tuo acquario sono protetti fino al tuo prossimo turno",
    CardType.ACQUARIO_PROTETTO
 ) constructor {
    Effect = function() {
       controller.aquarium.protected = true
    }
 }
-
+//#endregion
+//#region    |       4.2.15 Scambio Equivalente   |
 function CardScambioEquivalente(owner) : ActionCard(
    "Scambio Equivalente", owner, undefined, undefined, sprScambioEquivalente,
-   "Scambia una sogliola del tuo Acquario con un'altra dell'acquario avversario",
+   "Scambia una sogliola del tuo acquario con un'altra dell'acquario avversario",
    CardType.SCAMBIO_EQUIVALENTE
 ) constructor {
    listener = function( event ) {
@@ -532,7 +724,11 @@ function CardScambioEquivalente(owner) : ActionCard(
          var opp = Opponent(ctx.controller)
          ctx.card1 = card
          opp.aquarium._cards.foreach( function(card,ctx) {
-            global.options.Add(["Activate swap '"+ctx.card1.name+"' <-> '"+card.name+"'", Activate, [ctx.card1, card]])
+            global.options.Add([
+               "Activate swap '"+ctx.card1.name+"' <-> '"+card.name+"'",
+               Activate,
+               self,
+               [ctx.card1, card]])
          },ctx)
       },self)
    }
@@ -547,3 +743,7 @@ function CardScambioEquivalente(owner) : ActionCard(
       global.ocean.Add(self)
    }
 }
+//#endregion |                                    |
+//#endregion |                                    |
+//#endregion |                                    |
+//           |____________________________________|

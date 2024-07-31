@@ -1,7 +1,71 @@
+debugMode = true // TODO: setta false in produzione
+
+
+
+function loadBlenderFromJSON(json) {
+   global.Blender = json_parse(json)
+
+   // TODO: possibile miglioramento, aggiungi una prorpietà type
+   // alle struct exportate e esegui questa operazione automaticamente
+   // per ogni oggetto di tipo mesh
+   // Crea le matrici di rotazione per ogni mesh
+   structs = [
+      global.Blender.HndPl,
+      global.Blender.HndPlZoom,
+      global.Blender.HndOp,
+      global.Blender.HndOpShowoff,
+      global.Blender.DckPl,
+      global.Blender.DckOp,
+      global.Blender.AqPl,
+      global.Blender.AqOp,
+      global.Blender.Ocean
+   ]
+   
+   
+   for(var i=0;i<array_length(structs);i++) {
+      var stru = structs[i]
+      stru.Mat =
+         matBuildCBM(
+            stru.Transform.j,
+            stru.Transform.i,
+            stru.Transform.k,
+         )
+      
+   }
+}
+
+// Load Blender File
+var json = ""
+var file = file_text_open_read("blender.json")
+while( !file_text_eof(file) )
+   json += " "+file_text_readln(file)
+file_text_close(file)
+loadBlenderFromJSON(json)
+
+
+// This struct holds the informatino the 3D camera uses
+// TODO: add fov info
+
+//v3SetIP(global.Blender.CamHand.From,global.camera.From)
+//v3SetIP(global.Blender.CamHand.To,global.camera.To)
+global.camera = {
+   From: v3Copy(Blender.CamHand.From),
+   To:   v3Copy(Blender.CamHand.To),
+   Up:   [0,0,1],
+   FOV:  Blender.CamHand.FovY
+}
+
+
+
 
 function ds_list() constructor {
    _list = ds_list_create()
    size = 0
+   static Insert = function(element,pos) {
+      ds_list_insert(_list,pos,element)
+      size += 1
+   }
+   
    static Add = function(element) {
       ds_list_add(_list,element)
       size += 1
@@ -17,6 +81,7 @@ function ds_list() constructor {
       }
       return newList
    }
+   
    static At = function(pos) {
       if( pos < 0 ) pos = size+pos
       return _list[|pos]
@@ -36,7 +101,8 @@ function ds_list() constructor {
    }
    static foreach = function(func,ctx=undefined) {
       for( var i=0; i<size; i++ ) {
-         func( _list[|i], ctx)
+         if func( _list[|i], ctx) == true
+            break
       }
    }
    static rofeach = function(func) {
@@ -63,12 +129,30 @@ function ds_list() constructor {
       return ds_list_find_index(_list,value)
    }
    
-   static Filter = function( check ) {
+   static Filter = function( check , args ) {
       for( var i=0;i<size;i++) {
          var c = _list[|i]
-         if check(c) return c;
+         if !is_undefined(args) {
+            if check(c,args) return c;
+         }
+         else {
+            if check(c) return c;
+         }
       }
       return undefined;
+   }
+   
+   static FilterAll = function( check, args ) {
+      var arr = []
+      var j = 0
+      for( var i=0; i<size;i++) {
+         var c = _list[|i]
+         if check(c,args) {
+            arr[@j] = c
+            j+=1
+         }
+      }
+      return arr;
    }
 }
 
@@ -77,7 +161,6 @@ function Opponent(player) {
    return player == global.player ? global.opponent : global.player
 }
 
-log = ds_list()
 
 function breakpoint() {
    return
@@ -226,15 +309,20 @@ function GameLoad() {
    global.srandom.value = globals[6]
 }
 
-function GameOver() {
-   var delta = getScore(global.player) - getScore(global.opponent)
-   if( delta > 0 )
-      show_message("game over: you win!")
-   else if( delta == 0 )
-      show_message("game over: draw!")
-   else
-      show_message("game over: you lose!")
-   game_end(0)
+function GameOver(msg) {
+   if !is_undefined(msg) {
+      show_message(msg)
+      game_end(0)
+   } else {
+      var delta = getScore(global.player) - getScore(global.opponent)
+      if( delta > 0 )
+         show_message("game over: you win!")
+      else if( delta == 0 )
+         show_message("game over: draw!")
+      else
+         show_message("game over: you lose!")
+      game_end(0)
+   }
 }
 
 function networkTypeString( _type ) {
@@ -258,4 +346,15 @@ function networkSendPacket( _msg ) {
    buffer_seek(buffer,0,buffer_seek_start)
    buffer_write(buffer,buffer_string,_msg)
    network_send_raw(global.client,buffer,string_length(_msg)+1)
+}
+
+function deltaTime() {
+   if global.debugMode
+      return 1000000/room_speed
+   return delta_time;
+}
+
+function smoothstep(edge0,edge1,x){
+   var t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+   return t * t * (3.0 - 2.0 * t);
 }

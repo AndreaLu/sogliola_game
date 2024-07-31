@@ -18,3 +18,4 @@ global.onePlayerFinished = false
 
 
 gameInitialized = false
+

@@ -1,0 +1,41 @@
+# Specifiche 
+Attese con grafica catene
+Quando l'avversario attiva una carta (guarda dove viene eseguito 
+global.choiceMade = true)
+
+
+- Se l'avversariogioca una carta, questa si sposta nell'area di showoff
+  (Se a giocarla è il giocatore, ciò non succede)
+- se ci sono dei target, viene fatta l'animazione del
+  del cursore avversario.
+
+- Si procede al codice regolare fino a compilare la chainRing, quindi,
+  dovessero esserci effetti che si incatenano automaticamente
+  verrebbero aggiunti qui.
+  Attenzione: quando si è completata la chainring non si esegue ancora, 
+  quindi le carte rimangono dove stanno.
+
+
+- Segue l'animazione 2d di chain in centro allo schermo (con solo la carta), 
+  SOLO se la chainRing  ha più di una carta, e quindi si sta avviando una 
+  catena, o se NON è una banale evocazione
+
+- Se sono state aggiunte carte alla chainRing possiamo:
+
+    - sollevarla leggermente dall'acquario se erano nell'acquario, 
+        o portarle alla zona showoff se erano nella mano
+    - poco dopo segue animazione catena che si aggiunge la carta nuova
+
+fase resolve:
+- attesa di un attimo
+- per ogni carta a ritroso:
+  - animazione a schermo della carta 2D
+  - attesa un attimo
+  - si esegue l'effetto (quello messo in scanchain)
+  - attesa un attimo (dai tempo al'effetto di finire)
+
+
+Quando si gioca la carta si può vedere facendo una funzione executeOption
+per fare la mossa e sostituendo tutti i 4 punti dove si chiama option[1](..)
+
+

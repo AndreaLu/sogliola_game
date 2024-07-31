@@ -1,6 +1,30 @@
+// +----------------------------------------------------------------------+
+// | Step Event                                                           |
+// +----------------------------------------------------------------------+
+/*
+   - Turn initialization
+      Here, the initialization of the turn happens (1.0). This is when the
+      variable startTurn is set to true, which happens when a player passes
+      the turn. the "pass the turn" option sets global.turnPassed to true,
+      which in turns make startTurn true just for a frame.
+   - Player/Opponent Move
+      After the initialization, if it's the players turn, this step
+      does nothing but wait for the user decision. When it finally comes,
+      global.choiceMade is set to true so this event can run the required
+      steps (2.3), which includes the propagation of a new TurnMain Event
+      to repopulate the global.options array
+      If it's the opponent's turn, this event calculate the move with the
+      IA (2.1) or waits for the multiplayer partner to pick a move
+   - Endgame
+      This event also calculates the endgame condition (2.3)
+*/
+
+
 if( room != room2DGame && room != room3DGame ) exit
+//            ___________________________
+//#region    | 1.0 Start of the Turn     |
+var playerDrawing = false // pezza per fissare il wrong gameend
 if startTurn {
-   startTurn = false
    // Inizializza tutto per questo turno
    global.turnPlayer.aquarium.protected = false
    global.maxFishPlayable = 1
@@ -10,46 +34,132 @@ if startTurn {
    
    global.supervisor.StartEvent( new EventTurnBegin() )
 
-   global.supervisor.StartEvent( new EventDraw(global.supervisor, function(_evt) {
-      if global.turnPlayer.deck.size > 0
-         global.turnPlayer.Draw()
-   } ) )// function() { global.turnPlayer.Draw() } , EventType.TURN_DRAW ) 
 
-   
    global.options.Clear()
-   global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;} ] )
-   // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
-   global.supervisor.StartEvent( new EventTurnMain() )
-   
-   if( global.options.size == 1 ) {
-      if( global.onePlayerFinished ) GameOver()
-      global.onePlayerFinished = true
+   if( global.turnPlayer.deck.size > 0 ) {
+      playerDrawing = true
+      if global.turnPlayer == global.player {
+         // Player's turn
+         global.disableUserInput = true
+         new StackMoveCamera(
+            global.Blender.CamDeck.From,
+            global.Blender.CamDeck.To,
+            global.Blender.CamDeck.FovY,
+            0.8,
+            function() {
+               global.supervisor.StartEvent(
+                  new EventDraw(global.supervisor, function(_evt) {
+                        if global.turnPlayer.deck.size > 0 {
+                           global.turnPlayer.Draw()
+                           global.choiceMade = true // PEZZA PEZZISSIMA
+                        }
+                     }
+                  )
+               )
+               new StackMoveCamera(
+                  global.Blender.CamHand.From,
+                  global.Blender.CamHand.To,
+                  global.Blender.CamHand.FovY,
+                  0.8, function() {
+                     global.disableUserInput = false
+                  }
+               )
+            }
+         )
+      } else {
+         // Opponent's turn
+         global.options.Add( ["Draw", function() {
+            global.supervisor.StartEvent(
+               new EventDraw(global.supervisor,
+                  function(_evt) {
+                     if global.turnPlayer.deck.size > 0
+                        global.turnPlayer.Draw()
+                  } 
+               ) 
+            )
+         }, global.turnPlayer.deck.At(0)])
+      }
+   } else {
+      global.supervisor.StartEvent( new EventTurnMain() )
+      new StackMoveCamera(
+         global.Blender.CamHand.From,
+         global.Blender.CamHand.To,
+         global.Blender.CamHand.FovY,
+         0.8, function() {
+            global.disableUserInput = false
+         }
+      )
    }
-}
+   global.options.Add( [ 
+      "Pass the turn", 
+      function() {global.turnPassed = true;},
+      undefined 
+   ] )
 
-// Opponent turn
-if !global.choiceMade && (global.turnPlayer == global.opponent) {
+}
+//#endregion |                       |
+//#region    | 2.0 Making a Move         |
+//#region    |    2.1 Opponents move     |
+// We need to make a move for the opponent.
+// If the game is multiplayer, this is not done here, but rather in the
+// async event (as we receive the move from the opponent)
+// If the game is singleplayer, this is where the IA performs its move
+
+
+// If there are some cards with locationLock set to true, wait
+// for them
+global.locationLock = false
+with obj3DCard {
+   if locationLock
+      global.locationLock = true 
+}
+if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution{
 
    if !global.multiplayer {
       // AI turn
       attesa += 1
-      if( attesa >= room_speed*5 ) {
+      if( attesa >= room_speed*0.5 ) {
+      
          attesa = 0
          var choice
-         choice = global.srandom.IRandom(global.options.size-1)
+         canDraw = false
+         global.options.foreach(function(option,ctx) {
+            if option[0] == "Draw" {
+               canDraw = true
+               return true
+            }
+         },self)
+         
+         if canDraw choice = 0
+         else choice = irandom(global.options.size-1)//global.srandom.IRandom(global.options.size-1)
+         
          var option = global.options.At(choice)
-         if array_length(option) > 2
-            option[1](option[2])
-         else
-            option[1]()
-         global.choiceMade = true
+
+         ExecuteOption(option,false)
       }
    } else {
       // Online multiplayer.. 
       // the choice will come from the async event
    }
 }
+//#endregion
+//#region    |    2.2 Player move        |
+/* 
+   The player move does not happen here. Rather, when the player clicks
+   on cards or whatnot, the move is made selecting one among the 
+   "global.options" array, that, at any given point, lists the possible
+   moves for the turn player.
+   When the player does his move, the global variable global.choiceMade
+   is set to true
+*/
+//#endregion
+//#region    |    2.3 ChoiceMade/Endgame |
+if( global.options.size == 1 && startTurn && !playerDrawing) {
+   if( global.onePlayerFinished ) GameOver()
+   global.onePlayerFinished = true
+}
 
+startTurn = false
 
 if global.choiceMade {
    global.choiceMade = false
@@ -61,7 +171,7 @@ if global.choiceMade {
       }
       
       global.options.Clear()
-      global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;} ] )
+      global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;}, undefined] )
       // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
       global.supervisor.StartEvent( new EventTurnMain() )
    } else {
@@ -70,4 +180,5 @@ if global.choiceMade {
       startTurn = true
    }
 }
-
+//#endregion
+//#endregion |___________________________|

@@ -29,11 +29,7 @@ if async_load[?"type"] == network_type_data {
          if( room == room2DGame || room == room3DGame && global.turnPlayer == global.opponent ) {
             var choice = real(msg[1])
             var option = global.options.At(choice)
-            if array_length(option) > 2
-               option[1](option[2])
-            else
-               option[1]()
-            global.choiceMade = true
+            ExecuteOption(option,false)
          } else {
             show_message("ERROR! move message received in wrong place")
             game_end(-1)

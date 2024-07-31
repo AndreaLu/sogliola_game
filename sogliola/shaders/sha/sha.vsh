@@ -10,21 +10,20 @@ varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying vec3 v_vNormal;
 varying vec3 v_vLightDir;
-varying vec3 v_vCardCol;
 
 uniform vec3 lightDir;
-uniform vec3 cardCol;
+
 
 
 
 void main()
 {
-    vec4 object_space_pos = vec4( in_Position.x, in_Position.y, in_Position.z, 1.0);
-    gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * object_space_pos;
-    
-    v_vColour = in_Colour;
-    v_vTexcoord = in_TextureCoord;
-	v_vNormal = -in_Normal;
-	v_vLightDir = lightDir;
-   v_vCardCol = cardCol;
+   vec4 object_space_pos = vec4( in_Position.x, in_Position.y, in_Position.z, 1.0);
+   gl_Position = gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION] * object_space_pos;
+
+   v_vColour = in_Colour;
+   v_vTexcoord = in_TextureCoord;
+   v_vNormal = -in_Normal;
+   v_vLightDir = lightDir;
+
 }

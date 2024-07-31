@@ -4,18 +4,24 @@
 varying vec2 v_vTexcoord;
 varying vec4 v_vColour;
 varying vec3 v_vNormal;
+uniform float v_Time; 
+uniform sampler2D t_Mask;
+varying vec2 fragCoord;
 
 void main()
 {
-	vec2 repeatedTexcoord = fract(v_vTexcoord);
-	vec4 baseColor = v_vColour * texture2D( gm_BaseTexture, repeatedTexcoord );
+	float wave = sin(v_Time*0.6) * 0.2;
+	float shift = (v_Time*0.3) * 0.3;
 	
-	float luminance = dot(baseColor.rgb, vec3(0.299, 0.587, 0.114));
-	//float threshold = 0.9; // Adjust this value as needed
-	//vec4 outputColor = (luminance > threshold) ? vec4(0.2) : vec4(0.0);
-	vec4 outputColor = vec4(luminance*luminance/3.0);
+	vec2 uvAlpha = v_vTexcoord + vec2(sin(fragCoord.y*5.0 + v_Time*2.0)*0.01,sin(fragCoord.x*5.0 + v_Time*2.0)*0.01);
 	
-    gl_FragColor = vec4(baseColor.rgb, 0.6) + outputColor;
+	vec2 uv = uvAlpha + vec2(shift,wave);
+	
+	vec4 baseColor = v_vColour * texture2D( gm_BaseTexture,  fract(uv*0.7) );
+	vec4 base_color2 = texture2D(t_Mask, fract(uv*0.7));
+	vec4 base_mask = texture2D(t_Mask, fract(v_vTexcoord*0.8)) * base_color2.x;
+	
+    gl_FragColor = vec4(baseColor.xyz + base_mask.xyz, 0.7 + base_mask.x);
 	
 	
 }
