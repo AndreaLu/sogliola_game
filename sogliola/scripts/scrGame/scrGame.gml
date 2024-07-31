@@ -103,11 +103,15 @@ function ExecuteOption(option,send) {
             new StackDisplayCardActivation(true,sourceCard)
          }
       }
+      new StackWait(0.1,function(card) {
+         card.showingOff = false
+      },sourceCard.guiCard)
    }
 
    
    new Stack( function() {
       show_debug_message("done execute option" + global.args[3])
+      
       var hasTarget = global.args[0]
       var callback = global.args[1]
       var targets = global.args[2]
@@ -118,7 +122,10 @@ function ExecuteOption(option,send) {
       }
       global.choiceMade = true
       global.waitingExecution = false
+      
    },)
+
+
    
    
    if global.multiplayer && send {
