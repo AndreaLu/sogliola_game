@@ -122,6 +122,42 @@ inputManager = {
    }
 }
 
+enum GS {
+   OUT,
+   ENTERING,
+   IN,
+   EXITING,
+}
+gridManager = {
+   mesh : mesh3DGLoad("graphics/cage.obj.3dg"),
+   position : [0,0,0],
+   protected : false,
+   state : GS.OUT,
+   t : 0,
+   Update : function() {
+      var aqp = global.player.aquarium.protected
+      if aqp != protected {
+         state = protected ? GS.EXITING : GS.ENTERING
+         t = 0
+         protected = aqp
+      }
+      t += deltaTime()/1000000
+      switch( state ) {
+         case GS.OUT:
+            matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
+            vertex_submit(mesh,pr_trianglelist,-1)
+            break
+         case GS.ENTERING:
+            break
+         case GS.EXITING:
+            break
+         case GS.IN:
+            break
+      }
+   }
+}
+
+
 
 opponentCursor = {
    x : window_get_width()/2,

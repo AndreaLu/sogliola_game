@@ -101,6 +101,8 @@ vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
+//gridManager.Update()
+
 
 with( obj3DCard ) {
    worldToScreenIP(
