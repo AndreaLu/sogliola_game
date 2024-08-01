@@ -43,7 +43,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
-         menu[@array_length(menu)] = [HINT_MBR,"Zoom Carta"]
+         menu[@array_length(menu)] = [HINT_MBR,"Dettagli"]
          if inputManager.keys.MBR {
             card.guiCard.setZoom()
          }
@@ -166,7 +166,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
    if is_instanceof( objectHover, Aquarium ) &&
       !is_undefined(global.pickingTarget) {
       
-      menu[@array_length(menu)] = [HINT_MBL,"Selezione Target"]
+      menu[@array_length(menu)] = [HINT_MBL,"Scegli il bersaglio"]
       if inputManager.keys.MBL {
          // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
          // passando il mouse
@@ -201,7 +201,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 if !is_undefined(global.pickingTarget) && !global.disableUserInput 
    && global.stack.size == 0 {
 
-   menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla Selezione Target"]
+   menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla la scelta"]
    if (inputManager.keys.MBR || inputManager.keys.S)  {
       global.pickingTarget = undefined
       global.disableUserInput = true
@@ -244,7 +244,7 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
 if !watching && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
 
-   menu[@array_length(menu)] = [HINT_W,"Zoom Acquario"]
+   menu[@array_length(menu)] = [HINT_W,"Zoom sull'Acquario"]
    if inputManager.keys.W {
       watching = true
       camTransition = true
@@ -271,7 +271,7 @@ if !watching && is_undefined(global.pickingTarget)
 if watching  && !watchingBack && !global.zooming 
 && global.stack.size == 0 {
 
-   menu[@array_length(menu)] = [HINT_S,"Esci da Zoom Acquario"]
+   menu[@array_length(menu)] = [HINT_S,"Indietro"]
    if inputManager.keys.S {
       watchingBack = true
       camTransition = true
@@ -352,20 +352,34 @@ with(obj3DCard) {
 //#region    |    5.1.0 Control hints                      |
 
 
-if array_length(menu) > 0 {
-   array_foreach(menu, function(item,i) {
-      if is_array(item[0]) {
-         for( var j=0;j<array_length(item[0]);j+=1) {
-            var icon = item[0][j]
-            draw_sprite_ext(sprHints,icon,30+40*j,50+i*42,1,1,0,c_white,1)
+var k = array_length(menu);
+var a = 0.8;
+if k > 0 {
+   var padding = 6;
+   var w = 230;
+   var h = k * 32 + (k-1)*padding;
+   var menuX = window_get_width()-w;
+   var menuY = window_get_height()-h;
+   draw_set_color(c_black);
+   draw_set_alpha(0.7*a);
+   draw_roundrect(menuX-16-padding, menuY-16-padding, menuX+w-16+padding, menuY+h-16+padding, 0);
+   draw_set_color(c_white);
+   draw_set_alpha(1*a);
+   for (var i=0; i<k; i++){
+      if is_array(menu[i][0]) {
+         for( var j=0;j<array_length(menu[i][0]);j+=1) {
+            var icon = menu[i][0][j]
+            draw_sprite_ext(sprHints,icon,menuX+32*j,menuY+i*(32+padding),1,1,0,c_white,1*a)
          }
       } else 
-         draw_sprite_ext(sprHints,item[0],30,50+i*42,1,1,0,c_white,1)
+         draw_sprite_ext(sprHints,menu[i][0],menuX,menuY+i*(32+padding),1,1,0,c_white,1*a)
       draw_set_font(fntBasic)
       draw_set_valign(fa_middle)
       draw_set_halign(fa_left)
-      draw_text(50,50+i*42,item[1])
-   })
+      draw_text(menuX+16+padding,menuY+i*(32+padding),menu[i][1])
+   }
+   draw_set_color(c_black);
+   draw_set_alpha(1);
 }
 
 //#endregion |                                             |
