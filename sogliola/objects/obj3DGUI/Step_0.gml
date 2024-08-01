@@ -1,8 +1,13 @@
 menu = []
 tt += 1
-if tt == 5 && surface_exists(sf) && !global.zooming && !camTransition {
-   tt = 0
-   var color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
+if surface_exists(sf) && !global.zooming && !camTransition {
+   var color
+   if tt >= 5 {
+      color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
+   } else {
+      color = prevColor
+   }
+   prevColor = color
    // Codifica clickbuffer:
    // se il colore è un rosso, si tratta di una carta
    // se il colore è blu 1 è acquario del player, blu 0.5 acquario opponent
