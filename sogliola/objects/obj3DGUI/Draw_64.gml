@@ -43,6 +43,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
+         menu[@array_length(menu)] = [HINT_MBR,"Zoom Carta"]
          if inputManager.keys.MBR {
             card.guiCard.setZoom()
          }
@@ -58,88 +59,68 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       // ------------------------------------------------------------------------------
       // Secondo click in poi, su carte 
-      if !watching && !global.zooming && inputManager.keys.MBL && 
-         !is_undefined(global.pickingTarget) {
-         // Trova tutte le mosse restanti che hanno come target tutti gli elementi
-         // attualmente presenti in pickingTarget, oltre alla carta attuale
-         options = global.options.FilterAll( function(option,args) {
-            // escludi le mosse la cui carta sorgente non sia quella che si vuole 
-            // attivare/evocare
-            if( option[2] != args[0][0]) return false;
-            // crea un array con tutti i target da ricercare nelle mosse
-            var targets = []
-            array_copy(targets,0,args[0],1,array_length(args[0])-1)
-            targets[@array_length(targets)] = args[1]
-            // crea un array con tutti i target della mossa
-            var optionTargets = (!is_array(option[3])) ? [option[3]] : option[3]
-            // verifica che tutti i target in targets siano anche in optionTargets
-            var count = 0
-            for( var i=0;i<array_length(optionTargets);i++) {
-               var target = optionTargets[i]
-               for( var j=0;j<array_length(targets);j++) {
-                  if targets[j] == target {
-                     count += 1
-                     break
+      if !watching && !global.zooming &&  !is_undefined(global.pickingTarget) {
+         menu[@array_length(menu)] = [HINT_MBL,"Selezione Target"]
+         if inputManager.keys.MBL {
+            // Trova tutte le mosse restanti che hanno come target tutti gli elementi
+            // attualmente presenti in pickingTarget, oltre alla carta attuale
+            options = global.options.FilterAll( function(option,args) {
+               // escludi le mosse la cui carta sorgente non sia quella che si vuole 
+               // attivare/evocare
+               if( option[2] != args[0][0]) return false;
+               // crea un array con tutti i target da ricercare nelle mosse
+               var targets = []
+               array_copy(targets,0,args[0],1,array_length(args[0])-1)
+               targets[@array_length(targets)] = args[1]
+               // crea un array con tutti i target della mossa
+               var optionTargets = (!is_array(option[3])) ? [option[3]] : option[3]
+               // verifica che tutti i target in targets siano anche in optionTargets
+               var count = 0
+               for( var i=0;i<array_length(optionTargets);i++) {
+                  var target = optionTargets[i]
+                  for( var j=0;j<array_length(targets);j++) {
+                     if targets[j] == target {
+                        count += 1
+                        break
+                     }
+                  }
+                  if count == array_length(targets) {
+                     return true
                   }
                }
-               if count == array_length(targets) {
-                  return true
-               }
+            },[global.pickingTarget,card])
+            
+            if array_length(options) == 1 {
+               // Esegue la mossa
+               var option = options[0]
+               ExecuteOption(option,true)
+               global.disableUserInput = true
+               new StackMoveCamera(
+                  global.Blender.CamHand.From,
+                  global.Blender.CamHand.To,
+                  global.Blender.CamHand.FovY,
+                  0.3, function() {
+                     global.pickingTarget = undefined
+                     global.disableUserInput = false
+                  }
+               )
             }
-         },[global.pickingTarget,card])
-         
-         if array_length(options) == 1 {
-            // Esegue la mossa
-            var option = options[0]
-            ExecuteOption(option,true)
-            global.disableUserInput = true
-            new StackMoveCamera(
-               global.Blender.CamHand.From,
-               global.Blender.CamHand.To,
-               global.Blender.CamHand.FovY,
-               0.3, function() {
-                  global.pickingTarget = undefined
-                  global.disableUserInput = false
-               }
-            )
-         }
-         else if array_length(options) > 1 {
-            // Se c'era più di una mossa, aggiunge la carta selezionata all'array
-            // pickingTarget
-            global.pickingTarget[@array_length(global.pickingTarget)] = card
+            else if array_length(options) > 1 {
+               // Se c'era più di una mossa, aggiunge la carta selezionata all'array
+               // pickingTarget
+               global.pickingTarget[@array_length(global.pickingTarget)] = card
+            }
          }
       }
 //#endregion
 //#region    |       2.1.1 Primo click                     | 
 
-      if !watching && !global.zooming && inputManager.keys.MBL
-         && is_undefined(global.pickingTarget) {
-         
-         
-         if( array_length(options) > 1) {
-            global.disableUserInput = true
-            // Zoom nell'acquario, bisogna scegliere il target
-            new StackMoveCamera(
-               global.Blender.CamAq.From,
-               global.Blender.CamAq.To,
-               global.Blender.CamAq.FovY,
-               0.3, function() {
-                  global.disableUserInput = false
-               }
-            )
-            global.pickingTarget = [card]
-         }
-
-         // La mossa possibile è una sola. La eseguo, solo se non ci sono target da 
-         // cliccare. Se ce ne sono, anche se uno solo, lo lascio scegliere al
-         // giocatore
-         if( array_length(options) == 1 ) {
-            var option = options[0]
-            // Se non ci sono target possibili, esegui l'unica mossa possibile
-            if (array_length(option) <= 3 || is_undefined(option[3])) {
-               ExecuteOption(option,true)
-            } else {
+      if !watching && !global.zooming && is_undefined(global.pickingTarget) {
+         menu[@array_length(menu)] = [HINT_MBL,"Gioca"]
+         if( inputManager.keys.MBL ) {
+            if( array_length(options) > 1) {
                global.disableUserInput = true
+               // Zoom nell'acquario, bisogna scegliere il target
                new StackMoveCamera(
                   global.Blender.CamAq.From,
                   global.Blender.CamAq.To,
@@ -150,8 +131,30 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
                )
                global.pickingTarget = [card]
             }
-         }
-      } 
+
+            // La mossa possibile è una sola. La eseguo, solo se non ci sono target da 
+            // cliccare. Se ce ne sono, anche se uno solo, lo lascio scegliere al
+            // giocatore
+            if( array_length(options) == 1 ) {
+               var option = options[0]
+               // Se non ci sono target possibili, esegui l'unica mossa possibile
+               if (array_length(option) <= 3 || is_undefined(option[3])) {
+                  ExecuteOption(option,true)
+               } else {
+                  global.disableUserInput = true
+                  new StackMoveCamera(
+                     global.Blender.CamAq.From,
+                     global.Blender.CamAq.To,
+                     global.Blender.CamAq.FovY,
+                     0.3, function() {
+                        global.disableUserInput = false
+                     }
+                  )
+                  global.pickingTarget = [card]
+               }
+            }
+         } 
+      }
    }
 //#endregion
 //#region    |       2.1.2 Secondo click (su acquari)      | 
@@ -161,52 +164,57 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
    // semplificata. Dovessero sorgere carte con più target, di cui almeno
    // uno acquario, dovrò correggere..
    if is_instanceof( objectHover, Aquarium ) &&
-      !is_undefined(global.pickingTarget) &&
-      inputManager.keys.MBL {
-      // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
-      // passando il mouse
-      aquarium = objectHover
-      var a = global.options.Filter(
-         function(option,args) { 
-            if array_length(option) < 4 || is_array(option[3]) return false;
-            return ( option[3] == args[0] && option[2] == global.pickingTarget[0] )
-         },
-         [aquarium]
-      )
-      if !is_undefined(a) {
-            // Esegue la mossa
-            ExecuteOption(a,true)
-            global.disableUserInput = true
-            new StackMoveCamera(
-               global.Blender.CamHand.From,
-               global.Blender.CamHand.To,
-               global.Blender.CamHand.FovY,
-               0.3, function() { 
-                  global.pickingTarget = undefined
-                  global.disableUserInput = false
-               }
-            )
+      !is_undefined(global.pickingTarget) {
+      
+      menu[@array_length(menu)] = [HINT_MBL,"Selezione Target"]
+      if inputManager.keys.MBL {
+         // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
+         // passando il mouse
+         aquarium = objectHover
+         var a = global.options.Filter(
+            function(option,args) { 
+               if array_length(option) < 4 || is_array(option[3]) return false;
+               return ( option[3] == args[0] && option[2] == global.pickingTarget[0] )
+            },
+            [aquarium]
+         )
+         if !is_undefined(a) {
+               // Esegue la mossa
+               ExecuteOption(a,true)
+               global.disableUserInput = true
+               new StackMoveCamera(
+                  global.Blender.CamHand.From,
+                  global.Blender.CamHand.To,
+                  global.Blender.CamHand.FovY,
+                  0.3, function() { 
+                     global.pickingTarget = undefined
+                     global.disableUserInput = false
+                  }
+               )
+         }
       }
    }
 }
 //#endregion
 //#region    |       2.1.3 Annullare un Card Picking       |
 // Annullare un cardpicking in corso
-if !is_undefined(global.pickingTarget) && 
-   (inputManager.keys.MBR || inputManager.keys.S) 
-   && !global.disableUserInput  && global.stack.size == 0 {
-   
-   global.pickingTarget = undefined
-   global.disableUserInput = true
-   // Torno alla mano, al massimo non accade niente
-   new StackMoveCamera(
-      global.Blender.CamHand.From,
-      global.Blender.CamHand.To,
-      global.Blender.CamHand.FovY,
-      0.3, function() {
-         global.disableUserInput = false
-      }
-   )
+if !is_undefined(global.pickingTarget) && !global.disableUserInput 
+   && global.stack.size == 0 {
+
+   menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla Selezione Target"]
+   if (inputManager.keys.MBR || inputManager.keys.S)  {
+      global.pickingTarget = undefined
+      global.disableUserInput = true
+      // Torno alla mano, al massimo non accade niente
+      new StackMoveCamera(
+         global.Blender.CamHand.From,
+         global.Blender.CamHand.To,
+         global.Blender.CamHand.FovY,
+         0.3, function() {
+            global.disableUserInput = false
+         }
+      )
+   }
 }
 //#endregion
 //#endregion |                                             |
@@ -232,52 +240,61 @@ if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
 }
 //#endregion |                                             |
 //#region    |    2.4 W and S keys                         |
-if inputManager.keys.W && !watching  && is_undefined(global.pickingTarget)
+
+if !watching && is_undefined(global.pickingTarget)
    && global.turnPlayer == global.player && !global.zooming && !global.disableUserInput {
-   watching = true
-   camTransition = true
-   global.disableUserInput = true
-   new StackMoveCamera(
-      global.Blender.CamAq.From,
-      global.Blender.CamAq.To,
-      global.Blender.CamAq.FovY,
-      0.3, function() {
-         time_source_start(
-            time_source_create(
-               time_source_game,0.1,
-               time_source_units_seconds, function() {
-               obj3DGUI.watchingBack = false
-               obj3DGUI.camTransition = false
-               global.disableUserInput = false
-            })
-         )
-      }
-   )
+
+   menu[@array_length(menu)] = [HINT_W,"Zoom Acquario"]
+   if inputManager.keys.W {
+      watching = true
+      camTransition = true
+      global.disableUserInput = true
+      new StackMoveCamera(
+         global.Blender.CamAq.From,
+         global.Blender.CamAq.To,
+         global.Blender.CamAq.FovY,
+         0.3, function() {
+            time_source_start(
+               time_source_create(
+                  time_source_game,0.1,
+                  time_source_units_seconds, function() {
+                  obj3DGUI.watchingBack = false
+                  obj3DGUI.camTransition = false
+                  global.disableUserInput = false
+               })
+            )
+         }
+      )
+   }
 }
 
-if watching && inputManager.keys.S && !watchingBack && !global.zooming 
+if watching  && !watchingBack && !global.zooming 
 && global.stack.size == 0 {
-   watchingBack = true
-   camTransition = true
-   global.disableUserInput = true
-   new StackMoveCamera(
-      global.Blender.CamHand.From,
-      global.Blender.CamHand.To,
-      global.Blender.CamHand.FovY,
-      0.3, function() {
-         obj3DGUI.watchingBack = true
-         time_source_start(
-            time_source_create(
-               time_source_game,0.1,
-               time_source_units_seconds, function() {
-               obj3DGUI.watching = false
-               obj3DGUI.camTransition = false
-               global.disableUserInput = false
-            })
-         )
-         
-      }
-   )
+
+   menu[@array_length(menu)] = [HINT_S,"Esci da Zoom Acquario"]
+   if inputManager.keys.S {
+      watchingBack = true
+      camTransition = true
+      global.disableUserInput = true
+      new StackMoveCamera(
+         global.Blender.CamHand.From,
+         global.Blender.CamHand.To,
+         global.Blender.CamHand.FovY,
+         0.3, function() {
+            obj3DGUI.watchingBack = true
+            time_source_start(
+               time_source_create(
+                  time_source_game,0.1,
+                  time_source_units_seconds, function() {
+                  obj3DGUI.watching = false
+                  obj3DGUI.camTransition = false
+                  global.disableUserInput = false
+               })
+            )
+            
+         }
+      )
+   }
 }
 //#endregion |                                             |
 //#region    | 3.0 Draw the Cursor                         |
@@ -330,6 +347,29 @@ with(obj3DCard) {
       }
    }
 }
+//#endregion |                                             |
+//#region    | 5.1 HUD                                     |
+//#region    |    5.1.0 Control hints                      |
+
+
+if array_length(menu) > 0 {
+   array_foreach(menu, function(item,i) {
+      if is_array(item[0]) {
+         for( var j=0;j<array_length(item[0]);j+=1) {
+            var icon = item[0][j]
+            draw_sprite_ext(sprHints,icon,30+40*j,50+i*42,1,1,0,c_white,1)
+         }
+      } else 
+         draw_sprite_ext(sprHints,item[0],30,50+i*42,1,1,0,c_white,1)
+      draw_set_font(fntBasic)
+      draw_set_valign(fa_middle)
+      draw_set_halign(fa_left)
+      draw_text(50,50+i*42,item[1])
+   })
+}
+
+//#endregion |                                             |
+//#endregion |                                             |
 //#endregion |                                             |
 //           |_____________________________________________|
 

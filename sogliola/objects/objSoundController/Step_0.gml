@@ -1,5 +1,7 @@
-if obj3DGUI.inputManager.keys.MBL && obj3DGUI.objectHover == global.radio {
-	global.radioOn = !global.radioOn;
+if obj3DGUI.objectHover == global.radio {
+	obj3DGUI.menu[@array_length(obj3DGUI.menu)] = [HINT_MBL,"Accendi RADIO!"]
+	if obj3DGUI.inputManager.keys.MBL
+		global.radioOn = !global.radioOn;
 }
 
 if (global.radioOn) {

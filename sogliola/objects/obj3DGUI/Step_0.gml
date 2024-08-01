@@ -1,4 +1,4 @@
-
+menu = []
 tt += 1
 if tt == 5 && surface_exists(sf) && !global.zooming && !camTransition {
    tt = 0
@@ -10,7 +10,10 @@ if tt == 5 && surface_exists(sf) && !global.zooming && !camTransition {
    var blue = color_get_blue(color)
    var green = color_get_green(color)
    if red > 0 { // è una carta
-      objectHover = global.allCards.At(red-1)
+      var card = global.allCards.At(red-1)
+      if !is_undefined(card) && !is_instanceof(card.location,Deck) {
+         objectHover = card
+      }
    } else if blue > 0 { // è un acquario
       objectHover = (blue == 255) ? global.player.aquarium : global.opponent.aquarium
    } else if green > 200 { 

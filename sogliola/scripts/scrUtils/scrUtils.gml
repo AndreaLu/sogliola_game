@@ -1,6 +1,9 @@
 debugMode = true // TODO: setta false in produzione
 
-
+#macro HINT_MBL 0
+#macro HINT_MBR 1
+#macro HINT_W   2
+#macro HINT_S   3
 
 function loadBlenderFromJSON(json) {
    global.Blender = json_parse(json)
