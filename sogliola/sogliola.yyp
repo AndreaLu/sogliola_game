@@ -66,6 +66,7 @@
   },
   "name":"sogliola",
   "resources":[
+    {"id":{"name":"ac1","path":"animcurves/ac1/ac1.yy",},},
     {"id":{"name":"fntBasic","path":"fonts/fntBasic/fntBasic.yy",},},
     {"id":{"name":"fntCards","path":"fonts/fntCards/fntCards.yy",},},
     {"id":{"name":"fntValue","path":"fonts/fntValue/fntValue.yy",},},
@@ -94,6 +95,7 @@
     {"id":{"name":"scrGUI3D","path":"scripts/scrGUI3D/scrGUI3D.yy",},},
     {"id":{"name":"scrUtils","path":"scripts/scrUtils/scrUtils.yy",},},
     {"id":{"name":"sha","path":"shaders/sha/sha.yy",},},
+    {"id":{"name":"shaCage","path":"shaders/shaCage/shaCage.yy",},},
     {"id":{"name":"shaClickBuffer","path":"shaders/shaClickBuffer/shaClickBuffer.yy",},},
     {"id":{"name":"shaOcean","path":"shaders/shaOcean/shaOcean.yy",},},
     {"id":{"name":"shaTable","path":"shaders/shaTable/shaTable.yy",},},
@@ -132,8 +134,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"roomMenu","path":"rooms/roomMenu/roomMenu.yy",},},
     {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
+    {"roomId":{"name":"roomMenu","path":"rooms/roomMenu/roomMenu.yy",},},
     {"roomId":{"name":"roomtest3D","path":"rooms/roomtest3D/roomtest3D.yy",},},
     {"roomId":{"name":"roomMultiplayerWaiting","path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},},
     {"roomId":{"name":"roomTest","path":"rooms/roomTest/roomTest.yy",},},

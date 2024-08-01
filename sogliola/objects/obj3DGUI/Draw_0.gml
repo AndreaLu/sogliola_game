@@ -101,7 +101,6 @@ vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
-//gridManager.Update()
 
 
 with( obj3DCard ) {
@@ -124,6 +123,15 @@ with( obj3DCard ) {
 }
 shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)
 
+matrix_set(matrix_world,matrix_build_identity())
+shader_reset()
+
+shader_set(shaCage)
+shader_set_uniform_f_array(shader_get_uniform(shaCage,"lightDir"),lightDir);
+
+
+gridManager.Update()
+gridManagerOpp.Update()
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
 

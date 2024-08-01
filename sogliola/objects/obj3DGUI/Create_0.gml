@@ -33,10 +33,8 @@ inputManager = {
          
             }
             mouse = playback_mouse[playbackFrame]
-            playbackFrame += 1
-            
+            playbackFrame += 1  
          }
-
       }
       if recording {
          if ! global.disableUserInput {
@@ -124,38 +122,81 @@ inputManager = {
 
 enum GS {
    OUT,
+   PRE_PRE_PRE_ENTERING,
+   PRE_PRE_ENTERING,
+   PRE_ENTERING,
    ENTERING,
    IN,
+   PRE_EXITING,
    EXITING,
 }
-gridManager = {
-   mesh : mesh3DGLoad("graphics/cage.obj.3dg"),
-   position : [0,0,0],
-   protected : false,
-   state : GS.OUT,
-   t : 0,
-   Update : function() {
-      var aqp = global.player.aquarium.protected
+meshCage = mesh3DGLoad("graphics/cage.obj.3dg")
+GridManager = function(isPlayer,_mesh) constructor {
+   controller = undefined
+   isPl = isPlayer
+   mesh = _mesh
+   offsX = 1
+   position = [offsX,-1.56,0]
+   protected = false
+   state = GS.OUT
+   t = 0;
+
+   Update = function() {
+      if is_undefined(controller) {
+         controller = isPl ? global.player : global.opponent
+         if !isPl position[@1] = -position[1]
+      }
+      if global.turnPlayer == controller
+         aqp = false
+      else
+         aqp = controller.aquarium.protected
+      
+      var aqp = keyboard_check(ord("E")) //global.player.aquarium.protected
       if aqp != protected {
-         state = protected ? GS.EXITING : GS.ENTERING
+         state = protected ? GS.PRE_EXITING : GS.PRE_ENTERING
          t = 0
          protected = aqp
       }
-      t += deltaTime()/1000000
       switch( state ) {
          case GS.OUT:
-            matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
-            vertex_submit(mesh,pr_trianglelist,-1)
+            break
+         case GS.PRE_ENTERING:
+            t = 0;
+            state = GS.ENTERING;
             break
          case GS.ENTERING:
+            t += deltaTime()/1000000
+            var p = t/3
+            var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 0), p)*(1/0.254)
+            position[@0] = -(1-_val)*(6.64+offsX) + offsX
+            show_debug_message(_val)
+            if p >= 1
+               state = GS.IN
             break
+         case GS.PRE_EXITING:
+            t = 0
+            state = GS.EXITING
+            break
+         
          case GS.EXITING:
+            t += deltaTime()/1000000
+            var p = t/3
+            var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 1), p)*(1/0.254)
+            position[@0] = -6.64-offsX+(1-_val)*(6.64+offsX) + offsX
+   
+            if p >= 1
+               state = GS.OUT
             break
          case GS.IN:
             break
       }
+      matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
+      vertex_submit(mesh,pr_trianglelist,-1)
    }
 }
+
+gridManager = new GridManager(true,meshCage);
+gridManagerOpp = new GridManager(false,meshCage)
 
 
 
