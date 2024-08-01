@@ -24,7 +24,6 @@ pos = [0,0]
 worldToScreenIP(xx,yy,zz, matrix_get(matrix_view), matrix_get(matrix_projection),pos)
 x = pos[0]
 y = pos[1]
-show_debug_message(pos)
 
 matrix_set(matrix_world,matrix_build_identity())
 

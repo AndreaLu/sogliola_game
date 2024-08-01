@@ -122,7 +122,6 @@ inputManager = {
 
 enum GS {
    OUT,
-   PRE_PRE_PRE_ENTERING,
    PRE_PRE_ENTERING,
    PRE_ENTERING,
    ENTERING,
@@ -137,7 +136,6 @@ GridManager = function(isPlayer,_mesh) constructor {
    mesh = _mesh
    offsX = 1
    position = [offsX,-1.56,0]
-   protected = false
    state = GS.OUT
    t = 0;
 
@@ -146,48 +144,63 @@ GridManager = function(isPlayer,_mesh) constructor {
          controller = isPl ? global.player : global.opponent
          if !isPl position[@1] = -position[1]
       }
-      if global.turnPlayer == controller
-         aqp = false
-      else
-         aqp = controller.aquarium.protected
+
       
-      var aqp = keyboard_check(ord("E")) //global.player.aquarium.protected
-      if aqp != protected {
-         state = protected ? GS.PRE_EXITING : GS.PRE_ENTERING
-         t = 0
-         protected = aqp
+
+      if global.turnPlayer == controller {
+         if controller.aquarium.protected {
+            state = GS.PRE_PRE_ENTERING
+         } else {
+            if state == GS.PRE_PRE_ENTERING {
+               state = GS.PRE_EXITING
+            }
+         }
+      } else {
+         if controller.aquarium.protected && state == GS.PRE_PRE_ENTERING {
+            state = GS.PRE_ENTERING
+         }
       }
+
       switch( state ) {
          case GS.OUT:
+            if controller == global.player show_debug_message("out")
+            break
+         case GS.PRE_PRE_ENTERING:
+            if controller == global.player show_debug_message("pre_pre_entering")
+            position[@0] = lerp( position[0],0,0.1 )
             break
          case GS.PRE_ENTERING:
+            if controller == global.player show_debug_message("pre_entering")
             t = 0;
             state = GS.ENTERING;
             break
          case GS.ENTERING:
+            if controller == global.player show_debug_message("entering")
             t += deltaTime()/1000000
             var p = t/3
             var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 0), p)*(1/0.254)
-            position[@0] = -(1-_val)*(6.64+offsX) + offsX
-            show_debug_message(_val)
+            position[@0] = -(1-_val)*(6.64)
             if p >= 1
                state = GS.IN
             break
          case GS.PRE_EXITING:
+            if controller == global.player show_debug_message("pre_exiting")
             t = 0
             state = GS.EXITING
             break
          
          case GS.EXITING:
+            if controller == global.player show_debug_message("EXITINGGG")
             t += deltaTime()/1000000
             var p = t/3
             var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 1), p)*(1/0.254)
-            position[@0] = -6.64-offsX+(1-_val)*(6.64+offsX) + offsX
+            position[@0] = -6.64+(1-_val)*(6.64+offsX)
    
             if p >= 1
                state = GS.OUT
             break
          case GS.IN:
+            if controller == global.player show_debug_message("in")
             break
       }
       matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
