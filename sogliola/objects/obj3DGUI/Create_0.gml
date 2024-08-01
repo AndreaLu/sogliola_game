@@ -304,3 +304,5 @@ tt = 0
 
 menu = [
 ]
+
+prevColor= c_black
