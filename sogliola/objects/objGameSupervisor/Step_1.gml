@@ -83,7 +83,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       
      
    }
-   //repeat(100) global.player.deck.Add( new CardScambioEquivalente(global.player) )
+   //repeat(100) global.player.deck.Add( new CardAcquarioProtetto(global.player) )
 
    
 

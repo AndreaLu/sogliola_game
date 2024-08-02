@@ -204,7 +204,7 @@ GridManager = function(isPlayer,_mesh) constructor {
             break
       }
       matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
-      vertex_submit(mesh,pr_trianglelist,-1)
+      vertex_submit(mesh,pr_trianglelist,sprite_get_texture(sprCage,0))
    }
 }
 

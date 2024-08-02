@@ -49,6 +49,7 @@
     {"name":"sprAlpha","order":22,"path":"sprites/sprAlpha/sprAlpha.yy",},
     {"name":"sprBack","order":16,"path":"sprites/sprBack/sprBack.yy",},
     {"name":"sprBottle","order":25,"path":"sprites/sprBottle/sprBottle.yy",},
+    {"name":"sprCage","order":29,"path":"sprites/sprCage/sprCage.yy",},
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
     {"name":"sprCursor","order":21,"path":"sprites/sprCursor/sprCursor.yy",},
     {"name":"sprCursorOp","order":26,"path":"sprites/sprCursorOp/sprCursorOp.yy",},
