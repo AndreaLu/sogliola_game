@@ -222,6 +222,7 @@ if !is_undefined(global.pickingTarget) && !global.disableUserInput
 //#region    |    2.3 Passare il turno                     |
 if is_instanceof(objectHover,Bottle) && !passingTurn &&
 global.turnPlayer == global.player {
+   global.bottle.highlight = 1
    menu[@array_length(menu)] = [HINT_MBL,"Passa il Turno"]
    if inputManager.keys.MBL {
       passingTurn = true
@@ -247,6 +248,8 @@ global.turnPlayer == global.player {
          }
       })
    }
+} else {
+   global.bottle.highlight = 0
 }
 //#endregion |                                             |
 //#region    |    2.4 W and S keys                         |

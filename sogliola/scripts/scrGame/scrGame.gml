@@ -26,6 +26,7 @@ maxFishPlayable = 1             // max number of fish that can be played this tu
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
+   highlight = 0
 }
 radio = new Radio()
 bottle = new Bottle()
