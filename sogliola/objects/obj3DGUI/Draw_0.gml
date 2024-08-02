@@ -68,6 +68,13 @@ shader_set_uniform_f_array(
 );
 vertex_submit(radio,pr_trianglelist,-1);
 
+shader_set_uniform_f_array(
+   shader_get_uniform(shaClickBuffer,"cardCol"),
+   [0,0.3,0]
+);
+matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
+vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
+
 
 shader_reset()
 surface_set_target_ext(1,sfDummy)
@@ -98,9 +105,10 @@ vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
 vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 
-matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,0],[1,1,1]))
+shader_set_uniform_f(shader_get_uniform(sha,"uSel"),global.bottle.highlight)
+matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
-
+shader_set_uniform_f(shader_get_uniform(sha,"uSel"),0)
 
 
 with( obj3DCard ) {

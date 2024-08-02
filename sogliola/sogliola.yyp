@@ -67,6 +67,7 @@
   "name":"sogliola",
   "resources":[
     {"id":{"name":"ac1","path":"animcurves/ac1/ac1.yy",},},
+    {"id":{"name":"acBottle","path":"animcurves/acBottle/acBottle.yy",},},
     {"id":{"name":"fntBasic","path":"fonts/fntBasic/fntBasic.yy",},},
     {"id":{"name":"fntCards","path":"fonts/fntCards/fntCards.yy",},},
     {"id":{"name":"fntValue","path":"fonts/fntValue/fntValue.yy",},},

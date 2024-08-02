@@ -4,20 +4,21 @@
 // Index:
 // 1.0 Game Initialization
 
-//#region    | 1.0 Game Initialization |
+// Exit if already initialzied 
 if gameInitialized || (room != room2DGame && room != room3DGame )
    exit
-
-
 gameInitialized = true
-
-
 var seed = 8
 
+//            ____________________________
+//#region    | 1.0 Game Initialization    |
+//#region    |    1.0.1 Load the game     |
 if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false
+//#endregion |                            |
+//#region    |    1.0.2 Random Seed       |
 } else {
    
    if global.multiplayer {
@@ -31,7 +32,8 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    
    //global.srandom.SetSeed(date_get_second(date_current_datetime()))
    global.srandom.SetSeed(seed)    
-   
+//#endregion |                            |
+//#region    |    1.0.3 Fill up the deck  |
    var newCard
    repeat(1) {
       global.player.deck.Add( new CardFreeSogliola(global.player) )
@@ -83,9 +85,8 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       
      
    }
-   //repeat(100) global.player.deck.Add( new CardScambioEquivalente(global.player) )
-
-   
+//#endregion |                            |
+//#region    |    1.0.4 Determine the turn|
 
    // Determine whose turn it is, randomly
    if ! global.multiplayer  {
@@ -100,7 +101,13 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
          global.turnOpponent = global.player
       }
    }
-   
+   var finalAngle = global.turnPlayer == global.opponent ? 
+      random_range(180-20,180+20) : random_range(-20,20)
+   if abs(finalAngle-global.bottle.rotz) < 90 || finalAngle < global.bottle.rotz
+      finalAngle += 360
+   new StackFlipBottle(finalAngle)
+//#endregion |                            |
+//#region    |    1.0.5 Move the camera   |
    if room == room3DGame && global.turnPlayer == global.opponent {
       new StackMoveCamera(
          global.Blender.CamOpponent.From,
@@ -109,8 +116,13 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
          0.3, undefined
       )
    }
-   
+//#endregion |                            |
+//#region    |    1.0.6 Shuffle & Draw    |
+   // I deck devono essere mescolati nello stesso ordine
+   // di giocatori in una partita multiplayer, quindi
+   // uso il turnPlayer
    global.turnPlayer.deck.Shuffle()
+   // TODO: vedi perché è commentato
    //global.turnOpponent.deck.Shuffle()
    
    
@@ -119,8 +131,11 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.turnPlayer.Draw()
       global.turnOpponent.Draw()
    }
+//#endergion |                            |
    
 
    startTurn = true
 }
-//#endregion
+//#endregion |                            |
+//#endregion |                            |
+//           |____________________________|

@@ -305,4 +305,5 @@ tt = 0
 menu = [
 ]
 
-prevColor= c_black
+prevColor = c_black
+passingTurn = false

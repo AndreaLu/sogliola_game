@@ -43,7 +43,8 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       if ( card.location == global.player.hand && !watching) {
          //card.guiCard.setMouseHover()
-         menu[@array_length(menu)] = [HINT_MBR,"Dettagli"]
+         if !global.zooming 
+            menu[@array_length(menu)] = [HINT_MBR,"Dettagli"]
          if inputManager.keys.MBR {
             card.guiCard.setZoom()
          }
@@ -219,24 +220,36 @@ if !is_undefined(global.pickingTarget) && !global.disableUserInput
 //#endregion
 //#endregion |                                             |
 //#region    |    2.3 Passare il turno                     |
-if global.turnPlayer == global.player  && keyboard_check_pressed(vk_enter) {
-   var test = global.options.Filter( function(option) {
-      return option[0] == "Pass the turn"
-   })
-   if ! is_undefined(test) {
-      // Esegui la mossa, l'unica possibile
-      var option = test
-      ExecuteOption(option,true)
-      global.disableUserInput = true
-      new StackMoveCamera(
-         global.Blender.CamOpponent.From,
-         global.Blender.CamOpponent.To,
-         global.Blender.CamOpponent.FovY,
-         0.3, function() {
-            global.disableUserInput = false
+if is_instanceof(objectHover,Bottle) && !passingTurn &&
+global.turnPlayer == global.player {
+   global.bottle.highlight = 1
+   menu[@array_length(menu)] = [HINT_MBL,"Passa il Turno"]
+   if inputManager.keys.MBL {
+      passingTurn = true
+      new StackWait(0.1, function () {
+         var test = global.options.Filter( function(option) {
+            return option[0] == "Pass the turn"
+         })
+         if ! is_undefined(test) {
+            var option = test
+            ExecuteOption(option,true, function() {
+               new StackMoveCamera(
+                  global.Blender.CamOpponent.From,
+                  global.Blender.CamOpponent.To,
+                  global.Blender.CamOpponent.FovY,
+                  0.3, function() {
+                     global.disableUserInput = false
+                     obj3DGUI.passingTurn = false
+                  }
+               )
+            })
+            global.disableUserInput = true
+            
          }
-      )
+      })
    }
+} else {
+   global.bottle.highlight = 0
 }
 //#endregion |                                             |
 //#region    |    2.4 W and S keys                         |
@@ -381,6 +394,8 @@ if k > 0 {
    draw_set_color(c_black);
    draw_set_alpha(1);
 }
+
+//#endregion |                                             |
 
 //#endregion |                                             |
 //#endregion |                                             |

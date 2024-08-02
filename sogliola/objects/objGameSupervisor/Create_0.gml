@@ -2,7 +2,6 @@ if global.multiplayer {
    global.client = network_create_socket(network_socket_tcp)
    var ip = "127.0.0.1" // server IP
    network_connect_raw_async(global.client,ip,33000)
-   
 }
 
 attesa = 0

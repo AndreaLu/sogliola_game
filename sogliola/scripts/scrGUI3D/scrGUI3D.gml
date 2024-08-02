@@ -347,3 +347,41 @@ function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(un
       _callback()
    }
 }
+
+
+function StackFlipBottle(targetRotz) : Stack() constructor {
+   // Se non si passa l'angolo, lo si ricava automaticamente
+   // Solo una votla all'inizio si passa l'angolo
+   if is_undefined(targetRotz) {
+      var finalAngle = global.turnPlayer == global.player ? 
+         random_range(180-20,180+20) : random_range(-20,20)
+      if abs(finalAngle-global.bottle.rotz) < 90 || finalAngle < global.bottle.rotz
+         finalAngle += 360
+      endRotz = finalAngle
+   }
+   else {
+      endRotz = targetRotz
+   }
+
+   t = 0
+   startRotz = global.bottle.rotz
+   delta = endRotz - startRotz
+   // durata dell'animazione proporzionale all'angolo da ruotare
+   // normalizzato su 2.3 secondi
+   duration = delta/180 * 1.8
+   Update = function() {
+      t += deltaTime()/1000000
+
+      var p = clamp(t/duration,0,1)
+      global.bottle.rotz = startRotz + 
+         animcurve_channel_evaluate(animcurve_get_channel(acBottle, 0), p)*delta
+      done = t/duration >= 1
+
+   }
+
+   Callback = function() {
+
+      while global.bottle.rotz > 360
+         global.bottle.rotz -= 360
+   }
+}

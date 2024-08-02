@@ -24,7 +24,12 @@ fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 
 function Radio() constructor {}
+function Bottle() constructor {
+   rotz = 0
+   highlight = 0
+}
 radio = new Radio()
+bottle = new Bottle()
 //            ____________________________________
 //#region    | 1.0 Events                         |
 function Event(_src,_callback) constructor {
@@ -42,7 +47,7 @@ function EventSteal(_src,_cb,_target) : Event(_src,_cb) constructor { target = _
 function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca per un effetto
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
 global.waitingExecution = false
-function ExecuteOption(option,send) {
+function ExecuteOption(option,send,_callback) {
    global.waitingExecution = true
    show_debug_message( "ExecuteOption: " + option[0] )
    /* 
@@ -125,10 +130,9 @@ function ExecuteOption(option,send) {
       global.choiceMade = true
       global.waitingExecution = false
       
-   },)
+   })
+   new Stack(_callback)
 
-
-   
    
    if global.multiplayer && send {
       // Send the message!
