@@ -26,7 +26,7 @@
     {"name":"Manuale Tecnico","order":1,"path":"notes/Manuale Tecnico/Manuale Tecnico.yy",},
     {"name":"obj2DCard","order":1,"path":"objects/obj2DCard/obj2DCard.yy",},
     {"name":"obj3DCard","order":1,"path":"objects/obj3DCard/obj3DCard.yy",},
-    {"name":"objRoomController","order":10,"path":"objects/objRoomController/objRoomController.yy",},
+    {"name":"objMenuController","order":10,"path":"objects/objMenuController/objMenuController.yy",},
     {"name":"objSoundController","order":8,"path":"objects/objSoundController/objSoundController.yy",},
     {"name":"objTest","order":1,"path":"objects/objTest/objTest.yy",},
     {"name":"objTest3D","order":9,"path":"objects/objTest3D/objTest3D.yy",},

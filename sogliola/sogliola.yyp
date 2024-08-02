@@ -83,7 +83,7 @@
     {"id":{"name":"obj3DCard","path":"objects/obj3DCard/obj3DCard.yy",},},
     {"id":{"name":"obj3DGUI","path":"objects/obj3DGUI/obj3DGUI.yy",},},
     {"id":{"name":"objGameSupervisor","path":"objects/objGameSupervisor/objGameSupervisor.yy",},},
-    {"id":{"name":"objRoomController","path":"objects/objRoomController/objRoomController.yy",},},
+    {"id":{"name":"objMenuController","path":"objects/objMenuController/objMenuController.yy",},},
     {"id":{"name":"objSoundController","path":"objects/objSoundController/objSoundController.yy",},},
     {"id":{"name":"objTest","path":"objects/objTest/objTest.yy",},},
     {"id":{"name":"objTest3D","path":"objects/objTest3D/objTest3D.yy",},},
@@ -140,8 +140,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
     {"roomId":{"name":"roomMenu","path":"rooms/roomMenu/roomMenu.yy",},},
+    {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
     {"roomId":{"name":"roomtest3D","path":"rooms/roomtest3D/roomtest3D.yy",},},
     {"roomId":{"name":"roomMultiplayerWaiting","path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},},
     {"roomId":{"name":"roomTest","path":"rooms/roomTest/roomTest.yy",},},

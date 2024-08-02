@@ -361,3 +361,24 @@ function smoothstep(edge0,edge1,x){
    var t = clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
    return t * t * (3.0 - 2.0 * t);
 }
+
+function getW() {
+   static init = false
+   static w = 0
+   if !init {
+      w = surface_get_width(application_surface)
+      init = true
+   }
+   return w
+}
+
+function getH() {
+   static init = false
+   static h = 0
+   if !init {
+      h = surface_get_height(application_surface)
+      init = true
+   }
+   return h
+}
+
