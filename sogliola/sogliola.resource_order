@@ -53,6 +53,7 @@
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
     {"name":"sprCursor","order":21,"path":"sprites/sprCursor/sprCursor.yy",},
     {"name":"sprCursorOp","order":26,"path":"sprites/sprCursorOp/sprCursorOp.yy",},
+    {"name":"sprDrawing","order":29,"path":"sprites/sprDrawing/sprDrawing.yy",},
     {"name":"sprFreeSogliola","order":10,"path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},
     {"name":"sprFurto","order":12,"path":"sprites/sprFurto/sprFurto.yy",},
     {"name":"sprHints","order":28,"path":"sprites/sprHints/sprHints.yy",},

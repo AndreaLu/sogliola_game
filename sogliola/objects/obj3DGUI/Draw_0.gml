@@ -110,6 +110,9 @@ matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.b
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 shader_set_uniform_f(shader_get_uniform(sha,"uSel"),0)
 
+matrix_set(matrix_world,matrix_build_identity())
+vertex_submit(paper,pr_trianglelist,sprite_get_texture(sprDrawing,0));
+
 
 with( obj3DCard ) {
    worldToScreenIP(
