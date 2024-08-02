@@ -270,8 +270,10 @@ if is_undefined(objHov) || !is_instanceof(objHov,Card) && canUnhover {
 }
 
 // Uscire dalla modalità card zoom
-if cardZoom {
-   if obj3DGUI.inputManager.keys.MBR && !global.zoomCamTransition  {
+if cardZoom && !global.zoomCamTransition {
+   obj3DGUI.menu[@array_length(obj3DGUI.menu)] = [HINT_MBR,"Indietro"]
+   if obj3DGUI.inputManager.keys.MBR   {
+
       obj3DGUI.objectHover = undefined
       cardZoom = false
       global.disableUserInput = true

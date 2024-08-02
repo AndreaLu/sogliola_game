@@ -127,7 +127,7 @@
     {"lower":32,"upper":127,},
     {"lower":9647,"upper":9647,},
   ],
-  "regenerateBitmap":false,
+  "regenerateBitmap":true,
   "resourceType":"GMFont",
   "resourceVersion":"2.0",
   "sampleText":"Sogliola Diavolo Nero",

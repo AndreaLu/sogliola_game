@@ -19,6 +19,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"acBottle","order":1,"path":"animcurves/acBottle/acBottle.yy",},
     {"name":"fntCards","order":1,"path":"fonts/fntCards/fntCards.yy",},
     {"name":"fntValue","order":2,"path":"fonts/fntValue/fntValue.yy",},
     {"name":"Grafica Catene","order":2,"path":"notes/Grafica Catene/Grafica Catene.yy",},

@@ -171,7 +171,10 @@ if global.choiceMade {
       }
       
       global.options.Clear()
-      global.options.Add( [ "Pass the turn", function() {global.turnPassed = true;}, undefined] )
+      global.options.Add( [ "Pass the turn", function() {
+         global.turnPassed = true;
+         new StackFlipBottle()         
+      }, undefined] )
       // Tutte le mosse possibili verranno elencate in global.options dalle carte stesse
       global.supervisor.StartEvent( new EventTurnMain() )
    } else {

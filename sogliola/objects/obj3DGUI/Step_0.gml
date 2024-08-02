@@ -1,8 +1,9 @@
-menu = []
+
 tt += 1
 if surface_exists(sf) && !global.zooming && !camTransition {
    var color
    if tt >= 5 {
+      t = 0
       color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
    } else {
       color = prevColor
@@ -23,7 +24,9 @@ if surface_exists(sf) && !global.zooming && !camTransition {
       objectHover = (blue == 255) ? global.player.aquarium : global.opponent.aquarium
    } else if green > 200 { 
       objectHover = global.radio
-   } else {// niente...
+   } else if green > 0 {
+      objectHover = global.bottle
+   } else { // niente...
       objectHover = undefined
    }
 }
