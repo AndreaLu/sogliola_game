@@ -1,5 +1,6 @@
 
 tt += 1
+objectHover = undefined
 if surface_exists(sf) && !global.zooming && !camTransition {
    var color
    if tt >= 5 {
@@ -30,4 +31,3 @@ if surface_exists(sf) && !global.zooming && !camTransition {
       objectHover = undefined
    }
 }
-
