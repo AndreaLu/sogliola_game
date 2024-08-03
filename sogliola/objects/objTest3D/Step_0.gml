@@ -24,7 +24,7 @@ quat = mat2quat(
       forward,right,up
    )
 )
-p = window_mouse_get_x() / window_get_width()
+p = window_mouse_get_x() / getW()
 
 mat2 = matrix_multiply(
 

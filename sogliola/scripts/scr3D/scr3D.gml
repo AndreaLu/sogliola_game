@@ -447,6 +447,6 @@ function worldToScreenIP(xx,yy,zz,view_mat,proj_mat,v) {
 		var cy = proj_mat[13] + proj_mat[5] * (view_mat[1] * xx + view_mat[5] * yy + view_mat[9]  * zz + view_mat[13]);
 	}
 
-	v[@0] = (0.5 + 0.5 * cx) * window_get_width()
-	v[@1] = (0.5 - 0.5 * cy) * window_get_height()
+	v[@0] = (0.5 + 0.5 * cx) * getW()
+	v[@1] = (0.5 - 0.5 * cy) * getH()
 }

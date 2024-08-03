@@ -28,7 +28,8 @@ new Item("Gioca Online", sprHints, function() {
    show_message("online non ancora sbloccato")
 })
 new Item("Impostazioni", sprHints, function() {
-   show_message("non ancora implementato")
+
+   window_set_fullscreen(!window_get_fullscreen())
 })
 new Item("Esci", sprHints, function() {
    game_end(0)

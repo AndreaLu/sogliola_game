@@ -372,8 +372,8 @@ if k > 0 {
    var padding = 6;
    var w = 230;
    var h = k * 32 + (k-1)*padding;
-   var menuX = window_get_width()-w;
-   var menuY = window_get_height()-h;
+   var menuX = getW()-w;
+   var menuY = getH()-h;
    draw_set_color(c_black);
    draw_set_alpha(0.7*a);
    draw_roundrect(menuX-16-padding, menuY-16-padding, menuX+w-16+padding, menuY+h-16+padding, 0);

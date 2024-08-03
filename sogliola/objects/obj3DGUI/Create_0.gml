@@ -203,7 +203,7 @@ gridManagerOpp = new GridManager(false,meshCage)
 
 
 opponentCursor = {
-   x : window_get_width()/2,
+   x : getW()/2,
    y : 0,
    subimg : 0,
    alpha : 0,

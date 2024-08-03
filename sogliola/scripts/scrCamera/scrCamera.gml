@@ -5,7 +5,7 @@ function freeCamera() {
       view_camera[0],
       matrix_build_projection_perspective_fov(
          global.camera.FOV, // FOV
-         window_get_width()/window_get_height(),   // Aspect ratio
+         getW()/getH(),   // Aspect ratio
          0.1,         // Z-Near
          100          // Z-Far
       )

@@ -154,9 +154,9 @@ function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callba
    dur0 = 0.4
    dur1 = 0.4
    dur2 = 0.4
-   y0=window_get_height()/2
-   w = window_get_width()
-   h = window_get_height()
+   y0=getH()/2
+   w = getW()
+   h = getH()
    hh = 20
    sw = sprite_get_width(card[0].sprite)
    sh = sprite_get_height(card[0].sprite)
