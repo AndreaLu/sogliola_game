@@ -148,13 +148,14 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
             var saveState = GameGetJSON()
             // Durate una simulazione, annulla i nodi Stack
             global.simulating = true
-            // Blocca la location di tutte le carte (congelando il rendering)
-            //with( obj3DCard ) { locationLock = true }
             best = undefined
             for( var i=0; i<array_length(options); i+=1) {
-               // Simula la mossa
+               if options[i][0] == "Pass the turn" {
+                  optionPass = options[i]
+                  continue;
+               } 
+               // Simula la mossa e ne calcola il punteggio
                SimulateOption( options[i] )
-               // Calcola il punteggio della mossa
                var optionValue = getScore(global.opponent) - getScore(global.player)
                // Trova la migliore
                if( is_undefined(best) || optionValue > best.value )
@@ -162,15 +163,17 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
                // Riporta il gioco all'inizio
                GameRestoreJson(saveState)
             }
-            // Sblocca la location delle carte
-            //with( obj3DCard) { locationLock = false }
             global.simulating = false
-
-            // Ricostruisco global .options
+            
+            // Ricostruisco global.options
             global.options.Clear()
             for(var i=0;i<array_length(options);i+=1)
                global.options.Add(options[i])
-            }
+
+            if is_undefined(best) || best.value < 0 {
+               best = {option: optionPass, value: 0}
+            }   
+         }
          
          ExecuteOption(best.option,false)
       }

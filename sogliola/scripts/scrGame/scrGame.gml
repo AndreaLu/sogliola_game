@@ -289,7 +289,8 @@ function Actor() constructor {
             var evt = ring.At(0)[1]
             if (is_instanceof(evt,EventSteal) && is_instanceof(src,CardSogliolaDiavoloNero)) || 
                (is_instanceof(evt,EventFree) && is_instanceof(src,CardSogliolaPietra) ) {
-               evt.target.guiCard.locationLock = true
+               if !global.simulating
+                  evt.target.guiCard.locationLock = true
                new StackDisplayCardActivation(false,src, function(args) {
                   new StackWait(0.25, function(args) {
                      args[0].locationLock = false
