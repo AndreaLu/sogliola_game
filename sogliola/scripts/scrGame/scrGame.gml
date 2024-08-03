@@ -504,9 +504,9 @@ function CardSogliolaBlob(owner) : FishEffectCard(
       if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand 
          && global.fishPlayed < global.maxFishPlayable) {
-            if global.turnPlayer.aquarium.size < 8
+            if global.turnPlayer.aquarium.size < 7
                global.options.Add( ["Summon "+name,Summon,self,controller.aquarium] )
-            if global.turnOpponent.aquarium.size < 8
+            if global.turnOpponent.aquarium.size < 7 && !global.turnOpponent.aquarium.protected
                global.options.Add( ["Summon "+name+" to opponent",SummonToOpponent,self,Opponent(controller).aquarium])
          }
       }
