@@ -22,7 +22,7 @@ effectChainRing = new ds_list()  // list of effects that triggered simultaneousl
 options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
-
+simulating = false              // Used in opponent AI to notify that the game is in a simulation state
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
@@ -140,6 +140,22 @@ function ExecuteOption(option,send,_callback) {
    }
    
 }
+function SimulateOption(option) {
+
+   var callback = option[1]
+   var sourceCard = option[2]
+   var hasTarget = array_length(option) > 3 && !is_undefined(option[3])
+   var targets = hasTarget ? option[3] : undefined
+
+   if( hasTarget ) {
+      callback(targets)
+   } else {
+      callback()
+   }
+   global.choiceMade = true
+   global.waitingExecution = false
+   
+}
 //#endregion |                 |
 //#region    | 2.0 Collections                    |
 function CardCollection(_owner) constructor {
@@ -155,6 +171,14 @@ function CardCollection(_owner) constructor {
       _card.controller = owner
       size = _cards.size
    }
+
+   static AddAt = function(value, _pos) {
+      while( _pos + 1 > _cards.size ) {
+         _cards.Add(undefined)
+         size += 1
+      }
+      _cards.Set(value,_pos)
+   }
    static At = function(pos) {
       return _cards.At(pos)
    }
@@ -166,6 +190,18 @@ function CardCollection(_owner) constructor {
    static Random = function() {
       if size == 0 return undefined;
       return _cards.At(irandom(size-1))
+   }
+
+   static Clear = function() {
+      _cards.Clear()
+      size = 0
+   }
+
+   static IndexCheck = function(check)  {
+      for( var i=0;i<size;i+=1 ) {
+         if check( _cards.At(i) ) return i;
+      }
+      return undefined
    }
 }
 
@@ -295,6 +331,7 @@ function Supervisor() : Actor() constructor {}
 //#endregion |                      |
 //#region    | 4.0 Cards                          |
 //#region    |    4.1 Base Classes                |
+
 function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  constructor {
    name = _name
    owner = _owner
@@ -315,11 +352,19 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
    
    listener = function( event ) {}
    GetJSON = function() {
+      // Stabilisci in che posizione del deck si trova, se si trova nel deck
+      global.tmp = index
+      var locIdx = location.IndexCheck( function(card) { return card.index == global.tmp; } )
+      if is_undefined(locIdx) {
+         show_debug_message("undef")
+      }
       var data = [
          type,
          owner == global.player ? 0 : 1,
          controller == global.player ? 0 : 1,
          location_to_str( location ),
+         index,
+         locIdx
       ]
       return json_stringify( data) 
    }
@@ -329,6 +374,7 @@ function Card(_name,_owner,_controller, _location, _sprite, _type) : Actor()  co
       owner =  (data[1] == 0 ) ? global.player : global.opponent
       controller = (data[2] == 0 ) ? global.player : global.opponent
       location = str_to_location( data[3] )
+      locationIndex = data[5]
    }
    breakpoints = false
 }

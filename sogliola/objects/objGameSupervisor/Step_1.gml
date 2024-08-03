@@ -29,9 +29,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       //randomize()
       random_set_seed(seed)
    }
-   
-   //global.srandom.SetSeed(date_get_second(date_current_datetime()))
-   global.srandom.SetSeed(seed)    
+     
 //#endregion |                            |
 //#region    |    1.0.3 Fill up the deck  |
    var newCard

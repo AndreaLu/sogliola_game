@@ -5,7 +5,12 @@ FORWARD = [0,1,0]
 RIGHT = [1,0,0]
 UP = [0,0,1]
 
+
+stackEnabled = true
+
+
 function Stack(callback,args) constructor {
+   if global.simulating return;
    done = false
    Update = function() {
       done = true
@@ -16,6 +21,7 @@ function Stack(callback,args) constructor {
 }
 // guiCard: obj3DCard reference of the card to be ANIMATED!!!!
 function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
+   if global.simulating return;
    obj = guiCard
    time = 0
    duration = 3
@@ -69,6 +75,7 @@ function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
 // duration: length of the animation in seconds
 // callback: function that will be called when the anim is over
 function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback) constructor {
+   if global.simulating return;
    static _dirA = [0,0,0]
    static _dirB = [0,0,0]
    static _dir = [0,0,0]
@@ -100,6 +107,7 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
 }
 
 function StackWait(time,callback,args) : Stack(callback,args) constructor {
+   if global.simulating return;
    t = 0
    duration = time
    Update = function() {
@@ -108,7 +116,7 @@ function StackWait(time,callback,args) : Stack(callback,args) constructor {
    }
 }
 function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) constructor {
-
+   if global.simulating return;
    startX = obj3DGUI.opponentCursor.x
    startY = obj3DGUI.opponentCursor.y
    dstX = destX
@@ -133,7 +141,7 @@ function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) construct
 }
 
 function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callback,cbargs) constructor {
-
+   if global.simulating return;
 
    card = _card
    if !is_array(card)
@@ -236,7 +244,7 @@ function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callba
 }
 // es: StackBlenderAnimLerpPos(global.Blender.AnimCardDraw.Action,1,...)
 function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(undefined) constructor {
-   
+   if global.simulating return;
    // Lettura argomenti
    dur = duration
    guiCard = guicard
@@ -350,6 +358,7 @@ function StackBlenderAnimLerpPos(animation,duration,guicard,callback) : Stack(un
 
 
 function StackFlipBottle(targetRotz) : Stack() constructor {
+   if global.simulating return;
    // Se non si passa l'angolo, lo si ricava automaticamente
    // Solo una votla all'inizio si passa l'angolo
    if is_undefined(targetRotz) {
