@@ -202,7 +202,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 if !is_undefined(global.pickingTarget) && !global.disableUserInput 
    && global.stack.size == 0 {
 
-   menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla la scelta"]
+   menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla"]
    if (inputManager.keys.MBR || inputManager.keys.S)  {
       global.pickingTarget = undefined
       global.disableUserInput = true
@@ -385,12 +385,14 @@ if k > 0 {
             var icon = menu[i][0][j]
             draw_sprite_ext(sprHints,icon,menuX+32*j,menuY+i*(32+padding),1,1,0,c_white,1*a)
          }
-      } else 
+      } else {
          draw_sprite_ext(sprHints,menu[i][0],menuX,menuY+i*(32+padding),1,1,0,c_white,1*a)
+      }
       draw_set_font(fntBasic)
       draw_set_valign(fa_middle)
       draw_set_halign(fa_left)
-      draw_text(menuX+16+padding,menuY+i*(32+padding),menu[i][1])
+      var l = is_array(menu[i][0]) ? array_length(menu[i][0]) : 1
+      draw_text(menuX+16+padding+(l-1)*32,menuY+i*(32+padding),menu[i][1])
    }
    draw_set_color(c_black);
    draw_set_alpha(1);
