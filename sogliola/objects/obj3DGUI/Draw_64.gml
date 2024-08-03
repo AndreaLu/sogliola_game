@@ -56,11 +56,10 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
          var card = args[0]
          return (option[2] == card)
       },[card])
-      porcodio = options
       
       // ------------------------------------------------------------------------------
       // Secondo click in poi, su carte 
-      if !watching && !global.zooming &&  !is_undefined(global.pickingTarget) {
+      if !watching && !global.zooming && !is_undefined(global.pickingTarget) {
          menu[@array_length(menu)] = [HINT_MBL,"Selezione Target"]
          if inputManager.keys.MBL {
             // Trova tutte le mosse restanti che hanno come target tutti gli elementi
@@ -116,7 +115,8 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
 //#endregion
 //#region    |       2.1.1 Primo click                     | 
 
-      if !watching && !global.zooming && is_undefined(global.pickingTarget) {
+      if !watching && !global.zooming && is_undefined(global.pickingTarget) 
+      && array_length(options) > 0 {
          menu[@array_length(menu)] = [HINT_MBL,"Gioca"]
          if( inputManager.keys.MBL ) {
             if( array_length(options) > 1) {
