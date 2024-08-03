@@ -325,8 +325,12 @@ function Player() : Actor() constructor {
    hand = new Hand(self);
    aquarium = new Aquarium(self);
    static Draw = function() {
-      if( deck.size > 0 )
-         hand.Add( deck.Draw() );
+      if( deck.size > 0 ) {
+         var card = deck.Draw()
+         card.guiCard.locationLock = true
+         hand.Add( card );
+         new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
+      }  
    }
 }
 function Supervisor() : Actor() constructor {}
@@ -464,14 +468,8 @@ function CardPesca(owner) : ActionCard(
    CardType.PESCA
 ) constructor {
    Effect = function() {
-      if !global.simulating {
-         new Stack( function(args) { args[0].Draw() }, [controller] )
-         new StackWait(0.3)
-         new Stack( function(args) { args[0].Draw() }, [controller] )
-      } else {
-         controller.Draw()
-         controller.Draw()
-      }
+      controller.Draw()
+      controller.Draw()
    }
 }
 //#endregion |                               |
@@ -482,17 +480,9 @@ function CardPescaAbbondante(owner) : ActionCard(
    CardType.PESCA_ABBONDANTE
 ) constructor {
    Effect = function() {
-      if !global.simulating {
-         new Stack( function(args) { args[0].Draw() }, [controller] )
-         new StackWait(0.3)
-         new Stack( function(args) { args[0].Draw() }, [controller] )
-         new StackWait(0.3)
-         new Stack( function(args) { args[0].Draw() }, [controller] )
-      } else {
-         controller.Draw()
-         controller.Draw()
-         controller.Draw()
-      }
+      controller.Draw()
+      controller.Draw()
+      controller.Draw()
    }
 }
 //#endregion |                               |
