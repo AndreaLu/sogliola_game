@@ -354,7 +354,7 @@ function StackFlipBottle(targetRotz) : Stack() constructor {
    // Solo una votla all'inizio si passa l'angolo
    if is_undefined(targetRotz) {
       var finalAngle = global.turnPlayer == global.player ? 
-         random_range(180-20,180+20) : random_range(-20,20)
+         random_range(180-10,180+10) : random_range(-10,10)
       if abs(finalAngle-global.bottle.rotz) < 90 || finalAngle < global.bottle.rotz
          finalAngle += 360
       endRotz = finalAngle
@@ -368,7 +368,7 @@ function StackFlipBottle(targetRotz) : Stack() constructor {
    delta = endRotz - startRotz
    // durata dell'animazione proporzionale all'angolo da ruotare
    // normalizzato su 2.3 secondi
-   duration = delta/180 * 1.8
+   duration = delta/180 * 0.9
    Update = function() {
       t += deltaTime()/1000000
 
