@@ -15,7 +15,7 @@ if surface_exists(sf) && !global.zooming && !camTransition {
    var red = color_get_red(color)
    var blue = color_get_blue(color)
    var green = color_get_green(color)
-   if red > 0 { // è una carta
+   if red > 0 && global.canPass { // è una carta
       var card = global.allCards.At(red-1)
       if !is_undefined(card) && !is_instanceof(card.location,Deck) {
          objectHover = card
