@@ -144,14 +144,11 @@ GridManager = function(isPlayer,_mesh) constructor {
          controller = isPl ? global.player : global.opponent
          if !isPl position[@1] = -position[1]
       }
-
-      
-
       if global.turnPlayer == controller {
-         if controller.aquarium.protected {
+         if controller.aquarium.protected && state != GS.IN {
             state = GS.PRE_PRE_ENTERING
          } else {
-            if state == GS.PRE_PRE_ENTERING {
+            if state == GS.IN {
                state = GS.PRE_EXITING
             }
          }
@@ -163,19 +160,15 @@ GridManager = function(isPlayer,_mesh) constructor {
 
       switch( state ) {
          case GS.OUT:
-            if controller == global.player show_debug_message("out")
             break
          case GS.PRE_PRE_ENTERING:
-            if controller == global.player show_debug_message("pre_pre_entering")
             position[@0] = lerp( position[0],0,0.1 )
             break
          case GS.PRE_ENTERING:
-            if controller == global.player show_debug_message("pre_entering")
             t = 0;
             state = GS.ENTERING;
             break
          case GS.ENTERING:
-            if controller == global.player show_debug_message("entering")
             t += deltaTime()/1000000
             var p = t/3
             var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 0), p)*(1/0.254)
@@ -184,23 +177,19 @@ GridManager = function(isPlayer,_mesh) constructor {
                state = GS.IN
             break
          case GS.PRE_EXITING:
-            if controller == global.player show_debug_message("pre_exiting")
             t = 0
             state = GS.EXITING
             break
          
          case GS.EXITING:
-            if controller == global.player show_debug_message("EXITINGGG")
             t += deltaTime()/1000000
-            var p = t/3
-            var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 1), p)*(1/0.254)
-            position[@0] = -6.64+(1-_val)*(6.64+offsX)
+            var p = t/6
+            position[@0] += 6.64*p*p
    
             if p >= 1
                state = GS.OUT
             break
          case GS.IN:
-            if controller == global.player show_debug_message("in")
             break
       }
       matrix_set(matrix_world,matrix_build(position[0],position[1],position[2],0,0,0,1,1,1))
