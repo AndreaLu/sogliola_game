@@ -102,7 +102,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       }
    }
    var finalAngle = global.turnPlayer == global.opponent ? 
-      random_range(180-20,180+20) : random_range(-20,20)
+      random_range(180-10,180+10) : random_range(-10,10)
    if abs(finalAngle-global.bottle.rotz) < 90 || finalAngle < global.bottle.rotz
       finalAngle += 360
    new StackFlipBottle(finalAngle)

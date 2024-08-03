@@ -10,3 +10,8 @@ if (global.radioOn) {
 else {
 	audio_pause_sound(radioSound);
 }
+
+
+if (global.turnPassed) {
+	audio_play_sound(sndBottleSpin,1,0)
+}
