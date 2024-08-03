@@ -220,8 +220,9 @@ if !is_undefined(global.pickingTarget) && !global.disableUserInput
 //#endregion
 //#endregion |                                             |
 //#region    |    2.3 Passare il turno                     |
-if is_instanceof(objectHover,Bottle) && !passingTurn &&
-global.turnPlayer == global.player {
+
+if is_instanceof(objectHover,Bottle) && !passingTurn && !global.zooming && global.canPass &&
+global.turnPlayer == global.player && is_undefined(global.pickingTarget) && !watching  {
    global.bottle.highlight = 1
    menu[@array_length(menu)] = [HINT_MBL,"Passa il Turno"]
    if inputManager.keys.MBL {

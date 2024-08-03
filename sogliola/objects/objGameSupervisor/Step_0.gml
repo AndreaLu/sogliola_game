@@ -32,6 +32,7 @@ if startTurn {
    global.turnPassed = false
    global.choiceMade = false
    global.choiceCount = 0 // numero di mosse fatte in questo turno
+   global.canPass = false
    
    global.supervisor.StartEvent( new EventTurnBegin() )
 
@@ -63,6 +64,7 @@ if startTurn {
                   global.Blender.CamHand.FovY,
                   0.8, function() {
                      global.disableUserInput = false
+                     global.canPass = true
                   }
                )
             }
