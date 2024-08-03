@@ -31,6 +31,7 @@ if startTurn {
    global.fishPlayed = 0
    global.turnPassed = false
    global.choiceMade = false
+   global.choiceCount = 0 // numero di mosse fatte in questo turno
    
    global.supervisor.StartEvent( new EventTurnBegin() )
 
@@ -140,6 +141,8 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
          else {
 //#endregion |                           |
 //#region    |       2.1.1 Actual Move   |         
+            
+            
             // Crea una copia di global.options per non subire interferenze durante le simulazioni
             var options = []
             for(var i=0;i<global.options.size;i+=1)
@@ -170,9 +173,18 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
             for(var i=0;i<array_length(options);i+=1)
                global.options.Add(options[i])
 
-            if is_undefined(best) || best.value < 0 {
+            // Aggiungi una certa probabilità di passare la mano
+            // all'aumentare del numero di mosse fatte in questo turno.
+            // Dopo 2 mosse la prob è del 80%. Riduci questa probabilità
+            // man mano che la partita sta per finire per l'avversario
+            // per forze esterne, ovvero il mazzo che è vicino a finire o 
+            // il giocatore che ha un alto numero di sogliole
+            var passProb = global.choiceCount/2*0.8 * (7-global.player.aquarium.size)/7 * clamp(global.opponent.deck.size/3*0.2,0,1)
+            passProb = clamp(passProb,0,1)
+            var doPass = (irandom_range(1,100) <= 100*passProb)
+            if doPass || is_undefined(best) || best.value < 0 {
                best = {option: optionPass, value: 0}
-            }   
+            }
          }
          
          ExecuteOption(best.option,false)

@@ -129,6 +129,7 @@ function ExecuteOption(option,send,_callback) {
       }
       global.choiceMade = true
       global.waitingExecution = false
+      global.choiceCount += 1
       
    })
    new Stack(_callback)
