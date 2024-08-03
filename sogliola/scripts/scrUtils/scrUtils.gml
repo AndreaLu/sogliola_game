@@ -328,6 +328,9 @@ function GameLoad() {
    var json = file_text_read_string(file)
    file_text_close(file)
    GameLoadJson(json)
+   global.canPass = global.turnPlayer == global.player
+   global.choiceCount = 0
+   global.locationLock = false
 }
 
 function GameOver(msg) {
