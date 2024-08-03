@@ -464,8 +464,14 @@ function CardPesca(owner) : ActionCard(
    CardType.PESCA
 ) constructor {
    Effect = function() {
+      if !global.simulating {
+         new Stack( function(args) { args[0].Draw() }, [controller] )
+         new StackWait(0.3)
+         new Stack( function(args) { args[0].Draw() }, [controller] )
+      } else {
          controller.Draw()
          controller.Draw()
+      }
    }
 }
 //#endregion |                               |
@@ -476,9 +482,17 @@ function CardPescaAbbondante(owner) : ActionCard(
    CardType.PESCA_ABBONDANTE
 ) constructor {
    Effect = function() {
+      if !global.simulating {
+         new Stack( function(args) { args[0].Draw() }, [controller] )
+         new StackWait(0.3)
+         new Stack( function(args) { args[0].Draw() }, [controller] )
+         new StackWait(0.3)
+         new Stack( function(args) { args[0].Draw() }, [controller] )
+      } else {
          controller.Draw()
          controller.Draw()
          controller.Draw()
+      }
    }
 }
 //#endregion |                               |
