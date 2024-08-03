@@ -31,6 +31,7 @@ if startTurn {
    global.fishPlayed = 0
    global.turnPassed = false
    global.choiceMade = false
+   global.choiceCount = 0 // numero di mosse fatte in questo turno
    
    global.supervisor.StartEvent( new EventTurnBegin() )
 
@@ -100,6 +101,7 @@ if startTurn {
 //#endregion |                       |
 //#region    | 2.0 Making a Move         |
 //#region    |    2.1 Opponents move     |
+//#region    |       2.1.0 Draw          |
 // We need to make a move for the opponent.
 // If the game is multiplayer, this is not done here, but rather in the
 // async event (as we receive the move from the opponent)
@@ -113,9 +115,12 @@ with obj3DCard {
    if locationLock
       global.locationLock = true 
 }
-if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution{
 
+
+if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.opponent) && !global.waitingExecution {
    if !global.multiplayer {
+
+      var best = undefined
       // AI turn
       attesa += 1
       if( attesa >= room_speed*0.5 ) {
@@ -130,19 +135,70 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
             }
          },self)
          
-         if canDraw choice = 0
-         else choice = irandom(global.options.size-1)//global.srandom.IRandom(global.options.size-1)
-         
-         var option = global.options.At(choice)
+         // Si da per scontato che draw sia sempre la scelta 0
+         if canDraw
+            best = { option: global.options.At(0) , value: 0 } 
+         else {
+//#endregion |                           |
+//#region    |       2.1.1 Actual Move   |         
+            
+            
+            // Crea una copia di global.options per non subire interferenze durante le simulazioni
+            var options = []
+            for(var i=0;i<global.options.size;i+=1)
+               array_push(options,global.options.At(i))
+            // Salva il gioco per fare delle simulazioni e tornare indietro
+            var saveState = GameGetJSON()
+            // Durate una simulazione, annulla i nodi Stack
+            global.simulating = true
+            best = undefined
+            for( var i=0; i<array_length(options); i+=1) {
+               if options[i][0] == "Pass the turn" {
+                  optionPass = options[i]
+                  continue;
+               } 
+               // Simula la mossa e ne calcola il punteggio
+               SimulateOption( options[i] )
+               var optionValue = getScore(global.opponent) - getScore(global.player)
+               // Trova la migliore
+               if( is_undefined(best) || optionValue > best.value )
+                  best = {option: options[i], value: optionValue}
+               // Riporta il gioco all'inizio
+               GameRestoreJson(saveState)
+            }
+            global.simulating = false
+            
+            // Ricostruisco global.options
+            global.options.Clear()
+            for(var i=0;i<array_length(options);i+=1)
+               global.options.Add(options[i])
 
-         ExecuteOption(option,false)
+            // Aggiungi una certa probabilità di passare la mano
+            // all'aumentare del numero di mosse fatte in questo turno.
+            // Dopo 2 mosse la prob è del 80%. Riduci questa probabilità
+            // man mano che la partita sta per finire per l'avversario
+            // per forze esterne, ovvero il mazzo che è vicino a finire o 
+            // il giocatore che ha un alto numero di sogliole
+            var passProb = global.choiceCount/2*0.8 * (7-global.player.aquarium.size)/7 * clamp(global.opponent.deck.size/3*0.2,0,1)
+            passProb = clamp(passProb,0,1)
+            var doPass = (irandom_range(1,100) <= 100*passProb)
+            if doPass || is_undefined(best) || best.value < 0 {
+               best = {option: optionPass, value: 0}
+            }
+         }
+         
+         ExecuteOption(best.option,false)
       }
-   } else {
+   }
+//#endregion |                           |
+//#region    |       2.1.2 Multiplayer   | 
+   else {
       // Online multiplayer.. 
       // the choice will come from the async event
    }
 }
-//#endregion
+//#endregion |                           |
+//#endregion |                           |
 //#region    |    2.2 Player move        |
 /* 
    The player move does not happen here. Rather, when the player clicks
@@ -184,4 +240,5 @@ if global.choiceMade {
    }
 }
 //#endregion
-//#endregion |___________________________|
+//#endregion |                           |
+//           |___________________________|

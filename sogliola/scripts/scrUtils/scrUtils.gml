@@ -84,7 +84,9 @@ function ds_list() constructor {
       }
       return newList
    }
-   
+   static Set = function(value,pos) {
+      _list[|pos] = value
+   }
    static At = function(pos) {
       if( pos < 0 ) pos = size+pos
       return _list[|pos]
@@ -178,7 +180,15 @@ function getScore(player) {
 }
 
 
+
 function GameSave() {
+   var json = GameGetJSON()
+   if( file_exists("savedata.json") ) file_delete("savedata.json")
+   var file = file_text_open_write("savedata.json")
+   file_text_write_string(file,json)
+   file_text_close(file)
+}
+function GameGetJSON() {
    var cards = []
    for(var i=0; i<global.allCards.size; i++ ) {
       array_push(cards,global.allCards.At(i).GetJSON())
@@ -189,59 +199,58 @@ function GameSave() {
       global.opponent.aquarium.protected,
       global.maxFishPlayable,
       global.fishPlayed,
-      global.onePlayerFinished,
-      global.srandom.value
+      global.onePlayerFinished
    ]
-
-   if( file_exists("savedata.json") ) file_delete("savedata.json")
-   var file = file_text_open_write("savedata.json")
-   file_text_write_string(file,json_stringify([cards,globals]))
-   file_text_close(file)
+   var json = json_stringify([cards,globals])
+   return json
 }
 
-function Random() constructor {
-   value = 2
-   repetitions = 0
-   static GetNext = function() {
-      var newBit = (((value >> 19) ^ (value >> 18) ^ (value >> 17)  ^ (value >> 14) ) & 1)
-      value = ((value << 1) | newBit)
-      return value
+
+function GameRestoreJson(json) {
+   var data = json_parse(json) 
+   var cards = data[0]
+   var globals = data[1]
+
+   // Ripristina i vlaori di tutte le carte
+   for(var i=0;i<array_length(cards);i++) {
+      var cardJSON = cards[i]
+      var card = json_parse(cardJSON)
+      var index = card[4]
+      global.allCards.At(index).FromJSON(cardJSON)
    }
+
+   // Ripristina lo stato delle variabili globali
+   global.turnPlayer = globals[0] == 0 ? global.player : global.opponent
+   global.turnOpponent = Opponent(global.turnPlayer)
+   global.player.aquarium.protected = globals[1]
+   global.opponent.aquarium.protected = globals[2]
+   global.turnPassed = false
+   global.choiceMade = true
+   global.maxFishPlayable = globals[3]
+   global.fishPlayed = globals[4]
+   global.onePlayerFinished = globals[5]
    
-   static SetSeed = function(_seed) {
-      value = _seed
-      repeat(1000) {
-         GetNext()
+   // Ripulisce tutte le location e le ripopola
+   global.opponent.hand.Clear()
+   global.opponent.aquarium.Clear()
+   global.opponent.deck.Clear()
+   global.player.hand.Clear()
+   global.player.aquarium.Clear()
+   global.player.deck.Clear()
+   global.ocean.Clear()
+   global.allCards.foreach( function(card) {
+      if is_undefined( card.locationIndex ) {
+      } else {
+         card.location.AddAt(card,card.locationIndex)
       }
-   }
-   static IRandom = function(_max) {
-      var mask = power( 2, ceil(log2(_max+1)+1) ) - 1
-      var v 
-      do {
-         v = GetNext() & mask
-      }
-      until( v <= _max+1 && v > 0 )
-      return v-1
-   }
+   })
+   
 }
-global.srandom = new Random()
-/*
-r = new Random()
-repeat(10) {
-   arr = array_create(10,0)
-   repeat(10000) {
-      var v = r.IRandom(9)
-      arr[v] += 1
-   }
-   show_message( arr )
-}*/
-function GameLoad() {
+function GameLoadJson(json) {
    random_set_seed(0) // il seed non è importante, poiché non conta ciò che sarebbe
    // successo dopo nel game da cui proviene il salvataggio, ma conta 
    // solamente avere una continuazione sempre riproducibile dai savedata
-   var file = file_text_open_read("savedata.json")
-   var data = json_parse(file_text_read_string(file)) 
-   file_text_close(file)
+   var data = json_parse(json) 
    var cards = data[0]
    var globals = data[1]
    for(var i=0;i<array_length(cards);i++) {
@@ -309,7 +318,16 @@ function GameLoad() {
    global.maxFishPlayable = globals[3]
    global.fishPlayed = globals[4]
    global.onePlayerFinished = globals[5]
-   global.srandom.value = globals[6]
+}
+
+function GameLoad() {
+   random_set_seed(0) // il seed non è importante, poiché non conta ciò che sarebbe
+   // successo dopo nel game da cui proviene il salvataggio, ma conta 
+   // solamente avere una continuazione sempre riproducibile dai savedata
+   var file = file_text_open_read("savedata.json")
+   var json = file_text_read_string(file)
+   file_text_close(file)
+   GameLoadJson(json)
 }
 
 function GameOver(msg) {
