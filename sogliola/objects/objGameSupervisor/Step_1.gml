@@ -125,15 +125,15 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    
    
    // Draw 4 cards
+   new StackWait(0.3)
    repeat(4) {
-      global.turnPlayer.Draw()
-      global.turnOpponent.Draw()
+      new Stack( function() { global.turnPlayer.Draw() } )
+      new Stack( function() { global.turnOpponent.Draw() } )
    }
 //#endergion |                            |
    
-
    startTurn = true
 }
 //#endregion |                            |
 //#endregion |                            |
-//           |____________________________|
+   //           |____________________________|
