@@ -438,6 +438,7 @@ function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructo
    duration = _dur
    duration2 = 2
    phase = 0
+   global.drawHints = false
    Update = function() {
       if ! surface_exists(sf) {
          sf = surface_create(getW(),getH())

@@ -13,7 +13,7 @@ var seed = 8
 //            ____________________________
 //#region    | 1.0 Game Initialization    |
 //#region    |    1.0.1 Load the game     |
-if false && global.debugMode && !global.multiplayer && file_exists("savedata.json")
+if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false
@@ -49,11 +49,9 @@ if false && global.debugMode && !global.multiplayer && file_exists("savedata.jso
       global.player.deck.Add( new CardSogliolaBlob(global.player) )
       global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
    
-      //global.player.deck.Add( new CardReSogliola(global.player) )
-      global.opponent.deck.Add( new CardReSogliola(global.opponent) )
-      global.opponent.deck.Add( new CardReSogliola(global.opponent) )
-      global.opponent.deck.Add( new CardReSogliola(global.opponent) )
-      /*
+      global.player.deck.Add( new CardReSogliola(global.player) )
+      global.opponent.deck.Add( new CardReSogliola(global.opponent))
+      
       global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
       global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
    
@@ -81,8 +79,7 @@ if false && global.debugMode && !global.multiplayer && file_exists("savedata.jso
       global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
    
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
-      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )*/
-      
+      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )      
      
    }
 //#endregion |                            |

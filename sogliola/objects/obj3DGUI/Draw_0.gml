@@ -136,7 +136,7 @@ with( obj3DCard ) {
    if !is_undefined(card) {
       shader_set_uniform_f(
          shader_get_uniform(sha, "uSel"),
-         selected ? 1.0 : 0.0
+         selected || superSelected ? 1.0 : 0.0
       );
       matrix_set(matrix_world,mat)
       if surface_exists(surfSprite)

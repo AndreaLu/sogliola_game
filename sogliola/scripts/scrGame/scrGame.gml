@@ -817,10 +817,10 @@ function CardScambioEquivalente(owner) : ActionCard(
 function GameOverSequence(t) {
    // t can be 0 (end of deck seqeuence) or 1 (filled aquarium sequence)
    global.gameOvering = true
-   with( obj3DCard ) locationLock = true;
    global.disableUserInput = true
 
    if t == 0 { // DECK OVER GAME END
+      with( obj3DCard ) locationLock = true;
       new StackWait(0.3)
       if global.turnPlayer == global.opponent {
          new StackMoveCamera(global.Blender.CamDeckOp.From, global.Blender.CamDeckOp.To,global.Blender.CamDeckOp.FovY,0.5)
@@ -847,7 +847,27 @@ function GameOverSequence(t) {
       })
    }
    else { // AQUARIUM COMPLETE GAME END
-
+      new StackWait(0.5, function() {with( obj3DCard ) locationLock = true;})
+      new StackMoveCamera(
+         global.Blender.CamAq.From, global.Blender.CamAq.To, global.Blender.CamAq.FovY,
+         0.5, function() {
+            global.turnPlayer.aquarium._cards.foreach( function(card) {
+               card.guiCard.superSelected = true
+            })
+            new StackWait(3)
+            new StackMoveCamera(
+               global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
+               function() {
+                  new StackClosingAnimation( 790, 430, 2.2, function() {
+                     new StackMoveCameraBlack(
+                        global.Blender.CamHand.From, global.Blender.CamHand.To, global.Blender.CamHand.FovY,2
+                        ,function() {GoBack()}
+                     )
+                  })
+               }
+            )
+         }
+      )
 
    }
    
