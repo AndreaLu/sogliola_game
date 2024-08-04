@@ -11,7 +11,7 @@ Input = {};
 xscale = 1;
 
 // Imposta la dimensione della finestra di gioco
-window_set_size(900, 600);
+//window_set_size(900, 600);
 
 // Crea e configura la camera
 camera = camera_create();
@@ -25,3 +25,19 @@ camera_set_view_pos(camera, x - 150, y - 100);
 // Assegna la camera alla view
 view_set_camera(0, camera);
 view_visible[0] = true;
+
+room_speed = 60
+
+x = global.catX
+y = global.catY
+inputDisabled = false
+enterDuel = function() {
+   if inputDisabled return;
+   global.catX = x
+   global.catY = y
+   inputDisabled = true
+   t = 0
+}
+
+
+truet = 0

@@ -50,14 +50,15 @@ function SettingsSMC() : SubMenuController() constructor {
    }
 }
 new Item("Gioca",sprMenu,function() {
-   room_goto(room3DGame)
+   room_goto(roomBeach)
 })
-new Item("Gioca Online", sprMenu, function() {
-   show_message("online non ancora sbloccato")
-})
-//new Item("Impostazioni", sprMenu, function() {
-//   window_set_fullscreen(!window_get_fullscreen())
+//new Item("Gioca Online", sprMenu, function() {
+//   show_message("online non ancora sbloccato")
 //})
+new Item("Fullscreen", sprMenu, function(obj) {
+   window_set_fullscreen(!window_get_fullscreen())
+   obj.Text = window_get_fullscreen() ? "Finestra" : "Fullscreen"
+})
 new Item("Esci", sprMenu, function() {
    game_end(0)
 })

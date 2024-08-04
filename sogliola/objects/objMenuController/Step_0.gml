@@ -14,4 +14,4 @@ guiSelection = lerp(guiSelection,selection,0.06)
 
 
 if keyboard_check_pressed(vk_enter)
-   items.At(selection).Callback()
+   items.At(selection).Callback(items.At(selection))

@@ -85,7 +85,7 @@ global.matView = matrix_get(matrix_view)
 global.matView[0] = global.matView[0] 
 global.matProjection = matrix_get(matrix_projection)
 global.matProjection[0] = global.matProjection[0]
-draw_clear(c_dkgrey)
+draw_clear(make_color_rgb(48,117,163))
 
 shader_set(sha)
 shader_set_uniform_f(

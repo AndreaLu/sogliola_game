@@ -1,5 +1,8 @@
 debugMode = true // TODO: setta false in produzione
 
+global.catX = 200
+global.catY = 140
+
 #macro HINT_MBL 0
 #macro HINT_MBR 1
 #macro HINT_W   2
@@ -419,5 +422,5 @@ function GoBack() {
       delete card
    })
    // remove 3d graphics setup
-   room_goto(roomMenu)
+   room_goto(roomBeach)
 }
