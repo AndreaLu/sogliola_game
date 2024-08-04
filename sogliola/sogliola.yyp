@@ -89,6 +89,8 @@
     {"id":{"name":"obj3DGUI","path":"objects/obj3DGUI/obj3DGUI.yy",},},
     {"id":{"name":"objCat2D","path":"objects/objCat2D/objCat2D.yy",},},
     {"id":{"name":"objCat2D2","path":"objects/objCat2D2/objCat2D2.yy",},},
+    {"id":{"name":"objCat2D3","path":"objects/objCat2D3/objCat2D3.yy",},},
+    {"id":{"name":"objCat2D4","path":"objects/objCat2D4/objCat2D4.yy",},},
     {"id":{"name":"objColl","path":"objects/objColl/objColl.yy",},},
     {"id":{"name":"objGameSupervisor","path":"objects/objGameSupervisor/objGameSupervisor.yy",},},
     {"id":{"name":"objMenuController","path":"objects/objMenuController/objMenuController.yy",},},

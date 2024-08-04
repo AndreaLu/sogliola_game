@@ -32,6 +32,8 @@
     {"name":"obj2DRivaDx","order":2,"path":"objects/obj2DRivaDx/obj2DRivaDx.yy",},
     {"name":"obj3DCard","order":1,"path":"objects/obj3DCard/obj3DCard.yy",},
     {"name":"objCat2D2","order":4,"path":"objects/objCat2D2/objCat2D2.yy",},
+    {"name":"objCat2D3","order":5,"path":"objects/objCat2D3/objCat2D3.yy",},
+    {"name":"objCat2D4","order":6,"path":"objects/objCat2D4/objCat2D4.yy",},
     {"name":"objColl","order":3,"path":"objects/objColl/objColl.yy",},
     {"name":"objMenuController","order":10,"path":"objects/objMenuController/objMenuController.yy",},
     {"name":"objSoundController","order":8,"path":"objects/objSoundController/objSoundController.yy",},

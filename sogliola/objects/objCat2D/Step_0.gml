@@ -70,16 +70,20 @@ view_y = clamp(y - 100,0,100) // 200 / 2
 // Imposta la posizione della camera
 camera_set_view_pos(camera, view_x, view_y);
 
-
-if xx != 0 || yy != 0 {
-   if collision_line(x,y-10,x+xx*5,y-10+yy*5,objCat2D2,false,true) {
-      if keyboard_check_pressed(vk_enter) {
+if keyboard_check_pressed(vk_enter) {
+   if xx != 0 || yy != 0 {
+      if collision_line(x,y-10,x+xx*5,y-10+yy*5,objCat2D2,false,true) {
+         global.catSprite = sprCat3
          enterDuel()
       }
-   }
-} else {
-   if collision_line(x,y-10,x*xscale*20,y-10,objCat2D2,false,true) {
-      if keyboard_check_pressed(vk_enter) {
+      if collision_line(x,y-10,x+xx*5,y-10+yy*5,objCat2D3,false,true) {
+         global.catSprite = sprCat
+         enterDuel()
+      }
+      
+   } else {
+      if collision_line(x,y-10,x*xscale*20,y-10,objCat2D2,false,true) {
+         global.catSprite = sprCat3
          enterDuel()
       }
    }
