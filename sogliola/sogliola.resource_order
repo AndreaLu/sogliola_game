@@ -65,6 +65,7 @@
     {"name":"sndDraw0","order":4,"path":"sounds/sndDraw0/sndDraw0.yy",},
     {"name":"sndDraw1","order":5,"path":"sounds/sndDraw1/sndDraw1.yy",},
     {"name":"sndEffect","order":6,"path":"sounds/sndEffect/sndEffect.yy",},
+    {"name":"sndHit","order":10,"path":"sounds/sndHit/sndHit.yy",},
     {"name":"sndRadio","order":2,"path":"sounds/sndRadio/sndRadio.yy",},
     {"name":"spr2DRivaDx","order":6,"path":"sprites/spr2DRivaDx/spr2DRivaDx.yy",},
     {"name":"spr2DRivaGiu","order":3,"path":"sprites/spr2DRivaGiu/spr2DRivaGiu.yy",},
