@@ -436,7 +436,7 @@ function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructo
    sf = -1
    t = 0
    duration = _dur
-   duration2 = 2
+   duration2 = 4
    phase = 0
    global.drawHints = false
    if getScore(global.opponent) < getScore(global.player)
@@ -464,18 +464,34 @@ function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructo
          draw_surface(sf,0,0)
          gpu_set_blendmode(bm_normal)
          if( p >= 1 ) {
-            done = true
+            phase += 1
+            t = 0
          }
       } else {
          p = t/duration2
          done = p >= 1
          surface_set_target(sf)
-         draw_clear(c_white)
+         draw_clear(c_black)
          surface_reset_target()
-         gpu_set_blendmode(bm_subtract)
          draw_surface(sf,0,0)
-         gpu_set_blendmode(bm_normal)
-      }
 
+         var aaa = smoothstep(0,0.3,p)-smoothstep(0.7,1,p)
+         draw_set_alpha( aaa )
+         draw_set_color(c_white)
+         var text
+         draw_set_halign(fa_center)
+         draw_set_valign(fa_middle)
+         var sp = getScore(global.player)
+         var so = getScore(global.opponent)
+         if sp > so  {
+            text = "Hai vinto!"
+         } else if sp == so {
+            text = "Pareggio!"
+         } else {
+            text = "Hai perso!"
+         }
+         draw_text(getW()/2,getH()/2,text)
+         draw_set_alpha(1)
+      }
    }
 }
