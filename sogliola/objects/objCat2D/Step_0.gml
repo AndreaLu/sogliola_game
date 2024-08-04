@@ -1,7 +1,16 @@
+depth = -y 
+
+
 Input.right = keyboard_check(ord("D"));
 Input.left = keyboard_check(ord("A"));
 Input.up = keyboard_check(ord("W"));
 Input.down = keyboard_check(ord("S"));
+if inputDisabled {
+   Input.right = false
+   Input.left = false
+   Input.up = false
+   Input.down = false
+}
 
 /// STEP EVENT
 // xxx and yyy can be thought of as acceleration 
@@ -25,17 +34,53 @@ if (xx != 0 && yy != 0) { // if the player is moving
 	yy = lengthdir_y(mag, dir); 
 }
 
+
 // ideally you would do collisions here, but it depends on how you're doing it (objects vs. tiles)
 // when you do collide however, set xx and yy to the minimum distance you can travel (which might be 0)
 // X collision here
-x += xx;
+// calcola la maxdist
+
+_x = x
+repeat(abs(xx)) {
+   _x += sign(xx)
+   if collision_rectangle(_x-10,y-20,_x+10,y,objColl,false,true) {
+      _x -= sign(xx)
+   }
+}
+x = _x
+x = clamp(x,10,435)
 
 // Y collision here
-y += yy;
+
+
+_y = y
+repeat(abs(yy)) {
+   _y += sign(yy)
+   if collision_rectangle(x-10,_y-20,x+10,_y,objColl,false,true) {
+      _y -= sign(yy)
+   }
+}
+y = _y
+y = clamp(y,24,298)
 
 // Centra la view sul giocatore
-var view_x = x - 150; // 300 / 2
-var view_y = y - 100; // 200 / 2
+view_x = clamp(x - 150,0,146); // 300 / 2
+view_y = clamp(y - 100,0,100) // 200 / 2
 
 // Imposta la posizione della camera
 camera_set_view_pos(camera, view_x, view_y);
+
+
+if xx != 0 || yy != 0 {
+   if collision_line(x,y-10,x+xx*5,y-10+yy*5,objCat2D2,false,true) {
+      if keyboard_check_pressed(vk_enter) {
+         enterDuel()
+      }
+   }
+} else {
+   if collision_line(x,y-10,x*xscale*20,y-10,objCat2D2,false,true) {
+      if keyboard_check_pressed(vk_enter) {
+         enterDuel()
+      }
+   }
+}

@@ -50,7 +50,7 @@ function SettingsSMC() : SubMenuController() constructor {
    }
 }
 new Item("Gioca",sprMenu,function() {
-   room_goto(room3DGame)
+   room_goto(roomBeach)
 })
 new Item("Gioca Online", sprMenu, function() {
    show_message("online non ancora sbloccato")
