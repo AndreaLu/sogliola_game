@@ -401,7 +401,7 @@ draw_sprite_ext(sprScore,0,
    w*3/2 + 10, w*3/2 + 10 ,
 3,3,0,c_white,1)
 draw_sprite_ext(sprScore,0, 
-   getW() - w*3/2 + 10, w*3/2 + 10 ,
+   getW() - w*3/2 - 10, w*3/2 + 10 ,
 3,3,0,c_white,1)
 
 
@@ -433,7 +433,7 @@ draw_text(50,50,string(round(targetScoreOp)))
 surface_reset_target()
 
 draw_surface_ext(sfScore,
-   getW() - w*3/2 + 10 -50*opScoreScal, w*3/2 + 10 - 50*opScoreScal,
+   getW() - w*3/2 - 10 -50*opScoreScal, w*3/2 + 10 - 50*opScoreScal,
    opScoreScal,opScoreScal,opScoreRot,c_white, 1)
 
 
@@ -483,9 +483,11 @@ if global.stack.size > 0 {
    }
 }
 
+truet += deltaTime()/1000000
+var truep = clamp(truet/2,0,1)
+draw_set_alpha(1-truep)
+draw_rectangle_color(0,0,1440,900,c_black,c_black,c_black,c_black,false)
+draw_set_alpha(1)
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
-
-
-
 

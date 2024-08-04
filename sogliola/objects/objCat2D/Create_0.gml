@@ -30,6 +30,7 @@ room_speed = 60
 
 inputDisabled = false
 enterDuel = function() {
+   if inputDisabled return;
    inputDisabled = true
    t = 0
 }

@@ -1,5 +1,5 @@
 if inputDisabled {
-   
+   show_debug_message(t)
    t += deltaTime()/1000000
    p = t/1
    draw_set_alpha(p)
