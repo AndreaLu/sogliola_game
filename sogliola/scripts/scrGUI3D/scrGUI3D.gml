@@ -439,6 +439,8 @@ function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructo
    duration2 = 2
    phase = 0
    global.drawHints = false
+   if getScore(global.opponent) < getScore(global.player)
+      obj3DGUI.catTexture = sprite_get_texture(obj3DGUI.catSprite,1)
    Update = function() {
       if ! surface_exists(sf) {
          sf = surface_create(getW(),getH())

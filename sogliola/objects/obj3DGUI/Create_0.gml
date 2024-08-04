@@ -7,6 +7,8 @@ ScoreScal = 1
 opScoreRot = 1
 ScoreRot = 0
 sfScore = -1
+catSprite = sprCat
+catTexture = sprite_get_texture(catSprite,0)
 inputManager = {
    // when recording is true, the user plays normally, 
    // otherwise its a playback and input comes from a recording file

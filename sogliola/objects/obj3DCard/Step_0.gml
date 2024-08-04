@@ -93,6 +93,9 @@ switch( guiLocation ) {
          v3SetIP(obj3DGUI.TargetHndOpScal,targetScal)
          v3SumIP([0.3*offs,0,0],global.Blender.HndOp.Position,targetPos)
          v3SumIP([0,3,0],zero3,targetRot)
+         if global.gameOvering {
+            v3SumIP([0.3*offs,0,-1],global.Blender.HndOp.Position,targetPos)
+         }
          //targetRot = [0,3,0]
          targetMat = global.Blender.HndOp.Mat
       }
