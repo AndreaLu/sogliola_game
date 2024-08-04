@@ -1,6 +1,12 @@
 meshCard = mesh3DGLoad("graphics/card.obj.3dg")
 meshBack = mesh3DGLoad("graphics/back.obj.3dg")
-
+targetScore = 0
+targetScoreOp = 0
+opScoreScal = 1
+ScoreScal = 1
+opScoreRot = 1
+ScoreRot = 0
+sfScore = -1
 inputManager = {
    // when recording is true, the user plays normally, 
    // otherwise its a playback and input comes from a recording file

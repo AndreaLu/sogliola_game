@@ -396,7 +396,87 @@ if( global.drawHints ) {
    }
 }
 //#endregion |                                             |
+//#region    |    5.1.2 Punteggio                          |
 
+
+//draw_set_color(c_black);
+//draw_set_alpha(0.7*a);
+//draw_roundrect(0,100, 120, 300, 0);
+//draw_set_color(c_white);
+//draw_set_alpha(1*a);
+
+var w = sprite_get_width(sprScore)
+draw_sprite_ext(sprScore,0, 
+   w*3/2 + 10, w*3/2 + 10 ,
+3,3,0,c_white,1)
+draw_sprite_ext(sprScore,0, 
+   getW() - w*3/2 + 10, w*3/2 + 10 ,
+3,3,0,c_white,1)
+
+
+
+
+
+
+prev = round(targetScoreOp)
+targetScoreOp = lerp(targetScoreOp,getScore(global.opponent),0.03)
+if round(targetScoreOp) != prev {
+   opScoreScal = 1.5
+   opScoreRot = random_range(-5,5)
+}
+opScoreScal = lerp(opScoreScal,1,0.1)
+opScoreRot = lerp(opScoreRot,0,0.1)
+
+if !surface_exists(sfScore)
+   sfScore = surface_create(100,100)
+
+
+surface_set_target(sfScore)
+draw_clear_alpha(c_black,0)
+
+draw_set_color(c_black)
+draw_set_font(fntScore)
+draw_set_halign(fa_center)
+draw_set_valign(fa_middle)
+draw_text(50,50,string(round(targetScoreOp)))
+surface_reset_target()
+
+draw_surface_ext(sfScore,
+   getW() - w*3/2 + 10 -50*opScoreScal, w*3/2 + 10 - 50*opScoreScal,
+   opScoreScal,opScoreScal,opScoreRot,c_white, 1)
+
+
+
+
+prev = round(targetScore)
+targetScore = lerp(targetScore,getScore(global.player),0.03)
+if round(targetScore) != prev {
+   ScoreScal = 1.5
+   ScoreRot = random_range(-5,5)
+}
+ScoreScal = lerp(ScoreScal,1,0.1)
+ScoreRot = lerp(ScoreRot,0,0.1)
+
+surface_set_target(sfScore)
+draw_clear_alpha(c_black,0)
+
+draw_set_color(c_black)
+draw_set_font(fntScore)
+draw_set_halign(fa_center)
+draw_set_valign(fa_middle)
+draw_text(50,50,string(round(targetScore)))
+surface_reset_target()
+
+draw_surface_ext(sfScore,
+   w*3/2 + 10 -50*ScoreScal, w*3/2 + 10 - 50*ScoreScal,
+   ScoreScal,ScoreScal,ScoreRot,c_white, 1)
+
+
+
+
+
+
+//#endregion |                                             |
 //#endregion |                                             |
 //#endregion |                                             |
 //#endregion |                                             |
