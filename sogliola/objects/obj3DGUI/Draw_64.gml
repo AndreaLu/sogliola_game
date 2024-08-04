@@ -462,6 +462,52 @@ draw_surface_ext(sfScore,
    w*3/2 + 10 -50*ScoreScal, w*3/2 + 10 - 50*ScoreScal,
    ScoreScal,ScoreScal,ScoreRot,c_white, 1)
 
+var xx = 140
+var yy = w*3/2 + 10
+
+size = global.player.aquarium.size
+if size != prevSize {
+   sscal = 2.9
+   srot = random_range(-40,40)
+}
+prevSize = size
+sscal = lerp(sscal,2,0.1)
+srot = lerp(srot,0,0.1)
+repeat( 7 ) {
+   draw_sprite_ext(sprSogliolaHud,0,xx,yy,2,2,0,c_white,1)
+   xx += 35
+}
+xx = 140
+repeat( size ) {
+   draw_sprite_ext(sprSogliolaHud,1,xx,yy,sscal,sscal,srot,c_white,1)
+   xx += 35
+}
+
+// -------
+
+var xx = getW() - 140
+var yy = w*3/2 + 10
+
+size = global.opponent.aquarium.size
+if size != prevSizeOp {
+   sscalOp = 2.9
+   srotOp = random_range(-40,40)
+}
+prevSizeOp = size
+sscalOp = lerp(sscalOp,2,0.1)
+srotOp = lerp(srotOp,0,0.1)
+repeat( 7 ) {
+   draw_sprite_ext(sprSogliolaHud,0,xx,yy,2,2,180,c_white,1)
+   xx -= 35
+}
+xx = getW() - 140
+repeat( size ) {
+   draw_sprite_ext(sprSogliolaHud,1,xx,yy,sscalOp,sscalOp,srotOp+180,c_white,1)
+   xx -= 35
+}
+
+
+
 
 
 
@@ -488,6 +534,8 @@ var truep = clamp(truet/2,0,1)
 draw_set_alpha(1-truep)
 draw_rectangle_color(0,0,1440,900,c_black,c_black,c_black,c_black,false)
 draw_set_alpha(1)
+
+
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
 

@@ -102,6 +102,7 @@
     {"name":"sprSogliolaBlob","order":3,"path":"sprites/sprSogliolaBlob/sprSogliolaBlob.yy",},
     {"name":"sprSogliolaDiavoloNero","order":6,"path":"sprites/sprSogliolaDiavoloNero/sprSogliolaDiavoloNero.yy",},
     {"name":"sprSogliolaGiullare","order":13,"path":"sprites/sprSogliolaGiullare/sprSogliolaGiullare.yy",},
+    {"name":"sprSogliolaHud","order":40,"path":"sprites/sprSogliolaHud/sprSogliolaHud.yy",},
     {"name":"sprSogliolaPietra","order":7,"path":"sprites/sprSogliolaPietra/sprSogliolaPietra.yy",},
     {"name":"sprSogliolaSalmone","order":9,"path":"sprites/sprSogliolaSalmone/sprSogliolaSalmone.yy",},
     {"name":"sprSogliolaVolante","order":2,"path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},

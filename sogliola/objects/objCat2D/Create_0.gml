@@ -28,9 +28,16 @@ view_visible[0] = true;
 
 room_speed = 60
 
+x = global.catX
+y = global.catY
 inputDisabled = false
 enterDuel = function() {
    if inputDisabled return;
+   global.catX = x
+   global.catY = y
    inputDisabled = true
    t = 0
 }
+
+
+truet = 0

@@ -166,6 +166,7 @@
     {"id":{"name":"sprSogliolaBlob","path":"sprites/sprSogliolaBlob/sprSogliolaBlob.yy",},},
     {"id":{"name":"sprSogliolaDiavoloNero","path":"sprites/sprSogliolaDiavoloNero/sprSogliolaDiavoloNero.yy",},},
     {"id":{"name":"sprSogliolaGiullare","path":"sprites/sprSogliolaGiullare/sprSogliolaGiullare.yy",},},
+    {"id":{"name":"sprSogliolaHud","path":"sprites/sprSogliolaHud/sprSogliolaHud.yy",},},
     {"id":{"name":"sprSogliolaPietra","path":"sprites/sprSogliolaPietra/sprSogliolaPietra.yy",},},
     {"id":{"name":"sprSogliolaSalmone","path":"sprites/sprSogliolaSalmone/sprSogliolaSalmone.yy",},},
     {"id":{"name":"sprSogliolaVolante","path":"sprites/sprSogliolaVolante/sprSogliolaVolante.yy",},},
