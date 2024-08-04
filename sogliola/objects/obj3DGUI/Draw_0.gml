@@ -113,6 +113,18 @@ shader_set_uniform_f(shader_get_uniform(sha,"uSel"),0)
 matrix_set(matrix_world,matrix_build_identity())
 vertex_submit(paper,pr_trianglelist,sprite_get_texture(sprDrawing,0));
 
+// xCard
+if global.xCardVisible {
+   if global.turnPlayer == global.Player {
+   matrix_set(matrix_world, matBuild(global.Blender.DckPl.Position, [0,0,0], [1,1,1] ))
+   vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+   vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+   } else {
+   matrix_set(matrix_world, matBuild(global.Blender.DckOp.Position, [0,0,0], [1,1,1] ))
+   vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+   vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+   }
+}
 
 with( obj3DCard ) {
    worldToScreenIP(
@@ -137,6 +149,8 @@ shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
 
+
+//#region    | 2.0 Cage (shaCage)                      |
 shader_set(shaCage)
 shader_set_uniform_f_array(shader_get_uniform(shaCage,"lightDir"),lightDir);
 
@@ -145,7 +159,7 @@ gridManager.Update()
 gridManagerOpp.Update()
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
-
+//#endregion |                                         |
 //#endregion |                                         |
 //#region    | 3.0 Ocean             (shaOcean)        |
 

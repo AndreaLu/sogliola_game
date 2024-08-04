@@ -20,6 +20,7 @@
   ],
   "ResourceOrderSettings":[
     {"name":"acBottle","order":1,"path":"animcurves/acBottle/acBottle.yy",},
+    {"name":"acEye","order":2,"path":"animcurves/acEye/acEye.yy",},
     {"name":"fntCards","order":1,"path":"fonts/fntCards/fntCards.yy",},
     {"name":"fntValue","order":2,"path":"fonts/fntValue/fntValue.yy",},
     {"name":"Grafica Catene","order":2,"path":"notes/Grafica Catene/Grafica Catene.yy",},
@@ -52,6 +53,7 @@
     {"name":"sprBack","order":16,"path":"sprites/sprBack/sprBack.yy",},
     {"name":"sprBottle","order":25,"path":"sprites/sprBottle/sprBottle.yy",},
     {"name":"sprCage","order":29,"path":"sprites/sprCage/sprCage.yy",},
+    {"name":"sprCardX","order":31,"path":"sprites/sprCardX/sprCardX.yy",},
     {"name":"sprCat","order":17,"path":"sprites/sprCat/sprCat.yy",},
     {"name":"sprCursor","order":21,"path":"sprites/sprCursor/sprCursor.yy",},
     {"name":"sprCursorOp","order":26,"path":"sprites/sprCursorOp/sprCursorOp.yy",},

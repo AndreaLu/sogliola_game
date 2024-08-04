@@ -1,4 +1,5 @@
 items = new ds_list()
+sf = -1
 function Item(text,sprite,callback) constructor {
    Text = text
    Sprite = sprite
@@ -15,7 +16,10 @@ function Item(text,sprite,callback) constructor {
       var color = lerp(80,255,s*s)
       draw_sprite_ext(Sprite,Index,x,y,s,s,0,make_color_rgb(color,color,color),1)
       draw_set_halign(fa_center)
-      draw_text(x,y+32,Text)
+      draw_set_valign(fa_middle)
+      draw_set_font(fntBasic)
+      draw_set_color(c_white)
+      draw_text(x,y+42,Text)
    }
 }
 
@@ -51,9 +55,9 @@ new Item("Gioca",sprMenu,function() {
 new Item("Gioca Online", sprMenu, function() {
    show_message("online non ancora sbloccato")
 })
-new Item("Impostazioni", sprMenu, function() {
-   window_set_fullscreen(!window_get_fullscreen())
-})
+//new Item("Impostazioni", sprMenu, function() {
+//   window_set_fullscreen(!window_get_fullscreen())
+//})
 new Item("Esci", sprMenu, function() {
    game_end(0)
 })

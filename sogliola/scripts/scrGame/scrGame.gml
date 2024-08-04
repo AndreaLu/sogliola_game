@@ -24,6 +24,7 @@ fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 simulating = false              // Used in opponent AI to notify that the game is in a simulation state
 gameOvering = false
+xCardVisible = false
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
@@ -818,14 +819,30 @@ function GameOverSequence(t) {
    global.gameOvering = true
    with( obj3DCard ) locationLock = true;
    global.disableUserInput = true
-   new StackWait(6)
-   new StackMoveCamera(
-      global.Blender.CamDeckOp.From,
-      global.Blender.CamDeckOp.To,
-      global.Blender.CamDeckOp.FovY,
-      0.5
-   )
-   global.simulating = true // impedisce altri stack di aggiungersi
+   new StackWait(0.3)
+   if global.turnPlayer == global.opponent {
+      new StackMoveCamera(global.Blender.CamDeckOp.From, global.Blender.CamDeckOp.To,global.Blender.CamDeckOp.FovY,0.5)
+   } else {
+      new StackMoveCamera(global.Blender.CamDeck.From, global.Blender.CamDeck.To,global.Blender.CamDeck.FovY,0.5)
+   }
+   repeat(3) {
+      new StackWait( 0.4 )
+      new Stack( function() {global.xCardVisible = true })
+      new StackWait( 0.5 )
+      new Stack( function() {global.xCardVisible = false})
+   }
+   new StackWait( 0.1, function() {
+      new StackMoveCamera(
+         global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
+         function() {
+            new StackClosingAnimation( 790, 430, 2.2, function() {
+               GoBack()
+            })
+         })
+   })
+
+   
+   
    /*
    //new StackWait(1)
    if( t == 0) {
@@ -861,4 +878,5 @@ function GameOverSequence(t) {
       global.turnPlayer.aquarium.foreach( function(card) {card.guiCard.selected = true} )
 
    }*/
+   //global.simulating = true // impedisce altri stack di aggiungersi
 }

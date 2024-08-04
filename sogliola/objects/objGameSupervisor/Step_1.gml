@@ -13,7 +13,7 @@ var seed = 8
 //            ____________________________
 //#region    | 1.0 Game Initialization    |
 //#region    |    1.0.1 Load the game     |
-if global.debugMode && !global.multiplayer && file_exists("savedata.json")
+if false && global.debugMode && !global.multiplayer && file_exists("savedata.json")
    && show_question("savedata exists, load it?") {
    GameLoad()
    startTurn = false

@@ -403,3 +403,9 @@ function getH() {
    return h
 }
 
+
+
+function GoBack() {
+   // remove 3d graphics setup
+   room_goto(roomMenu)
+}

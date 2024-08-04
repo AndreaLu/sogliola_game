@@ -72,6 +72,7 @@
   "resources":[
     {"id":{"name":"ac1","path":"animcurves/ac1/ac1.yy",},},
     {"id":{"name":"acBottle","path":"animcurves/acBottle/acBottle.yy",},},
+    {"id":{"name":"acEye","path":"animcurves/acEye/acEye.yy",},},
     {"id":{"name":"fntBasic","path":"fonts/fntBasic/fntBasic.yy",},},
     {"id":{"name":"fntCards","path":"fonts/fntCards/fntCards.yy",},},
     {"id":{"name":"fntValue","path":"fonts/fntValue/fntValue.yy",},},
@@ -113,6 +114,7 @@
     {"id":{"name":"sprBack","path":"sprites/sprBack/sprBack.yy",},},
     {"id":{"name":"sprBottle","path":"sprites/sprBottle/sprBottle.yy",},},
     {"id":{"name":"sprCage","path":"sprites/sprCage/sprCage.yy",},},
+    {"id":{"name":"sprCardX","path":"sprites/sprCardX/sprCardX.yy",},},
     {"id":{"name":"sprCat","path":"sprites/sprCat/sprCat.yy",},},
     {"id":{"name":"sprCursor","path":"sprites/sprCursor/sprCursor.yy",},},
     {"id":{"name":"sprCursorOp","path":"sprites/sprCursorOp/sprCursorOp.yy",},},

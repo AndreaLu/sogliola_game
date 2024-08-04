@@ -406,7 +406,13 @@ if k > 0 {
 //#endregion |                                             |
 //           |_____________________________________________|
 
+
+draw_text(100,100,string( [window_mouse_get_x(), window_mouse_get_y()]) )
+
+
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
+
+
 
 

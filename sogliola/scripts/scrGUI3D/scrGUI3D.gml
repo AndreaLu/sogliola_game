@@ -76,9 +76,9 @@ function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
 // callback: function that will be called when the anim is over
 function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback) constructor {
    if global.simulating return;
-   static _dirA = [0,0,0]
-   static _dirB = [0,0,0]
-   static _dir = [0,0,0]
+   _dirA = [0,0,0]
+   _dirB = [0,0,0]
+   _dir = [0,0,0]
    t = 0
    fromA = v3Copy(global.camera.From)
    fromB = v3Copy(location)
@@ -392,5 +392,54 @@ function StackFlipBottle(targetRotz) : Stack() constructor {
 
       while global.bottle.rotz > 360
          global.bottle.rotz -= 360
+   }
+}
+
+
+function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructor {
+   x = _x
+   y = _y
+   sf = -1
+   t = 0
+   duration = _dur
+   duration2 = 2
+   phase = 0
+   Update = function() {
+      if ! surface_exists(sf) {
+         sf = surface_create(getW(),getH())
+      }
+
+      t += deltaTime()/1000000
+
+      if phase == 0 {
+         
+         var p = t/duration
+         
+         var _val = animcurve_channel_evaluate(animcurve_get_channel(acEye, 0), p)
+         var radius = lerp(getW()/2,0,_val)
+
+         surface_set_target(sf)
+         draw_clear(c_white)
+         draw_circle_color(x,y,radius,c_black,c_black,false)
+         surface_reset_target()
+
+         gpu_set_blendmode(bm_subtract)
+         draw_surface(sf,0,0)
+         gpu_set_blendmode(bm_normal)
+         if( p >= 1 ) {
+            phase = 1
+            t = 0
+         }
+      } else {
+         p = t/duration2
+         done = p >= 1
+         surface_set_target(sf)
+         draw_clear(c_white)
+         surface_reset_target()
+         gpu_set_blendmode(bm_subtract)
+         draw_surface(sf,0,0)
+         gpu_set_blendmode(bm_normal)
+      }
+
    }
 }
