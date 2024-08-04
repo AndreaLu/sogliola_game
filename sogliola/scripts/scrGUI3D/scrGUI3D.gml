@@ -106,6 +106,40 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
    }
 }
 
+function StackMoveCameraBlack(location,target,fov,duration,callback) : Stack(callback) constructor {
+   if global.simulating return;
+   _dirA = [0,0,0]
+   _dirB = [0,0,0]
+   _dir = [0,0,0]
+   t = 0
+   fromA = v3Copy(global.camera.From)
+   fromB = v3Copy(location)
+   toA = v3Copy(global.camera.To)
+   toB = v3Copy(target)
+   dur = duration
+   startFov = global.camera.FOV
+   endFov = fov
+   
+   v3SubIP(global.camera.To,global.camera.From,_dirA)
+   v3SubIP(target,location,_dirB)
+   v3NormalizeIP(_dirA,_dirA)
+   v3NormalizeIP(_dirB,_dirB)
+
+   Update = function() {
+      t = min(t+deltaTime()/(1000000*dur),1)
+      done = (t == 1)
+      var cc = sin(t*pi-pi/2)*0.5+0.5
+      var c = sin(cc*pi-pi/2)*0.5+0.5
+      // c coefficient ranging between 0 and 1
+      v3SlerpIP(_dirA,_dirB,c,_dir)
+      v3LC2IP(fromA,fromB,1-c,c,global.camera.From)
+      v3LC2IP(global.camera.From,_dir,1,1,global.camera.To)
+      global.camera.FOV = lerp(startFov,endFov,c)
+      draw_clear(c_black)
+   }
+}
+
+
 function StackWait(time,callback,args) : Stack(callback,args) constructor {
    if global.simulating return;
    t = 0
@@ -427,8 +461,7 @@ function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructo
          draw_surface(sf,0,0)
          gpu_set_blendmode(bm_normal)
          if( p >= 1 ) {
-            phase = 1
-            t = 0
+            done = true
          }
       } else {
          p = t/duration2

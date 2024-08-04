@@ -819,28 +819,37 @@ function GameOverSequence(t) {
    global.gameOvering = true
    with( obj3DCard ) locationLock = true;
    global.disableUserInput = true
-   new StackWait(0.3)
-   if global.turnPlayer == global.opponent {
-      new StackMoveCamera(global.Blender.CamDeckOp.From, global.Blender.CamDeckOp.To,global.Blender.CamDeckOp.FovY,0.5)
-   } else {
-      new StackMoveCamera(global.Blender.CamDeck.From, global.Blender.CamDeck.To,global.Blender.CamDeck.FovY,0.5)
-   }
-   repeat(3) {
-      new StackWait( 0.4 )
-      new Stack( function() {global.xCardVisible = true })
-      new StackWait( 0.5 )
-      new Stack( function() {global.xCardVisible = false})
-   }
-   new StackWait( 0.1, function() {
-      new StackMoveCamera(
-         global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
-         function() {
-            new StackClosingAnimation( 790, 430, 2.2, function() {
-               GoBack()
-            })
-         })
-   })
 
+   if t == 0 { // DECK OVER GAME END
+      new StackWait(0.3)
+      if global.turnPlayer == global.opponent {
+         new StackMoveCamera(global.Blender.CamDeckOp.From, global.Blender.CamDeckOp.To,global.Blender.CamDeckOp.FovY,0.5)
+      } else {
+         new StackMoveCamera(global.Blender.CamDeck.From, global.Blender.CamDeck.To,global.Blender.CamDeck.FovY,0.5)
+      }
+      repeat(3) {
+         new StackWait( 0.4 )
+         new Stack( function() {global.xCardVisible = true })
+         new StackWait( 0.5 )
+         new Stack( function() {global.xCardVisible = false})
+      }
+      new StackWait( 0.1, function() {
+         new StackMoveCamera(
+            global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
+            function() {
+               new StackClosingAnimation( 790, 430, 2.2, function() {
+                  new StackMoveCameraBlack(
+                     global.Blender.CamHand.From, global.Blender.CamHand.To, global.Blender.CamHand.FovY,2
+                     ,function() {GoBack()}
+                  )
+               })
+            })
+      })
+   }
+   else { // AQUARIUM COMPLETE GAME END
+
+
+   }
    
    
    /*

@@ -115,14 +115,14 @@ vertex_submit(paper,pr_trianglelist,sprite_get_texture(sprDrawing,0));
 
 // xCard
 if global.xCardVisible {
-   if global.turnPlayer == global.Player {
-   matrix_set(matrix_world, matBuild(global.Blender.DckPl.Position, [0,0,0], [1,1,1] ))
-   vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
-   vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+   if global.turnPlayer == global.player {
+      matrix_set(matrix_world, matBuild(global.Blender.DckPl.Position, [0,0,0], [1,1,1] ))
+      vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
    } else {
-   matrix_set(matrix_world, matBuild(global.Blender.DckOp.Position, [0,0,0], [1,1,1] ))
-   vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
-   vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      matrix_set(matrix_world, matBuild(global.Blender.DckOp.Position, [0,0,0], [1,1,1] ))
+      vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
    }
 }
 
