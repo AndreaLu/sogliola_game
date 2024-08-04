@@ -1,4 +1,4 @@
-depth = -y 
+//depth = -y 
 
 
 Input.right = keyboard_check(ord("D"));
