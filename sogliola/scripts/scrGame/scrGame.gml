@@ -394,6 +394,9 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
       StartEvent( new EventSummon(self, function(event) {
          event.src.controller.aquarium.Add(event.src)
          global.fishPlayed += 1
+         if event.src.controller.aquarium.size == 7 {
+            GameOverSequence(1)
+         }
       }, false) )
    }
    SummonToOpponent = function() {
@@ -406,7 +409,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
       if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
-             global.turnPlayer.aquarium.size < 8 ) {
+             global.turnPlayer.aquarium.size < 7 ) {
             global.options.Add( ["Summon target"+name,Summon, self, global.turnPlayer.aquarium] ) 
          }
       }
@@ -805,3 +808,45 @@ function CardScambioEquivalente(owner) : ActionCard(
 //#endregion |                                    |
 //#endregion |                                    |
 //           |____________________________________|
+
+
+function GameOverSequence(t) {
+   // t can be 0 (end of deck seqeuence) or 1 (filled aquarium sequence)
+   with( obj3DCard ) locationLock = true;
+   global.disableUserInput = true
+
+   new StackWait(1)
+   if( t == 0) {
+      // GAME OVER BY DECK FINISHED!
+      if global.turnPlayer == global.Player {
+         new StackMoveCamera(
+            global.Blender.CamDeck.From,
+            global.Blender.CamDeck.To,
+            global.Blender.CamDeck.FovY,
+            0.3,
+         )
+         new StackWait(2)
+      }
+      else
+      {
+         new StackMoveCamera(
+            global.Blender.CamDeck.From,
+            global.Blender.CamDeck.To,
+            global.Blender.CamDeck.FovY,
+            0.3,
+         )
+         new StackWait(2)
+      } 
+   } else {
+      // GAME OVER BY AQUARIUM FINISHED!
+
+      new StackMoveCamera(
+         global.Blender.CamAq.From,
+         global.Blender.CamAq.To,
+         global.Blender.CamAq.FovY,
+         0.3,
+      )
+      global.turnPlayer.aquarium.foreach( function(card) {card.guiCard.selected = true} )
+
+   }
+}

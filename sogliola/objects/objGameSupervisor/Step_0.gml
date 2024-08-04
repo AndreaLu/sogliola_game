@@ -38,6 +38,9 @@ if startTurn {
 
 
    global.options.Clear()
+   if( global.turnPlayer.deck.size == 0 ) {
+      GameOverSequence(0)
+   } 
    if( global.turnPlayer.deck.size > 0 ) {
       playerDrawing = true
       if global.turnPlayer == global.player {
