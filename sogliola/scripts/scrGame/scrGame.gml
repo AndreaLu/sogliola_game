@@ -23,6 +23,7 @@ options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 simulating = false              // Used in opponent AI to notify that the game is in a simulation state
+gameOvering = false
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
@@ -813,12 +814,20 @@ function CardScambioEquivalente(owner) : ActionCard(
 
 
 function GameOverSequence(t) {
-   show_message("OVER")
    // t can be 0 (end of deck seqeuence) or 1 (filled aquarium sequence)
+   global.gameOvering = true
    with( obj3DCard ) locationLock = true;
    global.disableUserInput = true
-
-   new StackWait(1)
+   new StackWait(6)
+   new StackMoveCamera(
+      global.Blender.CamDeckOp.From,
+      global.Blender.CamDeckOp.To,
+      global.Blender.CamDeckOp.FovY,
+      0.5
+   )
+   global.simulating = true // impedisce altri stack di aggiungersi
+   /*
+   //new StackWait(1)
    if( t == 0) {
       // GAME OVER BY DECK FINISHED!
       if global.turnPlayer == global.Player {
@@ -833,9 +842,9 @@ function GameOverSequence(t) {
       else
       {
          new StackMoveCamera(
-            global.Blender.CamDeck.From,
-            global.Blender.CamDeck.To,
-            global.Blender.CamDeck.FovY,
+            global.Blender.CamDeckOp.From,
+            global.Blender.CamDeckOp.To,
+            global.Blender.CamDeckOp.FovY,
             0.3,
          )
          new StackWait(2)
@@ -851,5 +860,5 @@ function GameOverSequence(t) {
       )
       global.turnPlayer.aquarium.foreach( function(card) {card.guiCard.selected = true} )
 
-   }
+   }*/
 }

@@ -234,15 +234,16 @@ global.turnPlayer == global.player && is_undefined(global.pickingTarget) && !wat
          if ! is_undefined(test) {
             var option = test
             ExecuteOption(option,true, function() {
-               new StackMoveCamera(
-                  global.Blender.CamOpponent.From,
-                  global.Blender.CamOpponent.To,
-                  global.Blender.CamOpponent.FovY,
-                  0.3, function() {
-                     global.disableUserInput = false
-                     obj3DGUI.passingTurn = false
-                  }
-               )
+               if global.turnPlayer.deck.size > 0
+                  new StackMoveCamera(
+                     global.Blender.CamOpponent.From,
+                     global.Blender.CamOpponent.To,
+                     global.Blender.CamOpponent.FovY,
+                     0.3, function() {
+                        global.disableUserInput = false
+                        obj3DGUI.passingTurn = false
+                     }
+                  )
             })
             global.disableUserInput = true
             

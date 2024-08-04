@@ -49,7 +49,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.player.deck.Add( new CardSogliolaBlob(global.player) )
       global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
    
-      global.player.deck.Add( new CardReSogliola(global.player) )
+      /*global.player.deck.Add( new CardReSogliola(global.player) )
       global.opponent.deck.Add( new CardReSogliola(global.opponent) )
    
       global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
@@ -79,7 +79,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
    
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
-      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )
+      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )*/
       
      
    }
