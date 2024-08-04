@@ -327,9 +327,11 @@ function Player() : Actor() constructor {
    static Draw = function() {
       if( deck.size > 0 ) {
          var card = deck.Draw()
-         card.guiCard.locationLock = true
+         if !global.simulating
+            card.guiCard.locationLock = true
          hand.Add( card );
-         new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
+         if !global.simulating 
+            new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
       }  
    }
 }
@@ -811,6 +813,7 @@ function CardScambioEquivalente(owner) : ActionCard(
 
 
 function GameOverSequence(t) {
+   show_message("OVER")
    // t can be 0 (end of deck seqeuence) or 1 (filled aquarium sequence)
    with( obj3DCard ) locationLock = true;
    global.disableUserInput = true
