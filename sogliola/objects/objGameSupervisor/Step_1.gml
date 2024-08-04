@@ -26,8 +26,8 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       // del match
       random_set_seed(seed)
    } else {
-      //randomize()
-      random_set_seed(seed)
+      randomize()
+      //random_set_seed(seed)
    }
      
 //#endregion |                            |
@@ -36,16 +36,28 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    repeat(1) {
       global.player.deck.Add( new CardFreeSogliola(global.player) )
       global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
+      global.player.deck.Add( new CardFreeSogliola(global.player) )
+      global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
       
+      global.player.deck.Add( new CardSogliola(global.player) )
+      global.opponent.deck.Add( new CardSogliola(global.opponent) )
+      global.player.deck.Add( new CardSogliola(global.player) )
+      global.opponent.deck.Add( new CardSogliola(global.opponent) )
       global.player.deck.Add( new CardSogliola(global.player) )
       global.opponent.deck.Add( new CardSogliola(global.opponent) )
    
       global.player.deck.Add( new CardPesca(global.player) )
       global.opponent.deck.Add( new CardPesca(global.opponent) )
+      global.player.deck.Add( new CardPesca(global.player) )
+      global.opponent.deck.Add( new CardPesca(global.opponent) )
    
       global.player.deck.Add( new CardPioggia(global.player) )
       global.opponent.deck.Add( new CardPioggia(global.opponent) )
+      global.player.deck.Add( new CardPioggia(global.player) )
+      global.opponent.deck.Add( new CardPioggia(global.opponent) )
    
+      global.player.deck.Add( new CardSogliolaBlob(global.player) )
+      global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
       global.player.deck.Add( new CardSogliolaBlob(global.player) )
       global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
    
@@ -54,13 +66,21 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       
       global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
       global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
+      global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
+      global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
    
+      global.player.deck.Add( new CardSogliolaPietra(global.player) )
+      global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
       global.player.deck.Add( new CardSogliolaPietra(global.player) )
       global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
    
       global.player.deck.Add( new CardSogliolaVolante(global.player) )
       global.opponent.deck.Add( new CardSogliolaVolante(global.opponent) )
+      global.player.deck.Add( new CardSogliolaVolante(global.player) )
+      global.opponent.deck.Add( new CardSogliolaVolante(global.opponent) )
    
+      global.player.deck.Add( new CardSogliolaSalmone(global.player) )
+      global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
       global.player.deck.Add( new CardSogliolaSalmone(global.player) )
       global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
    
@@ -74,12 +94,20 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    
       global.player.deck.Add( new CardSogliolaGiullare(global.player) )
       global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
+      global.player.deck.Add( new CardSogliolaGiullare(global.player) )
+      global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
    
+      global.player.deck.Add( new CardAcquarioProtetto(global.player) )
+      global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
+      global.player.deck.Add( new CardAcquarioProtetto(global.player) )
+      global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
       global.player.deck.Add( new CardAcquarioProtetto(global.player) )
       global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
    
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
-      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )      
+      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )
+      global.player.deck.Add( new CardScambioEquivalente(global.player) )
+      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )    
      
    }
 //#endregion |                            |
@@ -120,7 +148,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    // uso il turnPlayer
    global.turnPlayer.deck.Shuffle()
    // TODO: vedi perché è commentato
-   //global.turnOpponent.deck.Shuffle()
+   global.turnOpponent.deck.Shuffle()
    
    
    // Draw 4 cards

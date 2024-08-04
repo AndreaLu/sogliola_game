@@ -217,7 +217,7 @@ GridManager = function(isPlayer,_mesh) constructor {
          case GS.PRE_EXITING:
             t = 0
             state = GS.EXITING
-            audio = audio_play_sound(sndChain,10,false)
+            audio = audio_play_sound(sndChain2,10,false)
             break
          
          case GS.EXITING:

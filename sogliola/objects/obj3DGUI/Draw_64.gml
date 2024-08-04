@@ -203,6 +203,7 @@ if !is_undefined(global.pickingTarget) && !global.disableUserInput
 
    menu[@array_length(menu)] = [[HINT_MBR,HINT_S],"Annulla"]
    if (inputManager.keys.MBR || inputManager.keys.S)  {
+      audio_play_sound(sndTick,10,false)
       global.pickingTarget = undefined
       global.disableUserInput = true
       // Torno alla mano, al massimo non accade niente
@@ -417,6 +418,7 @@ targetScoreOp = lerp(targetScoreOp,getScore(global.opponent),0.03)
 if round(targetScoreOp) != prev {
    opScoreScal = 1.5
    opScoreRot = random_range(-5,5)
+   audio_play_sound(sndTick,10,false)
 }
 opScoreScal = lerp(opScoreScal,1,0.1)
 opScoreRot = lerp(opScoreRot,0,0.1)
@@ -447,6 +449,7 @@ targetScore = lerp(targetScore,getScore(global.player),0.03)
 if round(targetScore) != prev {
    ScoreScal = 1.5
    ScoreRot = random_range(-5,5)
+   audio_play_sound(sndTick,10,false)
 }
 ScoreScal = lerp(ScoreScal,1,0.1)
 ScoreRot = lerp(ScoreRot,0,0.1)
