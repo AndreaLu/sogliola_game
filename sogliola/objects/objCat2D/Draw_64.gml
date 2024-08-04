@@ -1,7 +1,6 @@
 if inputDisabled {
    t += deltaTime()/1000000
    if phase == 1 {
-      show_debug_message(t)
       p = t/1
       draw_set_alpha(p)
       draw_rectangle_color(0,0,getW(),getH(),c_black,c_black,c_black,c_black,false)

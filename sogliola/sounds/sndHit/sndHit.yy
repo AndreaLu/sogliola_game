@@ -1,6 +1,6 @@
 {
   "$GMSound":"",
-  "%Name":"sndChain",
+  "%Name":"sndHit",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -9,8 +9,8 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":3.414966,
-  "name":"sndChain",
+  "duration":1.735533,
+  "name":"sndHit",
   "parent":{
     "name":"Sounds",
     "path":"folders/Sounds.yy",
@@ -19,7 +19,7 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"sndChain.wav",
+  "soundFile":"sndHit.wav",
   "type":0,
-  "volume":0.39,
+  "volume":1.0,
 }

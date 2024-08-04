@@ -154,6 +154,8 @@ GridManager = function(isPlayer,_mesh) constructor {
    position = [offsX,-1.56,0]
    state = GS.OUT
    t = 0;
+   prevP = 0
+   p = 0
 
    Update = function() {
       if is_undefined(controller) {
@@ -183,27 +185,51 @@ GridManager = function(isPlayer,_mesh) constructor {
          case GS.PRE_ENTERING:
             t = 0;
             state = GS.ENTERING;
+            audio = audio_play_sound(sndChain,10,true)
             break
          case GS.ENTERING:
             t += deltaTime()/1000000
-            var p = t/3
-            var _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 0), p)*(1/0.254)
+            prevP = p
+            p = t/3
+            
+            _val = animcurve_channel_evaluate(animcurve_get_channel(ac1, 0), p)*(1/0.254)
+            //0.35 0.725 0.9 1
+            if p >= 0.35 && prevP < 0.35 {
+               audio_play_sound(sndHit,10,false)
+               audio_pause_sound(audio)
+            }
+            if p>=0.725 && prevP < 0.725 {
+               audio_play_sound(sndHit,10,false)
+            }
+
+            if p>=0.9 && prevP < 0.9 {
+               audio_play_sound(sndHit,10,false)
+            }
+
+
             position[@0] = -(1-_val)*(6.64)
-            if p >= 1
+            if p >= 1 {
                state = GS.IN
+               audio_play_sound(sndHit,10,false)
+               
+            }
             break
          case GS.PRE_EXITING:
             t = 0
             state = GS.EXITING
+            audio = audio_play_sound(sndChain,10,false)
             break
          
          case GS.EXITING:
             t += deltaTime()/1000000
-            var p = t/6
+            p = t/6
             position[@0] += 6.64*p*p
+            
    
-            if p >= 1
+            if p >= 1 {
                state = GS.OUT
+               audio_pause_sound(audio)
+            }
             break
          case GS.IN:
             break
