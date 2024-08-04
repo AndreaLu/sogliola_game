@@ -161,8 +161,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
     {"roomId":{"name":"roomBeach","path":"rooms/roomBeach/roomBeach.yy",},},
+    {"roomId":{"name":"room3DGame","path":"rooms/room3DGame/room3DGame.yy",},},
     {"roomId":{"name":"roomMenu","path":"rooms/roomMenu/roomMenu.yy",},},
     {"roomId":{"name":"roomtest3D","path":"rooms/roomtest3D/roomtest3D.yy",},},
     {"roomId":{"name":"roomMultiplayerWaiting","path":"rooms/roomMultiplayerWaiting/roomMultiplayerWaiting.yy",},},

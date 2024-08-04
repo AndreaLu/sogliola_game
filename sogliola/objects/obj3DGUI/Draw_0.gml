@@ -99,7 +99,7 @@ if (global.radioOn) {
 	bobbing = sin(current_time/60)*0.1;
 }
 matrix_set(matrix_world,matBuild([0,0,bobbing],[0,0,0],[1,1,1]))
-vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat3,0));
+vertex_submit(cat,pr_trianglelist,sprite_get_texture(sprCat,0));
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
