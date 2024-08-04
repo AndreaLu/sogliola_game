@@ -276,7 +276,7 @@ if is_undefined(objHov) || !is_instanceof(objHov,Card) && canUnhover {
 if cardZoom && !global.zoomCamTransition {
    obj3DGUI.menu[@array_length(obj3DGUI.menu)] = [HINT_MBR,"Indietro"]
    if obj3DGUI.inputManager.keys.MBR   {
-
+      audio_play_sound(sndDeal0,10,false)
       obj3DGUI.objectHover = undefined
       cardZoom = false
       global.disableUserInput = true

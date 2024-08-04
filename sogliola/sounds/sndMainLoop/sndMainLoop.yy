@@ -21,5 +21,5 @@
   "sampleRate":44100,
   "soundFile":"sndMainLoop.ogg",
   "type":1,
-  "volume":0.7,
+  "volume":0.45,
 }

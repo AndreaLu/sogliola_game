@@ -58,6 +58,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       if !watching && !global.zooming && !is_undefined(global.pickingTarget) {
          menu[@array_length(menu)] = [HINT_MBL,"Selezione Target"]
          if inputManager.keys.MBL {
+            audio_play_sound(sndDraw0,10,false)
             // Trova tutte le mosse restanti che hanno come target tutti gli elementi
             // attualmente presenti in pickingTarget, oltre alla carta attuale
             options = global.options.FilterAll( function(option,args) {
@@ -115,6 +116,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       && array_length(options) > 0 {
          menu[@array_length(menu)] = [HINT_MBL,"Gioca"]
          if( inputManager.keys.MBL ) {
+            audio_play_sound(sndDeal1,10,false)
             if( array_length(options) > 1) {
                global.disableUserInput = true
                // Zoom nell'acquario, bisogna scegliere il target
@@ -165,6 +167,7 @@ if( !is_undefined(objectHover) && global.turnPlayer == global.player ) {
       
       menu[@array_length(menu)] = [HINT_MBL,"Scegli il bersaglio"]
       if inputManager.keys.MBL {
+         audio_play_sound(sndDraw0,10,false)
          // Valuto se, tra le opzioni, si può scegliere l'acquario su cui si sta
          // passando il mouse
          aquarium = objectHover

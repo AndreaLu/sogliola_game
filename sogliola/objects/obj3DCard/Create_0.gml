@@ -64,6 +64,7 @@ setZoom = function() {
 
    cardZoom = true
    global.zooming = true
+   audio_play_sound(sndDraw0,10,false)
 
    // Compute camTo and camFrom to make a camera transition
    static camTo = [0,0,0]

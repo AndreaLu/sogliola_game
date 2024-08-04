@@ -184,6 +184,7 @@ function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callba
       for(var i=0;i<array_length(card);i++)
          card[i].guiCard.locationLock = true
    t = 0
+   prevt = 0
    phase = 0
    dur0 = 0.4
    dur1 = 0.4
@@ -203,16 +204,22 @@ function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callba
           sf = surface_create(w,h)
       surface_set_target(sf)
       draw_clear_alpha(c_white,0)
+      prevt = t
       t += deltaTime()/1000000
       var al = array_length(card)
+      
       switch(phase) {
          case( 0 ):
             draw_set_color(c_black)
             for( var i=0;i<N;i++) {
                draw_rectangle(w - t/dur0*w +40*i ,y0-hh*(N/2-i),w,y0-hh*(N/2-i-1),false)
             }
+            
+            if t >= dur0 && prevt < dur0
+               audio_play_sound(sndEffect,10,false)
             if t >= dur0*1.2 {
                phase = 1
+               
                t = 0
             }
             gpu_set_blendmode(bm_add) // TODO: usa blendmode ext per togliere dove non ci sono ancora i rect
@@ -230,6 +237,7 @@ function StackDisplayCardActivation(doLock,_card,callback,cbargs) : Stack(callba
             }
             gpu_set_blendmode(bm_normal)
             if t >= dur1 {
+               
                phase = 2
                t = 0
             }

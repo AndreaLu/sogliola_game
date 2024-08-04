@@ -41,3 +41,17 @@ enterDuel = function() {
 
 
 truet = 0
+
+info = [
+   "Benvenuto!",
+   "",
+   "",
+   "Questo e` un gioco di carte basato su sogliole!",
+   "Posiziona una sogliola al turno nel tuo acquario.",
+   "",
+   "La partita termina quando un giocatore non",
+   "puo` pescare, o quando si riempie un acquario.",
+   "",
+   "Vince chi ha l'acquario piu` bello!"
+]
+phase = 1

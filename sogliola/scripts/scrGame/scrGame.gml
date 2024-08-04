@@ -91,13 +91,14 @@ function ExecuteOption(option,send,_callback) {
                }
             }
             new StackAnimOppCursor(pos[0],pos[1],pos[2]) 
-            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1; audio_play_sound(sndDraw0,10,false)})
             new StackWait(0.1)
-            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
+            audio_play_sound(sndDeal1,10,false)
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0 })
             new StackWait(0.1)
-            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1})
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 1; audio_play_sound(sndDraw0,10,false)})
             new StackWait(0.1)
-            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0})
+            new Stack(function() { obj3DGUI.opponentCursor.subimg = 0 })
             // cursor click!
          }
          new StackAnimOppCursor(0,20,2,true)
@@ -333,7 +334,10 @@ function Player() : Actor() constructor {
             card.guiCard.locationLock = true
          hand.Add( card );
          if !global.simulating 
-            new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
+            new StackWait(0.3, function(card) {
+               card.guiCard.locationLock = false
+               audio_play_sound(sndDraw1,10,false)
+            }, card)
       }  
    }
 }
