@@ -1,6 +1,6 @@
-if global.multiplayer {
+if global.multiplayer && !global.connected {
    global.client = network_create_socket(network_socket_tcp)
-   var ip = "127.0.0.1" // server IP
+   var ip = "34.16.250.226"
    network_connect_raw_async(global.client,ip,33000)
 }
 

@@ -1,7 +1,7 @@
 {
   "$GMRoom":"v1",
   "%Name":"roomMultiplayerWaiting",
-  "creationCodeFile":"",
+  "creationCodeFile":"rooms/roomMultiplayerWaiting/RoomCreationCode.gml",
   "inheritCode":false,
   "inheritCreationOrder":false,
   "inheritLayers":false,
@@ -31,10 +31,10 @@
   "resourceType":"GMRoom",
   "resourceVersion":"2.0",
   "roomSettings":{
-    "Height":768,
+    "Height":900,
     "inheritRoomSettings":false,
     "persistent":false,
-    "Width":1366,
+    "Width":1440,
   },
   "sequenceId":null,
   "views":[

@@ -17,8 +17,10 @@ if async_load[?"type"] == network_type_data {
       case "match_start":
          if( room == roomMultiplayerWaiting ) {
             global.multiplayerStarter = (msg[1] == "0")
+            global.connected = true
+            global.gameStart = true
+            room_goto(room3DGame)
             
-            room_goto(room2DGame)
          } else {
             show_message("ERROR! match found received while not waiting")
             game_end(-1)

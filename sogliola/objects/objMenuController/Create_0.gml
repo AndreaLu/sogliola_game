@@ -50,10 +50,12 @@ function SettingsSMC() : SubMenuController() constructor {
    }
 }
 new Item("Gioca",sprMenu,function() {
+   global.multiplayer = false
    room_goto(room3DGame)
 })
 new Item("Gioca Online", sprMenu, function() {
-   show_message("online non ancora sbloccato")
+   global.multiplayer = true
+   room_goto(roomMultiplayerWaiting)
 })
 //new Item("Impostazioni", sprMenu, function() {
 //   window_set_fullscreen(!window_get_fullscreen())

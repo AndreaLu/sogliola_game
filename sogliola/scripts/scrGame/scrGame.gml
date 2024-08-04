@@ -1,4 +1,3 @@
-multiplayer = false
 allCards = new ds_list() // tutte le carte esistenti si inseriscono automaticamente in questa lista
 
 effectListeners = new ds_list()
@@ -25,6 +24,7 @@ maxFishPlayable = 1             // max number of fish that can be played this tu
 simulating = false              // Used in opponent AI to notify that the game is in a simulation state
 gameOvering = false
 xCardVisible = false
+connected = false
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
