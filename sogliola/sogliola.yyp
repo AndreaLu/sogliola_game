@@ -120,6 +120,7 @@
     {"id":{"name":"sprFreeSogliola","path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},},
     {"id":{"name":"sprFurto","path":"sprites/sprFurto/sprFurto.yy",},},
     {"id":{"name":"sprHints","path":"sprites/sprHints/sprHints.yy",},},
+    {"id":{"name":"sprMenu","path":"sprites/sprMenu/sprMenu.yy",},},
     {"id":{"name":"sprOcean","path":"sprites/sprOcean/sprOcean.yy",},},
     {"id":{"name":"sprPesca","path":"sprites/sprPesca/sprPesca.yy",},},
     {"id":{"name":"sprPescaAbbondante","path":"sprites/sprPescaAbbondante/sprPescaAbbondante.yy",},},

@@ -59,6 +59,7 @@
     {"name":"sprFreeSogliola","order":10,"path":"sprites/sprFreeSogliola/sprFreeSogliola.yy",},
     {"name":"sprFurto","order":12,"path":"sprites/sprFurto/sprFurto.yy",},
     {"name":"sprHints","order":28,"path":"sprites/sprHints/sprHints.yy",},
+    {"name":"sprMenu","order":30,"path":"sprites/sprMenu/sprMenu.yy",},
     {"name":"sprOcean","order":19,"path":"sprites/sprOcean/sprOcean.yy",},
     {"name":"sprPesca","order":1,"path":"sprites/sprPesca/sprPesca.yy",},
     {"name":"sprPescaAbbondante","order":11,"path":"sprites/sprPescaAbbondante/sprPescaAbbondante.yy",},
