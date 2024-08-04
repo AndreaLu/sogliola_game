@@ -321,16 +321,7 @@ opponentCursor.Draw()
 //#endregion |                                             |
 //#region    | 4.0 Stack                                   |
 
-if global.stack.size > 0 {
-   var stackChain = global.stack.At(0)
-   stackChain.Update()
-   if stackChain.done {
-      if !is_undefined(stackChain.Callback) {
-         stackChain.Callback(stackChain.cbArgs)
-      }
-      global.stack.RemoveAt(0)
-   }
-}
+
 //#endregion |                                             |
 //#region    | 5.0 Generating text surface                 |
 with(obj3DCard) {
@@ -481,7 +472,16 @@ draw_surface_ext(sfScore,
 //#endregion |                                             |
 //#endregion |                                             |
 //           |_____________________________________________|
-
+if global.stack.size > 0 {
+   var stackChain = global.stack.At(0)
+   stackChain.Update()
+   if stackChain.done {
+      if !is_undefined(stackChain.Callback) {
+         stackChain.Callback(stackChain.cbArgs)
+      }
+      global.stack.RemoveAt(0)
+   }
+}
 
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
