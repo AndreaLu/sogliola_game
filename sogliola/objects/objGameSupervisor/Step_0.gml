@@ -34,10 +34,15 @@ if startTurn {
    global.choiceCount = 0 // numero di mosse fatte in questo turno
    global.canPass = false
    
+   if( global.turnPlayer.deck.size == 0 ) {
+      GameOverSequence(0)
+   } 
+
    global.supervisor.StartEvent( new EventTurnBegin() )
 
 
    global.options.Clear()
+   
    if( global.turnPlayer.deck.size > 0 ) {
       playerDrawing = true
       if global.turnPlayer == global.player {
@@ -82,7 +87,8 @@ if startTurn {
             )
          }, global.turnPlayer.deck.At(0)])
       }
-   } else {
+   } 
+   /*else {
       global.supervisor.StartEvent( new EventTurnMain() )
       new StackMoveCamera(
          global.Blender.CamHand.From,
@@ -92,12 +98,13 @@ if startTurn {
             global.disableUserInput = false
          }
       )
-   }
-   global.options.Add( [ 
-      "Pass the turn", 
-      function() {global.turnPassed = true;},
-      undefined 
-   ] )
+   }*/
+   if !global.gameOvering
+      global.options.Add( [ 
+         "Pass the turn", 
+         function() {global.turnPassed = true;},
+         undefined 
+      ] )
 
 }
 //#endregion |                       |

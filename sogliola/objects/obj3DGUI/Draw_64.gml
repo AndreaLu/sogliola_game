@@ -21,10 +21,6 @@ if global.debugMode {
    // Click Buffer
    if keyboard_check(vk_escape) draw_surface(sf,0,0)
    // Protected aquarium info
-   if global.player.aquarium.protected
-      draw_text(400,100,"acquario player protetto")
-   if global.opponent.aquarium.protected
-      draw_text(400,80,"acquario avversario protetto")
    // Draw all the available moves
    //drawY = 100
    //draw_set_color(c_black)
@@ -234,15 +230,16 @@ global.turnPlayer == global.player && is_undefined(global.pickingTarget) && !wat
          if ! is_undefined(test) {
             var option = test
             ExecuteOption(option,true, function() {
-               new StackMoveCamera(
-                  global.Blender.CamOpponent.From,
-                  global.Blender.CamOpponent.To,
-                  global.Blender.CamOpponent.FovY,
-                  0.3, function() {
-                     global.disableUserInput = false
-                     obj3DGUI.passingTurn = false
-                  }
-               )
+               if global.turnPlayer.deck.size > 0
+                  new StackMoveCamera(
+                     global.Blender.CamOpponent.From,
+                     global.Blender.CamOpponent.To,
+                     global.Blender.CamOpponent.FovY,
+                     0.3, function() {
+                        global.disableUserInput = false
+                        obj3DGUI.passingTurn = false
+                     }
+                  )
             })
             global.disableUserInput = true
             
@@ -365,39 +362,39 @@ with(obj3DCard) {
 //#region    | 5.1 HUD                                     |
 //#region    |    5.1.0 Control hints                      |
 
-
-var k = array_length(menu);
-var a = 0.8;
-if k > 0 {
-   var padding = 6;
-   var w = 230;
-   var h = k * 32 + (k-1)*padding;
-   var menuX = getW()-w;
-   var menuY = getH()-h;
-   draw_set_color(c_black);
-   draw_set_alpha(0.7*a);
-   draw_roundrect(menuX-16-padding, menuY-16-padding, menuX+w-16+padding, menuY+h-16+padding, 0);
-   draw_set_color(c_white);
-   draw_set_alpha(1*a);
-   for (var i=0; i<k; i++){
-      if is_array(menu[i][0]) {
-         for( var j=0;j<array_length(menu[i][0]);j+=1) {
-            var icon = menu[i][0][j]
-            draw_sprite_ext(sprHints,icon,menuX+32*j,menuY+i*(32+padding),1,1,0,c_white,1*a)
+if( global.drawHints ) {
+   var k = array_length(menu);
+   var a = 0.8;
+   if k > 0 {
+      var padding = 6;
+      var w = 230;
+      var h = k * 32 + (k-1)*padding;
+      var menuX = getW()-w;
+      var menuY = getH()-h;
+      draw_set_color(c_black);
+      draw_set_alpha(0.7*a);
+      draw_roundrect(menuX-16-padding, menuY-16-padding, menuX+w-16+padding, menuY+h-16+padding, 0);
+      draw_set_color(c_white);
+      draw_set_alpha(1*a);
+      for (var i=0; i<k; i++){
+         if is_array(menu[i][0]) {
+            for( var j=0;j<array_length(menu[i][0]);j+=1) {
+               var icon = menu[i][0][j]
+               draw_sprite_ext(sprHints,icon,menuX+32*j,menuY+i*(32+padding),1,1,0,c_white,1*a)
+            }
+         } else {
+            draw_sprite_ext(sprHints,menu[i][0],menuX,menuY+i*(32+padding),1,1,0,c_white,1*a)
          }
-      } else {
-         draw_sprite_ext(sprHints,menu[i][0],menuX,menuY+i*(32+padding),1,1,0,c_white,1*a)
+         draw_set_font(fntBasic)
+         draw_set_valign(fa_middle)
+         draw_set_halign(fa_left)
+         var l = is_array(menu[i][0]) ? array_length(menu[i][0]) : 1
+         draw_text(menuX+16+padding+(l-1)*32,menuY+i*(32+padding),menu[i][1])
       }
-      draw_set_font(fntBasic)
-      draw_set_valign(fa_middle)
-      draw_set_halign(fa_left)
-      var l = is_array(menu[i][0]) ? array_length(menu[i][0]) : 1
-      draw_text(menuX+16+padding+(l-1)*32,menuY+i*(32+padding),menu[i][1])
+      draw_set_color(c_black);
+      draw_set_alpha(1);
    }
-   draw_set_color(c_black);
-   draw_set_alpha(1);
 }
-
 //#endregion |                                             |
 
 //#endregion |                                             |
@@ -405,7 +402,10 @@ if k > 0 {
 //#endregion |                                             |
 //           |_____________________________________________|
 
+
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)
+
+
 
 

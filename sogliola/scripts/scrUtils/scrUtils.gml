@@ -403,3 +403,21 @@ function getH() {
    return h
 }
 
+
+
+function GoBack() {
+   // Pulisce tutto
+   global.ocean.Clear()
+   global.player.aquarium.Clear()
+   global.opponent.aquarium.Clear()
+   global.player.hand.Clear()
+   global.opponent.hand.Clear()
+   global.player.deck.Clear()
+   global.opponent.deck.Clear()
+   // Elimina tutte le carte
+   global.allCards.foreach(function(card) {
+      delete card
+   })
+   // remove 3d graphics setup
+   room_goto(roomMenu)
+}

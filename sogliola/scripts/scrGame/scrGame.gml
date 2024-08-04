@@ -23,6 +23,8 @@ options = new ds_list()
 fishPlayed = 0                  // number of fish the player summoned this turn
 maxFishPlayable = 1             // max number of fish that can be played this turn
 simulating = false              // Used in opponent AI to notify that the game is in a simulation state
+gameOvering = false
+xCardVisible = false
 function Radio() constructor {}
 function Bottle() constructor {
    rotz = 0
@@ -327,9 +329,11 @@ function Player() : Actor() constructor {
    static Draw = function() {
       if( deck.size > 0 ) {
          var card = deck.Draw()
-         card.guiCard.locationLock = true
+         if !global.simulating
+            card.guiCard.locationLock = true
          hand.Add( card );
-         new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
+         if !global.simulating 
+            new StackWait(0.3, function(card) {card.guiCard.locationLock = false}, card)
       }  
    }
 }
@@ -394,6 +398,9 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
       StartEvent( new EventSummon(self, function(event) {
          event.src.controller.aquarium.Add(event.src)
          global.fishPlayed += 1
+         if event.src.controller.aquarium.size == 7 {
+            GameOverSequence(1)
+         }
       }, false) )
    }
    SummonToOpponent = function() {
@@ -406,7 +413,7 @@ function FishCard(_name,_owner, _controller, _location, _sprite, _value, _desc, 
       if( is_instanceof(event,EventTurnMain) ) {
          if( location ==  global.turnPlayer.hand &&
              global.fishPlayed < global.maxFishPlayable && 
-             global.turnPlayer.aquarium.size < 8 ) {
+             global.turnPlayer.aquarium.size < 7 ) {
             global.options.Add( ["Summon target"+name,Summon, self, global.turnPlayer.aquarium] ) 
          }
       }
@@ -805,3 +812,100 @@ function CardScambioEquivalente(owner) : ActionCard(
 //#endregion |                                    |
 //#endregion |                                    |
 //           |____________________________________|
+
+
+function GameOverSequence(t) {
+   // t can be 0 (end of deck seqeuence) or 1 (filled aquarium sequence)
+   global.gameOvering = true
+   global.disableUserInput = true
+
+   if t == 0 { // DECK OVER GAME END
+      with( obj3DCard ) locationLock = true;
+      new StackWait(0.3)
+      if global.turnPlayer == global.opponent {
+         new StackMoveCamera(global.Blender.CamDeckOp.From, global.Blender.CamDeckOp.To,global.Blender.CamDeckOp.FovY,0.5)
+      } else {
+         new StackMoveCamera(global.Blender.CamDeck.From, global.Blender.CamDeck.To,global.Blender.CamDeck.FovY,0.5)
+      }
+      repeat(3) {
+         new StackWait( 0.4 )
+         new Stack( function() {global.xCardVisible = true })
+         new StackWait( 0.5 )
+         new Stack( function() {global.xCardVisible = false})
+      }
+      new StackWait( 0.1, function() {
+         new StackMoveCamera(
+            global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
+            function() {
+               new StackClosingAnimation( 790, 430, 2.2, function() {
+                  new StackMoveCameraBlack(
+                     global.Blender.CamHand.From, global.Blender.CamHand.To, global.Blender.CamHand.FovY,2
+                     ,function() {GoBack()}
+                  )
+               })
+            })
+      })
+   }
+   else { // AQUARIUM COMPLETE GAME END
+      new StackWait(0.5, function() {with( obj3DCard ) locationLock = true;})
+      new StackMoveCamera(
+         global.Blender.CamAq.From, global.Blender.CamAq.To, global.Blender.CamAq.FovY,
+         0.5, function() {
+            global.turnPlayer.aquarium._cards.foreach( function(card) {
+               card.guiCard.superSelected = true
+            })
+            new StackWait(3)
+            new StackMoveCamera(
+               global.Blender.CamCat.From, global.Blender.CamCat.To,global.Blender.CamCat.FovY,1,
+               function() {
+                  new StackClosingAnimation( 790, 430, 2.2, function() {
+                     new StackMoveCameraBlack(
+                        global.Blender.CamHand.From, global.Blender.CamHand.To, global.Blender.CamHand.FovY,2
+                        ,function() {GoBack()}
+                     )
+                  })
+               }
+            )
+         }
+      )
+
+   }
+   
+   
+   /*
+   //new StackWait(1)
+   if( t == 0) {
+      // GAME OVER BY DECK FINISHED!
+      if global.turnPlayer == global.Player {
+         new StackMoveCamera(
+            global.Blender.CamDeck.From,
+            global.Blender.CamDeck.To,
+            global.Blender.CamDeck.FovY,
+            0.3,
+         )
+         new StackWait(2)
+      }
+      else
+      {
+         new StackMoveCamera(
+            global.Blender.CamDeckOp.From,
+            global.Blender.CamDeckOp.To,
+            global.Blender.CamDeckOp.FovY,
+            0.3,
+         )
+         new StackWait(2)
+      } 
+   } else {
+      // GAME OVER BY AQUARIUM FINISHED!
+
+      new StackMoveCamera(
+         global.Blender.CamAq.From,
+         global.Blender.CamAq.To,
+         global.Blender.CamAq.FovY,
+         0.3,
+      )
+      global.turnPlayer.aquarium.foreach( function(card) {card.guiCard.selected = true} )
+
+   }*/
+   //global.simulating = true // impedisce altri stack di aggiungersi
+}

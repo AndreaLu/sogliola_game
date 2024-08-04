@@ -5,9 +5,9 @@
 // 1.0 Game Initialization
 
 // Exit if already initialzied 
-if gameInitialized || (room != room2DGame && room != room3DGame )
+if !global.gameStart || (room != room2DGame && room != room3DGame )
    exit
-gameInitialized = true
+global.gameStart = false
 var seed = 8
 
 //            ____________________________
@@ -50,8 +50,8 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
    
       global.player.deck.Add( new CardReSogliola(global.player) )
-      global.opponent.deck.Add( new CardReSogliola(global.opponent) )
-   
+      global.opponent.deck.Add( new CardReSogliola(global.opponent))
+      
       global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
       global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
    
@@ -79,8 +79,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
    
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
-      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )
-      
+      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )      
      
    }
 //#endregion |                            |

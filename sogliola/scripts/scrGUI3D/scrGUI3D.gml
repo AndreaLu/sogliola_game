@@ -76,9 +76,9 @@ function StackCardDrawAnim(guiCard,callback) : Stack(undefined) constructor {
 // callback: function that will be called when the anim is over
 function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback) constructor {
    if global.simulating return;
-   static _dirA = [0,0,0]
-   static _dirB = [0,0,0]
-   static _dir = [0,0,0]
+   _dirA = [0,0,0]
+   _dirB = [0,0,0]
+   _dir = [0,0,0]
    t = 0
    fromA = v3Copy(global.camera.From)
    fromB = v3Copy(location)
@@ -105,6 +105,40 @@ function StackMoveCamera(location,target,fov,duration,callback) : Stack(callback
       global.camera.FOV = lerp(startFov,endFov,c)
    }
 }
+
+function StackMoveCameraBlack(location,target,fov,duration,callback) : Stack(callback) constructor {
+   if global.simulating return;
+   _dirA = [0,0,0]
+   _dirB = [0,0,0]
+   _dir = [0,0,0]
+   t = 0
+   fromA = v3Copy(global.camera.From)
+   fromB = v3Copy(location)
+   toA = v3Copy(global.camera.To)
+   toB = v3Copy(target)
+   dur = duration
+   startFov = global.camera.FOV
+   endFov = fov
+   
+   v3SubIP(global.camera.To,global.camera.From,_dirA)
+   v3SubIP(target,location,_dirB)
+   v3NormalizeIP(_dirA,_dirA)
+   v3NormalizeIP(_dirB,_dirB)
+
+   Update = function() {
+      t = min(t+deltaTime()/(1000000*dur),1)
+      done = (t == 1)
+      var cc = sin(t*pi-pi/2)*0.5+0.5
+      var c = sin(cc*pi-pi/2)*0.5+0.5
+      // c coefficient ranging between 0 and 1
+      v3SlerpIP(_dirA,_dirB,c,_dir)
+      v3LC2IP(fromA,fromB,1-c,c,global.camera.From)
+      v3LC2IP(global.camera.From,_dir,1,1,global.camera.To)
+      global.camera.FOV = lerp(startFov,endFov,c)
+      draw_clear(c_black)
+   }
+}
+
 
 function StackWait(time,callback,args) : Stack(callback,args) constructor {
    if global.simulating return;
@@ -392,5 +426,54 @@ function StackFlipBottle(targetRotz) : Stack() constructor {
 
       while global.bottle.rotz > 360
          global.bottle.rotz -= 360
+   }
+}
+
+
+function StackClosingAnimation(_x,_y,_dur,callback) : Stack(callback) constructor {
+   x = _x
+   y = _y
+   sf = -1
+   t = 0
+   duration = _dur
+   duration2 = 2
+   phase = 0
+   global.drawHints = false
+   Update = function() {
+      if ! surface_exists(sf) {
+         sf = surface_create(getW(),getH())
+      }
+
+      t += deltaTime()/1000000
+
+      if phase == 0 {
+         
+         var p = t/duration
+         
+         var _val = animcurve_channel_evaluate(animcurve_get_channel(acEye, 0), p)
+         var radius = lerp(getW()/2,0,_val)
+
+         surface_set_target(sf)
+         draw_clear(c_white)
+         draw_circle_color(x,y,radius,c_black,c_black,false)
+         surface_reset_target()
+
+         gpu_set_blendmode(bm_subtract)
+         draw_surface(sf,0,0)
+         gpu_set_blendmode(bm_normal)
+         if( p >= 1 ) {
+            done = true
+         }
+      } else {
+         p = t/duration2
+         done = p >= 1
+         surface_set_target(sf)
+         draw_clear(c_white)
+         surface_reset_target()
+         gpu_set_blendmode(bm_subtract)
+         draw_surface(sf,0,0)
+         gpu_set_blendmode(bm_normal)
+      }
+
    }
 }

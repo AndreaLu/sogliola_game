@@ -107,6 +107,7 @@ setZoom = function() {
 // when true, the card shines. This is used to indicate that this card
 // can be selected as a target during the activation of a card
 selected = false 
+superSelected = false
 lerpSpeed = 1
 
 surfSprite = -1
