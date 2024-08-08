@@ -417,7 +417,7 @@ prev = round(targetScoreOp)
 targetScoreOp = lerp(targetScoreOp,getScore(global.opponent),0.03)
 if round(targetScoreOp) != prev {
    opScoreScal = 1.5
-   opScoreRot = random_range(-5,5)
+   opScoreRot = PRNG.randomRange(-5,5)
    audio_play_sound(sndTick,10,false)
 }
 opScoreScal = lerp(opScoreScal,1,0.1)
@@ -448,7 +448,7 @@ prev = round(targetScore)
 targetScore = lerp(targetScore,getScore(global.player),0.03)
 if round(targetScore) != prev {
    ScoreScal = 1.5
-   ScoreRot = random_range(-5,5)
+   ScoreRot = PRNG.randomRange(-5,5)
    audio_play_sound(sndTick,10,false)
 }
 ScoreScal = lerp(ScoreScal,1,0.1)
@@ -474,7 +474,7 @@ var yy = w*3/2 + 10
 size = global.player.aquarium.size
 if size != prevSize {
    sscal = 2.9
-   srot = random_range(-40,40)
+   srot = PRNG.randomRange(-40,40)
 }
 prevSize = size
 sscal = lerp(sscal,2,0.1)
@@ -497,7 +497,7 @@ var yy = w*3/2 + 10
 size = global.opponent.aquarium.size
 if size != prevSizeOp {
    sscalOp = 2.9
-   srotOp = random_range(-40,40)
+   srotOp = PRNG.randomRange(-40,40)
 }
 prevSizeOp = size
 sscalOp = lerp(sscalOp,2,0.1)

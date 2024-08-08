@@ -24,10 +24,12 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    if global.multiplayer {
       // TODO: genera un seme lato server condiviso per entrambi i giocatori
       // del match
-      random_set_seed(seed)
+      PRNG.setState(seed)
    } else {
-      randomize()
-      //random_set_seed(seed)
+      if global.debugMode
+         PRNG.setState(seed)
+      else
+         PRNG.randomise()
    }
      
 //#endregion |                            |
@@ -127,7 +129,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       }
    }
    var finalAngle = global.turnPlayer == global.opponent ? 
-      random_range(180-10,180+10) : random_range(-10,10)
+      PRNG.randomRange(180-10,180+10) : PRNG.randomRange(-10,10)
    if abs(finalAngle-global.bottle.rotz) < 90 || finalAngle < global.bottle.rotz
       finalAngle += 360
    new StackFlipBottle(finalAngle)

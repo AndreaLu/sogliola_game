@@ -191,7 +191,7 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
             //var passProb = global.choiceCount/2*0.8 * (7-global.player.aquarium.size)/7 * clamp(global.opponent.deck.size/3*0.2,0,1)
             //passProb = clamp(passProb,0,1)
             passProb = global.choiceCount > 1 ? 0.5 : 0
-            var doPass = (irandom_range(1,100) <= 100*passProb)
+            var doPass = (PRNG.randomRange(1,100) <= 100*passProb)
             if doPass || is_undefined(best) || best.value < 0 {
                best = {option: optionPass, value: 0}
             }

@@ -193,7 +193,7 @@ function CardCollection(_owner) constructor {
    
    static Random = function() {
       if size == 0 return undefined;
-      return _cards.At(irandom(size-1))
+      return _cards.At(PRNG.iRandom(size-1))
    }
 
    static Clear = function() {

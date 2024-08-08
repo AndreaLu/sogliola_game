@@ -1,4 +1,4 @@
-debugMode = false // TODO: setta false in produzione
+debugMode = true // TODO: setta false in produzione
 
 global.catX = 200
 global.catY = 140
@@ -190,6 +190,7 @@ function GameSave() {
    var file = file_text_open_write("savedata.json")
    file_text_write_string(file,json)
    file_text_close(file)
+   
 }
 function GameGetJSON() {
    var cards = []
@@ -202,7 +203,8 @@ function GameGetJSON() {
       global.opponent.aquarium.protected,
       global.maxFishPlayable,
       global.fishPlayed,
-      global.onePlayerFinished
+      global.onePlayerFinished,
+      PRNG.getState()
    ]
    var json = json_stringify([cards,globals])
    return json
@@ -321,12 +323,10 @@ function GameLoadJson(json) {
    global.maxFishPlayable = globals[3]
    global.fishPlayed = globals[4]
    global.onePlayerFinished = globals[5]
+   PRNG.setState(globals[6])
 }
 
 function GameLoad() {
-   random_set_seed(0) // il seed non è importante, poiché non conta ciò che sarebbe
-   // successo dopo nel game da cui proviene il salvataggio, ma conta 
-   // solamente avere una continuazione sempre riproducibile dai savedata
    var file = file_text_open_read("savedata.json")
    var json = file_text_read_string(file)
    file_text_close(file)

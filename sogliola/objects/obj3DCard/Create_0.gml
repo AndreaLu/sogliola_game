@@ -12,7 +12,7 @@ guiLocation = undefined
 card = undefined
 
 // used when the card is in the deck
-randomrot = random_range(-5,5);
+randomrot = PRNG.randomRange(-5,5);
 
 //#region 3D Movement
 // +----------------------------------------------------------------------+

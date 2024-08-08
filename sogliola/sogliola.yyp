@@ -112,6 +112,7 @@
     {"id":{"name":"scrGame","path":"scripts/scrGame/scrGame.yy",},},
     {"id":{"name":"scrGUI2D","path":"scripts/scrGUI2D/scrGUI2D.yy",},},
     {"id":{"name":"scrGUI3D","path":"scripts/scrGUI3D/scrGUI3D.yy",},},
+    {"id":{"name":"scrPRNG","path":"scripts/scrPRNG/scrPRNG.yy",},},
     {"id":{"name":"scrUtils","path":"scripts/scrUtils/scrUtils.yy",},},
     {"id":{"name":"sha","path":"shaders/sha/sha.yy",},},
     {"id":{"name":"shaCage","path":"shaders/shaCage/shaCage.yy",},},
