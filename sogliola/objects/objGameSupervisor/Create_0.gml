@@ -23,7 +23,7 @@ global.turnPlayer = undefined
 global.onePlayerFinished = false
 
 
-networkMesages = new ds_list()
+networkMessages = new ds_list()
 
 gameInitialized = false
 

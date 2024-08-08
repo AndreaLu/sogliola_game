@@ -217,7 +217,7 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
             var message = networkMessages.At(0)
             var executed = false
             if array_length(message) == 2 {
-               var choice = real(msg[1])
+               var choice = real(message[1])
                var option = global.options.At(choice)
                ExecuteOption(option,false)
                executed = true
@@ -235,12 +235,12 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
                }
             }
             if( executed ) {
-               networkMessages.removeAt(0)
+               networkMessages.RemoveAt(0)
             }
 
          }
       } else {
-         networkWaitingb -= deltaTime()/1000000
+         networkWaiting -= deltaTime()/1000000
       }
    }
 }
