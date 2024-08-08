@@ -43,14 +43,16 @@ if !onlyDrawAquarium {
             obj3DGUI.uCardCol,
             [(card.index+1)/255,0,0]
          );
-         matrix_set(matrix_world,mat)
-         vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
-         vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+         if is_instanceof(card.location,Aquarium) {
+            matrix_set(matrix_world,mat)
+            vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
+            vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+         }
          // draw the ghost card
          if card.location == global.player.hand && !global.zooming {
             matrix_set(matrix_world,ghost.mat)
             vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
-			vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+			   vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
          }
       }
    }
