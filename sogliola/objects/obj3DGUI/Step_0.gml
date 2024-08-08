@@ -3,8 +3,8 @@ tt += 1
 objectHover = undefined
 if surface_exists(sf) && !global.zooming && !camTransition {
    var color
-   if tt >= 5 {
-      t = 0
+   if tt >= 10 {
+      tt = 0
       color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
    } else {
       color = prevColor
