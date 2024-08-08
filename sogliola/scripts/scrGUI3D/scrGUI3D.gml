@@ -164,8 +164,8 @@ function StackAnimOppCursor(destX,destY,destZ,back) : Stack(undefined) construct
       // Lerpa il cursore verso la destinazione con una maxspeed
       var curX = obj3DGUI.opponentCursor.x
       var curY = obj3DGUI.opponentCursor.y
-      obj3DGUI.opponentCursor.x = lerp(curX,dest[0],0.05)
-      obj3DGUI.opponentCursor.y = lerp(curY,dest[1],0.05)
+      obj3DGUI.opponentCursor.x = lerp(curX,dest[0],deltaTime()/1000000*8)
+      obj3DGUI.opponentCursor.y = lerp(curY,dest[1],deltaTime()/1000000*8)
 
       done = point_distance(
          obj3DGUI.opponentCursor.x,

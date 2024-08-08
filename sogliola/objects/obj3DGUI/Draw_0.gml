@@ -34,13 +34,13 @@ if !is_undefined(global.pickingTarget) {
 surface_set_target_ext(1,sf)
 shader_set(shaClickBuffer)
 draw_clear(c_dkgray)
-shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),0)
+shader_set_uniform_f(uAquarium,0)
 
 if !onlyDrawAquarium {
    with( obj3DCard ) {
       if !is_undefined(card) {
          shader_set_uniform_f_array(
-            shader_get_uniform(shaClickBuffer,"cardCol"),
+            obj3DGUI.uCardCol,
             [(card.index+1)/255,0,0]
          );
          matrix_set(matrix_world,mat)
@@ -59,17 +59,17 @@ if !onlyDrawAquarium {
 
 
 matrix_set(matrix_world,matrix_build_identity())
-shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),1)
+shader_set_uniform_f(uAquarium,1)
 vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
-shader_set_uniform_f(shader_get_uniform(shaClickBuffer,"aquarium"),0)
+shader_set_uniform_f(uAquarium,0)
 shader_set_uniform_f_array(
-   shader_get_uniform(shaClickBuffer,"cardCol"),
+   uCardCol,
    [0,255,0]
 );
 vertex_submit(radio,pr_trianglelist,-1);
 
 shader_set_uniform_f_array(
-   shader_get_uniform(shaClickBuffer,"cardCol"),
+   uCardCol,
    [0,0.3,0]
 );
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
@@ -89,10 +89,10 @@ draw_clear(make_color_rgb(48,117,163))
 
 shader_set(sha)
 shader_set_uniform_f(
-   shader_get_uniform(sha, "u_Time"),
+   uTime,
    current_time / 1000.0
 );
-shader_set_uniform_f_array(shader_get_uniform(sha,"lightDir"),lightDir);
+shader_set_uniform_f_array(uLightDir,lightDir);
 
 var bobbing = sin(current_time/600)*0.05;
 if (global.radioOn) {
@@ -105,10 +105,10 @@ vertex_submit(scene,pr_trianglelist,sprite_get_texture(sprSand,0));
 vertex_submit(table,pr_trianglelist,sprite_get_texture(sprTable,0));
 vertex_submit(radio,pr_trianglelist,sprite_get_texture(sprRadio,0));
 
-shader_set_uniform_f(shader_get_uniform(sha,"uSel"),global.bottle.highlight)
+shader_set_uniform_f(uSel,global.bottle.highlight)
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
-shader_set_uniform_f(shader_get_uniform(sha,"uSel"),0)
+shader_set_uniform_f(uSel,0)
 
 matrix_set(matrix_world,matrix_build_identity())
 vertex_submit(paper,pr_trianglelist,sprite_get_texture(sprDrawing,0));
@@ -135,7 +135,7 @@ with( obj3DCard ) {
    )
    if !is_undefined(card) {
       shader_set_uniform_f(
-         shader_get_uniform(sha, "uSel"),
+         obj3DGUI.uSel,
          selected || superSelected ? 1.0 : 0.0
       );
       matrix_set(matrix_world,mat)
@@ -144,7 +144,7 @@ with( obj3DCard ) {
       vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
    }
 }
-shader_set_uniform_f(shader_get_uniform(sha, "uSel"),0.0)
+shader_set_uniform_f(uSel,0.0)
 
 matrix_set(matrix_world,matrix_build_identity())
 shader_reset()
@@ -152,7 +152,7 @@ shader_reset()
 
 //#region    | 2.0 Cage (shaCage)                      |
 shader_set(shaCage)
-shader_set_uniform_f_array(shader_get_uniform(shaCage,"lightDir"),lightDir);
+shader_set_uniform_f_array(uCageLightDir,lightDir);
 
 
 gridManager.Update()
@@ -165,10 +165,10 @@ shader_reset()
 
 matrix_set(matrix_world,matBuild([0,0,0],[0,0,0],[1,1,1]))
 shader_set(shaOcean);
-var sMask = shader_get_sampler_index(shaOcean, "t_Mask");
+
 texture_set_stage(sMask, sprite_get_texture(sprWaterMask, 0));
-shader_set_uniform_f(shader_get_uniform(shaOcean, "u_Time"), current_time / 1000.0);
-shader_set_uniform_f(shader_get_uniform(shaOcean, "v_Time"), current_time / 1000.0);
+shader_set_uniform_f(uOceanTime, current_time / 1000.0);
+shader_set_uniform_f(vOceanTime, current_time / 1000.0);
 vertex_submit(ocean,pr_trianglelist,sprite_get_texture(sprWater,0));
 
 matrix_set(matrix_world,matrix_build_identity())
@@ -208,14 +208,11 @@ if( !is_undefined(global.pickingTarget) &&
 shader_set(shaTable);
 
 
-shader_set_uniform_f(shader_get_uniform(shaTable, "plAqSel"), plAqSel);
-shader_set_uniform_f(shader_get_uniform(shaTable, "opAqSel"), opAqSel);
-var sAlpha = shader_get_sampler_index(shaTable, "t_Alpha");
-var sMask = shader_get_sampler_index(shaTable, "t_Mask");
-
+shader_set_uniform_f(uPlAqSel, plAqSel);
+shader_set_uniform_f(uOpAqSel, opAqSel);
 texture_set_stage(sAlpha, sprite_get_texture(sprAlpha, 0));
-texture_set_stage(sMask, sprite_get_texture(sprWaterMask, 0));
-shader_set_uniform_f(shader_get_uniform(shaTable, "u_Time"), current_time / 1000.0);
+texture_set_stage(sTableMask, sprite_get_texture(sprWaterMask, 0));
+shader_set_uniform_f(uTableTime, current_time / 1000.0);
 vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
 
 

@@ -312,22 +312,8 @@ if watching  && !watchingBack && !global.zooming
    }
 }
 //#endregion |                                             |
-//#region    | 3.0 Draw the Cursor                         |
-draw_sprite_ext(
-   sprCursor,
-   mouse_check_button(mb_any) ? 1 : 0,        // subimg
-   inputManager.mouse.X,inputManager.mouse.Y, // x,y
-   2,2,0, c_white,1                           // scale,rot,col,alpha
-)
-opponentCursor.Draw()
-
 //#endregion |                                             |
-//#endregion |                                             |
-//#region    | 4.0 Stack                                   |
-
-
-//#endregion |                                             |
-//#region    | 5.0 Generating text surface                 |
+//#region    | 3.0 Generating text surface                 |
 with(obj3DCard) {
    if !is_undefined(card) {
       if !is_instanceof(card.location,Deck) {
@@ -354,8 +340,8 @@ with(obj3DCard) {
    }
 }
 //#endregion |                                             |
-//#region    | 5.1 HUD                                     |
-//#region    |    5.1.0 Control hints                      |
+//#region    | 4.0 HUD                                     |
+//#region    |    4.1.0 Control hints                      |
 
 if( global.drawHints ) {
    var k = array_length(menu);
@@ -391,14 +377,8 @@ if( global.drawHints ) {
    }
 }
 //#endregion |                                             |
-//#region    |    5.1.2 Punteggio                          |
-
-
-//draw_set_color(c_black);
-//draw_set_alpha(0.7*a);
-//draw_roundrect(0,100, 120, 300, 0);
-//draw_set_color(c_white);
-//draw_set_alpha(1*a);
+//#region    |    4.1.2 Punteggio                          |
+var dt = deltaTime()/1000000*12
 
 var w = sprite_get_width(sprScore)
 draw_sprite_ext(sprScore,0, 
@@ -409,19 +389,15 @@ draw_sprite_ext(sprScore,0,
 3,3,0,c_white,1)
 
 
-
-
-
-
 prev = round(targetScoreOp)
-targetScoreOp = lerp(targetScoreOp,getScore(global.opponent),0.03)
+targetScoreOp = lerp(targetScoreOp,getScore(global.opponent),dt/10*3)
 if round(targetScoreOp) != prev {
    opScoreScal = 1.5
    opScoreRot = PRNG.randomRange(-5,5)
    audio_play_sound(sndTick,10,false)
 }
-opScoreScal = lerp(opScoreScal,1,0.1)
-opScoreRot = lerp(opScoreRot,0,0.1)
+opScoreScal = lerp(opScoreScal,1,dt)
+opScoreRot = lerp(opScoreRot,0,dt)
 
 if !surface_exists(sfScore)
    sfScore = surface_create(100,100)
@@ -445,14 +421,14 @@ draw_surface_ext(sfScore,
 
 
 prev = round(targetScore)
-targetScore = lerp(targetScore,getScore(global.player),0.03)
+targetScore = lerp(targetScore,getScore(global.player), dt/10*3 )
 if round(targetScore) != prev {
    ScoreScal = 1.5
    ScoreRot = PRNG.randomRange(-5,5)
    audio_play_sound(sndTick,10,false)
 }
-ScoreScal = lerp(ScoreScal,1,0.1)
-ScoreRot = lerp(ScoreRot,0,0.1)
+ScoreScal = lerp(ScoreScal,1,dt)
+ScoreRot = lerp(ScoreRot,0,dt)
 
 surface_set_target(sfScore)
 draw_clear_alpha(c_black,0)
@@ -477,8 +453,8 @@ if size != prevSize {
    srot = PRNG.randomRange(-40,40)
 }
 prevSize = size
-sscal = lerp(sscal,2,0.1)
-srot = lerp(srot,0,0.1)
+sscal = lerp(sscal,2,dt)
+srot = lerp(srot,0,dt)
 repeat( 7 ) {
    draw_sprite_ext(sprSogliolaHud,0,xx,yy,2,2,0,c_white,1)
    xx += 35
@@ -500,8 +476,8 @@ if size != prevSizeOp {
    srotOp = PRNG.randomRange(-40,40)
 }
 prevSizeOp = size
-sscalOp = lerp(sscalOp,2,0.1)
-srotOp = lerp(srotOp,0,0.1)
+sscalOp = lerp(sscalOp,2,dt)
+srotOp = lerp(srotOp,0,dt)
 repeat( 7 ) {
    draw_sprite_ext(sprSogliolaHud,0,xx,yy,2,2,180,c_white,1)
    xx -= 35
@@ -520,10 +496,18 @@ repeat( size ) {
 
 
 //#endregion |                                             |
+//#region    |    4.1.3 Draw the Cursor                    |
+draw_sprite_ext(
+   sprCursor,
+   mouse_check_button(mb_any) ? 1 : 0,        // subimg
+   inputManager.mouse.X,inputManager.mouse.Y, // x,y
+   2,2,0, c_white,1                           // scale,rot,col,alpha
+)
+opponentCursor.Draw()
+
+//#endregion |     
 //#endregion |                                             |
-//#endregion |                                             |
-//#endregion |                                             |
-//           |_____________________________________________|
+//#region    | 5.0 Stack                                   |
 if global.stack.size > 0 {
    var stackChain = global.stack.At(0)
    stackChain.Update()
@@ -534,6 +518,9 @@ if global.stack.size > 0 {
       global.stack.RemoveAt(0)
    }
 }
+//#endregion |                                             |
+//           |_____________________________________________|
+
 
 truet += deltaTime()/1000000
 var truep = clamp(truet/2,0,1)

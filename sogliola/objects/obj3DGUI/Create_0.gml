@@ -15,6 +15,21 @@ srot=0
 srotOp=0
 prevSize=0
 prevSizeOp =0
+
+uAquarium = shader_get_uniform(shaClickBuffer,"aquarium")
+uCardCol = shader_get_uniform(shaClickBuffer,"cardCol")
+uTime = shader_get_uniform(sha, "u_Time") 
+uLightDir = shader_get_uniform(sha,"lightDir")
+uCageLightDir = shader_get_uniform(shaCage,"lightDir")
+uSel = shader_get_uniform(sha,"uSel")
+sMask = shader_get_sampler_index(shaOcean, "t_Mask")
+sTableMask = shader_get_sampler_index(shaTable, "t_Mask");
+sAlpha = shader_get_sampler_index(shaTable, "t_Alpha");
+uOceanTime = shader_get_uniform(shaOcean, "u_Time")
+vOceanTime = shader_get_uniform(shaOcean, "v_Time")
+uPlAqSel = shader_get_uniform(shaTable, "plAqSel")
+uOpAqSel = shader_get_uniform(shaTable, "opAqSel")
+uTableTime = shader_get_uniform(shaTable, "u_Time")
 inputManager = {
    // when recording is true, the user plays normally, 
    // otherwise its a playback and input comes from a recording file

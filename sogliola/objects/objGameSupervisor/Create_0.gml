@@ -11,6 +11,7 @@ if global.multiplayer {
    network_connect_raw_async(global.client,ip,33000)
 }
 
+show_debug_overlay( global.debugMode )
 attesa = 0
 global.supervisor = new Supervisor()
 

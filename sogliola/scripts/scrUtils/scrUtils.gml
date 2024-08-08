@@ -376,8 +376,8 @@ function networkSendPacket( _msg ) {
 }
 
 function deltaTime() {
-   if global.debugMode
-      return 1000000/room_speed
+   //if global.debugMode
+   //   return 1000000/room_speed
    return delta_time;
 }
 

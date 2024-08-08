@@ -3,6 +3,9 @@ function v3Copy(v) { // creates a new vector copy of v
    v3SetIP(v,w)
    return w
 }
+function v3Eq(v,w) {
+   return w[0] == v[0] && w[1] == v[1] && w[2] == v[2]
+}
 // puts the vector v into w
 function v3SetIP(v,w) { // w <- v
    w[@0] = v[0]
@@ -43,8 +46,11 @@ function v3Sum(v,w) {
 	return [v[0]+w[0],v[1]+w[1],v[2]+w[2]];
 }
 function v3LerpIP(v,w,a,z) {
+   gml_pragma("forceinline")
    a = 1-clamp(a,0,1)
-   v3LC2IP(v,w,a,1-a,z)
+   z[@0] = v[0]*a + w[0]*(1-a);
+	z[@1] = v[1]*a + w[1]*(1-a);
+	z[@2] = v[2]*a + w[2]*(1-a);
 }
 // Puts a*v + b*w into z and returns it
 function v3LC2IP(v,w,a,b,z) {
@@ -275,6 +281,7 @@ function mesh3DGLoad(fname) {
 		vertex_normal(vertexBuffer,_x,_y,_z);
 	}
 	vertex_end(vertexBuffer);
+   vertex_freeze(vertexBuffer)
 	return vertexBuffer;
 }
 // Frees the memory used by a 3DG mesh
@@ -372,7 +379,7 @@ function quat2mat(q) {
     var qy = q[2]
     var qz = q[3]
     
-    var m = array_create(16,0)// [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+    var m = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     m[@15] = 1
     
     m[@0] = 1 - 2 * (qy * qy + qz * qz)

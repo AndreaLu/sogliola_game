@@ -137,8 +137,8 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
 
       var best = undefined
       // AI turn
-      attesa += 1
-      if( attesa >= room_speed*0.5 ) {
+      attesa += deltaTime()/1000000
+      if( attesa >= 0.5 ) {
       
          attesa = 0
          var choice

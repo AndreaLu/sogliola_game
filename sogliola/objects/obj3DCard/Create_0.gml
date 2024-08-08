@@ -19,9 +19,11 @@ randomrot = PRNG.randomRange(-5,5);
 // | 3D Movement variables                                                |
 // +----------------------------------------------------------------------+
 position = [0,0,0]
+prevPosition = [0,0,0]
 scale = [1,1,1]
 mat = matrix_build_identity()
 rot = [0,0,0]
+prevRot = [0,0,0]
 targetPos = [0,0,0]
 targetMat = matrix_build_identity()
 targetScal = [1,1,1]
@@ -109,6 +111,8 @@ setZoom = function() {
 // can be selected as a target during the activation of a card
 selected = false 
 superSelected = false
-lerpSpeed = 1
+//lerpSpeed = 1
 
 surfSprite = -1
+
+transforming = 0

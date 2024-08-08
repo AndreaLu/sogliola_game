@@ -199,23 +199,32 @@ if card.location != global.player.hand {
 //#region    |    2.1 Rendering             |
 
 
-
+var lerpSpeed = deltaTime()/1000000*8
 v3LerpIP(position,targetPos,lerpSpeed,position)
 v3LerpIP(scale,targetScal,lerpSpeed,scale)
 v3LerpIP(rot,targetRot,lerpSpeed,rot)
-targetMat2 = matrix_multiply(
-   matBuild(zero3,rot,uno3),
-   targetMat
-)
+
+var changing = !v3Eq(position,prevPosition) || !v3Eq(rot,prevRot)
+v3SetIP(position,prevPosition)
+v3SetIP(rot,prevRot)
+if changing changingTimer = 2
+if changing || changingTimer > 0 {
+   changingTimer -= deltaTime()/1000000
+   targetMat2 = matrix_multiply(
+      matBuild(zero3,rot,uno3),
+      targetMat
+   )
 // TODO: possible improvement: keep in memory the quat and 
 // interpolate it, only compute the targetMat quat
-var q0 = mat2quat(mat)
-var q1 = mat2quat(targetMat2)
+   q0 = mat2quat(mat)
+   q1 = mat2quat(targetMat2)
 
-mat = matrix_multiply(
-   quat2mat(quatSlerp(q0,q1,lerpSpeed)),
-   matBuild(position,zero3,uno3)
-)
+
+   mat = matrix_multiply(
+      quat2mat(quatSlerp(q0,q1,lerpSpeed)),
+      matBuild(position,zero3,uno3)
+   )
+}
 zoomTime = 0
 startPos = v3Copy(position)
 
@@ -230,21 +239,23 @@ startPos = v3Copy(position)
 //)
 //#endregion
 //#region    |    2.2 Ghost                 |
-v3LerpIP(ghost.position,ghost.targetPos,lerpSpeed,ghost.position)
-v3LerpIP(ghost.scale,ghost.targetScal,lerpSpeed,ghost.scale)
-v3LerpIP(ghost.rot,ghost.targetRot,lerpSpeed,ghost.rot)
-q0 = mat2quat(ghost.mat)
-q1 = mat2quat(ghost.targetMat)
-ghost.mat = matrix_multiply(
-   quat2mat(quatSlerp(q0,q1,lerpSpeed)),
-   matBuild(ghost.position,zero3,ghost.scale)
-)
+if is_instanceof(card.location,Hand) {
+   v3LerpIP(ghost.position,ghost.targetPos,lerpSpeed,ghost.position)
+   v3LerpIP(ghost.scale,ghost.targetScal,lerpSpeed,ghost.scale)
+   v3LerpIP(ghost.rot,ghost.targetRot,lerpSpeed,ghost.rot)
+   q0 = mat2quat(ghost.mat)
+   q1 = mat2quat(ghost.targetMat)
+   ghost.mat = matrix_multiply(
+      quat2mat(quatSlerp(q0,q1,lerpSpeed)),
+      matBuild(ghost.position,zero3,ghost.scale)
+   )
+}
 //#endregion
 //#region    |    2.3 System                |
 // The first iteration of the step event has lerpSpeed to 1 to
 // make all the cards immediately reach their target values, now
 // put it back to a reasonable values
-lerpSpeed = 0.06
+//lerpSpeed = 0.06
 //#endregion |                             |
 //#endregion |                              |
 //#region    | 3.0 MouseHover / Zoom        |
