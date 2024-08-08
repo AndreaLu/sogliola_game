@@ -318,7 +318,7 @@ objectHover = undefined
 sf = -1
 sfDummy = -1
 
-if global.debugMode {
+if global.debugMode && false {
    // Start the Blender server
    blenderServer = network_create_server_raw(
       network_socket_tcp, 2233, 1

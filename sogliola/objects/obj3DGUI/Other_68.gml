@@ -2,7 +2,7 @@
 // +----------------------+
 // | BLENDER DEBUG SERVER |
 // +----------------------+
-
+if( global.multiplayer ) exit 
 if( !global.debugMode ) exit;
 if( async_load[?"type"] != network_type_data ) exit;
 

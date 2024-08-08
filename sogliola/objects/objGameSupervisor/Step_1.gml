@@ -1,13 +1,22 @@
+if disable exit;
+if ! is_undefined(global.turnPlayer) {
+   if global.turnPlayer == global.player
+      window_set_caption("its your turn")
+   if global.turnPlayer == global.opponent
+      window_set_caption("its your opponents turn")
+}
 // +----------------------------------------------------------------------+
 // | Begin Step Event                                                     |
 // +----------------------------------------------------------------------+
 // Index:
 // 1.0 Game Initialization
 
+
 // Exit if already initialzied 
-if !global.gameStart || (room != room2DGame && room != room3DGame )
+if (room != room3DGame && room != room2DGame) || !global.gameStart 
    exit
 global.gameStart = false
+gameInitialized = true
 var seed = 8
 
 //            ____________________________
@@ -86,8 +95,6 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.player.deck.Add( new CardSogliolaSalmone(global.player) )
       global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
    
-      
-   
       global.player.deck.Add( new CardPescaAbbondante(global.player) )
       global.opponent.deck.Add( new CardPescaAbbondante(global.opponent) )
    
@@ -120,13 +127,13 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
       global.turnPlayer = global.opponent
       global.turnOpponent = global.player
    } else {
-      if( global.multiplayerStarter ) {
+      /*if( global.multiplayerStarter ) {
          global.turnPlayer = global.player
          global.turnOpponent = global.opponent
       } else {
          global.turnPlayer = global.opponent
          global.turnOpponent = global.player
-      }
+      }*/
    }
    var finalAngle = global.turnPlayer == global.opponent ? 
       PRNG.randomRange(180-10,180+10) : PRNG.randomRange(-10,10)

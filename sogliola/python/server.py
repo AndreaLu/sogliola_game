@@ -3,6 +3,9 @@ from threading import Thread
 from time import sleep
 import random
 
+def log(text):
+    with open("log", "a") as file:
+        file.write(text + "\n")
 
 clients = []
 freeClients = []
@@ -33,6 +36,8 @@ def accept_incoming_connections():
 # This thread is started whenever a client joins the server.
 # The argument is the client socket
 def handle_client(client): 
+    print("welcoming client")
+    log("welcoming client")
     client.send(bytes("welcome", "utf8"))
     msg = client.recv(BUFSIZ)
     print(msg.decode("utf8"))
@@ -62,6 +67,7 @@ def handle_client(client):
     # client to my opponent
     while True:
         msg = client.recv(BUFSIZ)
+        log("forwarded message '{msg}'")
         opponent.send(msg)
         msg = msg.decode("utf8")
 
@@ -90,5 +96,4 @@ if __name__ == "__main__":
             freeClients[1-firstPlayer].send(bytes("match_start,1","utf-8"))
             matches.append( (freeClients[0],freeClients[1]) )
             freeClients = freeClients[2:]
-    #ACCEPT_THREAD.join()
     SERVER.close()

@@ -50,6 +50,8 @@ function EventDraw(_src,_cb) : Event(_src,_cb) constructor {} // quando si pesca
 function EventSwap(_src,_cb,_mine,_theirs) : Event(_src,_cb) constructor { mine = _mine; theirs = _theirs } // scambio di due sogliole
 global.waitingExecution = false
 function ExecuteOption(option,send,_callback) {
+   
+
    global.waitingExecution = true
    show_debug_message( "ExecuteOption: " + option[0] )
    /* 
@@ -140,7 +142,15 @@ function ExecuteOption(option,send,_callback) {
    
    if global.multiplayer && send {
       // Send the message!
-      networkSendPacket("move,"+string(sel_choice))
+      var idx = 0
+      var str = ""
+      while(global.options.At(idx)[0] != option[0]) idx += 1;
+      //for(var i=0;i<global.options.size;i++)
+      //   str += global.options.At(i)[0] +","
+      //str += string(idx)
+      //show_message(str)
+
+      networkSendPacket("move,"+string(idx))
    }
    
 }

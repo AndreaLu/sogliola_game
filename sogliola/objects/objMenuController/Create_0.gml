@@ -52,9 +52,11 @@ function SettingsSMC() : SubMenuController() constructor {
 new Item("Gioca",sprMenu,function() {
    room_goto(roomBeach)
 })
-//new Item("Gioca Online", sprMenu, function() {
-//   show_message("online non ancora sbloccato")
-//})
+new Item("Gioca Online", sprMenu, function() {
+   global.multiplayer = true
+   global.gameStart = true
+   room_goto(roomMultiplayerWaiting)
+})
 new Item("Fullscreen", sprMenu, function(obj) {
    window_set_fullscreen(!window_get_fullscreen())
    obj.Text = window_get_fullscreen() ? "Finestra" : "Fullscreen"

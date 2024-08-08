@@ -1,3 +1,4 @@
+if disable exit;
 // +----------------------------------------------------------------------+
 // | Step Event                                                           |
 // +----------------------------------------------------------------------+
@@ -21,6 +22,7 @@
 
 
 if( room != room2DGame && room != room3DGame ) exit
+if !gameInitialized exit
 //            ___________________________
 //#region    | 1.0 Start of the Turn     |
 var playerDrawing = false // pezza per fissare il wrong gameend
@@ -58,6 +60,10 @@ if startTurn {
                   new EventDraw(global.supervisor, function(_evt) {
                         if global.turnPlayer.deck.size > 0 {
                            global.turnPlayer.Draw()
+
+                           if global.multiplayer && global.turnPlayer == global.player {
+                              networkSendPacket("move,0")
+                           }
                            global.choiceMade = true // PEZZA PEZZISSIMA
                         }
                      }
