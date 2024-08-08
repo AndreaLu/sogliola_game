@@ -477,8 +477,8 @@ enum CardType {
 //#region    |    4.2 Card Database               |
 //#region    |       4.2.01 Sogliola              |
 function CardSogliola(owner) : FishCard(
-   "Sogliola", owner, undefined, undefined, sprSogliola, 5,
-   "",
+   "Sogliola", owner, undefined, undefined, sprSogliola, 4,
+   "Ora è piatta ma da piccola no.",
    CardType.SOGLIOLA
 ) constructor {
 }
@@ -541,7 +541,7 @@ function CardSogliolaBlob(owner) : FishEffectCard(
 //#region    |       4.2.06 Re Sogliola           |
 function CardReSogliola(owner) : FishEffectCard(
    "Re Sogliola",owner,undefined, undefined, sprReSogliola, 0,
-   "+3 al valore per ogni altra sogliola nell'acquario",
+   "+3 al valore per ogni altra sogliola nell'acquario, ma solo se non ci sono altri Re.",
    CardType.RE_SOGLIOLA
 ) constructor {
 
@@ -549,10 +549,14 @@ function CardReSogliola(owner) : FishEffectCard(
       if location == global.ocean
          return 0
       tmpVal = _val
-      controller.aquarium._cards.foreach(function(card,ctx) {
-         if card == ctx return;
-         ctx.tmpVal += 3;
-      },self)
+      if array_length( controller.aquarium._cards.FilterAll(function(card) {
+         return is_instanceof(card,CardReSogliola)
+      }) ) == 1 {
+         controller.aquarium._cards.foreach(function(card,ctx) {
+            if card == ctx return;
+            ctx.tmpVal += 3;
+         },self)
+      }
       
       return tmpVal
    }
@@ -771,7 +775,7 @@ function CardFurto(owner) : ActionCard(
 //#endregion
 //#region    |       4.2.13 Sogliola Giullare     |
 function CardSogliolaGiullare(owner) : FishEffectCard(
-   "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 3,
+   "Sogliola Giullare", owner, undefined, undefined, sprSogliolaGiullare, 2,
    "Se si trova in un Acquario col Re Sogliola, quest'ultimo non puo' essere Rubato né Liberato",
    CardType.SOGLIOLA_GIULLARE
 ) constructor {

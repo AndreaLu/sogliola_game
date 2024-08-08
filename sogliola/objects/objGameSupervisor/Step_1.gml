@@ -44,81 +44,69 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
 //#endregion |                            |
 //#region    |    1.0.3 Fill up the deck  |
    var newCard
-   repeat(1) {
+
+   repeat(4) {
       global.player.deck.Add( new CardFreeSogliola(global.player) )
       global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
-      global.player.deck.Add( new CardFreeSogliola(global.player) )
-      global.opponent.deck.Add( new CardFreeSogliola(global.opponent) )
-      
+   }
+   repeat(4) {
       global.player.deck.Add( new CardSogliola(global.player) )
       global.opponent.deck.Add( new CardSogliola(global.opponent) )
-      global.player.deck.Add( new CardSogliola(global.player) )
-      global.opponent.deck.Add( new CardSogliola(global.opponent) )
-      global.player.deck.Add( new CardSogliola(global.player) )
-      global.opponent.deck.Add( new CardSogliola(global.opponent) )
-   
+   }
+   repeat(4) {
       global.player.deck.Add( new CardPesca(global.player) )
       global.opponent.deck.Add( new CardPesca(global.opponent) )
-      global.player.deck.Add( new CardPesca(global.player) )
-      global.opponent.deck.Add( new CardPesca(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardPioggia(global.player) )
-      global.opponent.deck.Add( new CardPioggia(global.opponent) )
-      global.player.deck.Add( new CardPioggia(global.player) )
-      global.opponent.deck.Add( new CardPioggia(global.opponent) )
-   
+      global.opponent.deck.Add( new CardPioggia(global.opponent) )\
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaBlob(global.player) )
       global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
-      global.player.deck.Add( new CardSogliolaBlob(global.player) )
-      global.opponent.deck.Add( new CardSogliolaBlob(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardReSogliola(global.player) )
       global.opponent.deck.Add( new CardReSogliola(global.opponent))
-      
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
       global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
-      global.player.deck.Add( new CardSogliolaDiavoloNero(global.player) )
-      global.opponent.deck.Add( new CardSogliolaDiavoloNero(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaPietra(global.player) )
       global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
-      global.player.deck.Add( new CardSogliolaPietra(global.player) )
-      global.opponent.deck.Add( new CardSogliolaPietra(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaVolante(global.player) )
       global.opponent.deck.Add( new CardSogliolaVolante(global.opponent) )
-      global.player.deck.Add( new CardSogliolaVolante(global.player) )
-      global.opponent.deck.Add( new CardSogliolaVolante(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaSalmone(global.player) )
       global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
-      global.player.deck.Add( new CardSogliolaSalmone(global.player) )
-      global.opponent.deck.Add( new CardSogliolaSalmone(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardPescaAbbondante(global.player) )
       global.opponent.deck.Add( new CardPescaAbbondante(global.opponent) )
-   
+   }
+   repeat(4) {
       global.player.deck.Add( new CardFurto(global.player) )
       global.opponent.deck.Add( new CardFurto(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardSogliolaGiullare(global.player) )
       global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
-      global.player.deck.Add( new CardSogliolaGiullare(global.player) )
-      global.opponent.deck.Add( new CardSogliolaGiullare(global.opponent) )
-   
+   }
+   repeat(4) {
       global.player.deck.Add( new CardAcquarioProtetto(global.player) )
       global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
-      global.player.deck.Add( new CardAcquarioProtetto(global.player) )
-      global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
-      global.player.deck.Add( new CardAcquarioProtetto(global.player) )
-      global.opponent.deck.Add( new CardAcquarioProtetto(global.opponent) )
-   
+   }
+   repeat(2) {
       global.player.deck.Add( new CardScambioEquivalente(global.player) )
       global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )
-      global.player.deck.Add( new CardScambioEquivalente(global.player) )
-      global.opponent.deck.Add( new CardScambioEquivalente(global.opponent) )    
-     
    }
+
+
 //#endregion |                            |
 //#region    |    1.0.4 Determine the turn|
 
