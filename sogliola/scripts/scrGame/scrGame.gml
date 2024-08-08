@@ -150,7 +150,7 @@ function ExecuteOption(option,send,_callback) {
       //str += string(idx)
       //show_message(str)
 
-      networkSendPacket("move,"+string(idx))
+      networkSendPacket("move,"+string(idx)+","+option[0])
    }
    
 }

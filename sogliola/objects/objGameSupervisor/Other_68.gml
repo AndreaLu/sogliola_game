@@ -38,14 +38,8 @@ if async_load[?"type"] == network_type_data {
       case "move":
          if is_undefined(global.turnPlayer) show_message("undefined")
          if( room == room2DGame || room == room3DGame && global.turnPlayer == global.opponent ) {
-            var choice = real(msg[1])
-            var option = global.options.At(choice)
-            //var str = ""
-            //for(var i=0;i<global.options.size;i++)
-            //   str += global.options.At(i)[0] +","
-            //str += string(choice)
-            //show_message(str)
-            ExecuteOption(option,false)
+            networkMessages.Add(msg)
+
          } else {
             show_message("ERROR! move message received in wrong place")
             game_end(-1)

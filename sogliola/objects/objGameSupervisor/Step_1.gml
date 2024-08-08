@@ -59,7 +59,7 @@ if global.debugMode && !global.multiplayer && file_exists("savedata.json")
    }
    repeat(2) {
       global.player.deck.Add( new CardPioggia(global.player) )
-      global.opponent.deck.Add( new CardPioggia(global.opponent) )\
+      global.opponent.deck.Add( new CardPioggia(global.opponent) )
    }
    repeat(2) {
       global.player.deck.Add( new CardSogliolaBlob(global.player) )

@@ -211,6 +211,37 @@ if !global.locationLock && !global.choiceMade && (global.turnPlayer == global.op
    else {
       // Online multiplayer.. 
       // the choice will come from the async event
+      if( networkWaiting <= 0 ) {
+         networkWaiting = 1
+         if( networkMessages.size > 0 ) {
+            var message = networkMessages.At(0)
+            var executed = false
+            if array_length(message) == 2 {
+               var choice = real(msg[1])
+               var option = global.options.At(choice)
+               ExecuteOption(option,false)
+               executed = true
+               show_debug_message("async executed 0")
+            } else {
+               var text = message[2]
+               for( var jj=0;jj<global.options.size;jj+=1) {
+                  if global.options.At(jj)[0] == text {
+                     ExecuteOption(global.options.At(jj),false)
+                     executed = true
+                     show_debug_message("async executed 1")
+                     break
+                  }
+                  
+               }
+            }
+            if( executed ) {
+               networkMessages.removeAt(0)
+            }
+
+         }
+      } else {
+         networkWaitingb -= deltaTime()/1000000
+      }
    }
 }
 //#endregion |                           |
