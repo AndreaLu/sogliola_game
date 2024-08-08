@@ -6,6 +6,7 @@ meshBack = mesh3DGLoad("graphics/back.obj.3dg")
 
 locationLock = false
 guiLocation = undefined
+prevGuiLocation = undefined
 // card struct associated with this object
 // Similarly, the card has a guiCard to reference
 // this object
@@ -25,6 +26,7 @@ mat = matrix_build_identity()
 rot = [0,0,0]
 prevRot = [0,0,0]
 targetPos = [0,0,0]
+prevTargetPos = [0,0,0]
 targetMat = matrix_build_identity()
 targetScal = [1,1,1]
 targetRot = [0,0,0]

@@ -1,6 +1,8 @@
 function v3Copy(v) { // creates a new vector copy of v
    var w = array_create(3)
-   v3SetIP(v,w)
+   w[@0] = v[0]
+   w[@1] = v[1]
+   w[@2] = v[2]
    return w
 }
 function v3Eq(v,w) {

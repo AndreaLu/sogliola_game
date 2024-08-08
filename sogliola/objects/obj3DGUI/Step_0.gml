@@ -1,9 +1,9 @@
 
-tt += 1
+tt += deltaTime()/1000000
 objectHover = undefined
 if surface_exists(sf) && !global.zooming && !camTransition {
    var color
-   if tt >= 10 {
+   if tt >= 0.1 {
       tt = 0
       color = surface_getpixel(sf,inputManager.mouse.X,inputManager.mouse.Y)
    } else {

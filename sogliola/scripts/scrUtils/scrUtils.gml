@@ -1,4 +1,4 @@
-debugMode = true // TODO: setta false in produzione
+debugMode = false // TODO: setta false in produzione
 
 global.catX = 200
 global.catY = 140

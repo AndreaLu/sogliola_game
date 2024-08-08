@@ -8,6 +8,9 @@
 if is_undefined(card) exit
 if !locationLock {
    guiLocation = card.location
+   if guiLocation != prevGuiLocation {
+      prevGuiLocation = guiLocation
+   }
 }
 
 var pos
@@ -178,6 +181,10 @@ switch( guiLocation ) {
       ghost.targetMat = matrix_build_identity()
 
 }
+if !v3Eq(targetPos,prevTargetPos) {
+   changing = true
+   v3SetIP(targetPos,prevTargetPos)
+}
 //#endregion
 //#region    |    1.6 Ghost                 |
 // Disable ghosts when the card is not in the player hand
@@ -200,15 +207,18 @@ if card.location != global.player.hand {
 
 
 var lerpSpeed = deltaTime()/1000000*8
-v3LerpIP(position,targetPos,lerpSpeed,position)
-v3LerpIP(scale,targetScal,lerpSpeed,scale)
-v3LerpIP(rot,targetRot,lerpSpeed,rot)
+if changing changingTimer = 4
+if changingTimer > 0 {
+   v3LerpIP(position,targetPos,lerpSpeed,position)
+   v3LerpIP(scale,targetScal,lerpSpeed,scale)
+   v3LerpIP(rot,targetRot,lerpSpeed,rot)
 
-var changing = !v3Eq(position,prevPosition) || !v3Eq(rot,prevRot)
-v3SetIP(position,prevPosition)
-v3SetIP(rot,prevRot)
-if changing changingTimer = 2
-if changing || changingTimer > 0 {
+   changing = !v3Eq(position,prevPosition) || !v3Eq(rot,prevRot)
+   v3SetIP(position,prevPosition)
+   v3SetIP(rot,prevRot)
+}
+
+if changingTimer > 0 {
    changingTimer -= deltaTime()/1000000
    targetMat2 = matrix_multiply(
       matBuild(zero3,rot,uno3),
@@ -263,6 +273,7 @@ var objHov = obj3DGUI.objectHover
 if ( !is_undefined(objHov) && objHov == card && 
      objHov.location == global.player.hand && canHover ) {
    mouseHover = true
+   changing = true
    canUnhover = true
    canHover = false
    time_source_start(
