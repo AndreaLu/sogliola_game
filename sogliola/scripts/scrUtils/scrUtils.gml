@@ -125,7 +125,14 @@ function ds_list() constructor {
    }
    
    static Shuffle = function() {
-      ds_list_shuffle(_list)
+      tmp = ds_list_create()
+      while( ds_list_size(_list) > 0 ) {
+         var p = PRNG.iRandom( ds_list_size(_list)-1 )
+         ds_list_add(tmp,_list[|p])
+         ds_list_delete(_list,p)
+      }
+      ds_list_destroy(_list)
+      _list = tmp
    }
    
    static Destroy = function() {

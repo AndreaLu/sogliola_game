@@ -4,11 +4,6 @@
 /*
    All game rendering happens here
 */
-if !surface_exists(sf)
-   sf = surface_create(room_width,room_height)
-
-if !surface_exists(sfDummy)
-   sfDummy = surface_create(room_width,room_height)
 
 //            _________________________________________
 //#region    | 1.0 Click Buffer      (shaClickBuffer)  |
@@ -30,26 +25,15 @@ if !is_undefined(global.pickingTarget) {
    ))
 }
 
-surface_set_target_ext(1,sf)
-shader_set(shaClickBuffer)
-draw_clear(c_dkgray)
-shader_set_uniform_f(uAquarium,0)
 
 if !onlyDrawAquarium {
    with( obj3DCard ) {
       if !is_undefined(card) {
-         shader_set_uniform_f_array(
-            obj3DGUI.uCardCol,
-            [(card.index+1)/255,0,0]
-         );
          if is_instanceof(card.location,Aquarium) || card.location == global.player.hand {
-            //matrix_set(matrix_world,mat)
             var a = [0,0,0]
             worldToScreenIP(position[0],position[1],position[2], matrix_get(matrix_view), matrix_get(matrix_projection), a )
             array_push(a,card)
             ds_list_add(obj3DGUI.clickBuffer,a)
-            //vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
-            //vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
          }
          // draw the ghost card
          if card.location == global.player.hand && !global.zooming {
@@ -57,25 +41,12 @@ if !onlyDrawAquarium {
             worldToScreenIP(ghost.position[0],ghost.position[1],ghost.position[2], matrix_get(matrix_view), matrix_get(matrix_projection), b )
             array_push(b,card)
             ds_list_add(obj3DGUI.clickBuffer,b)
-
-            //matrix_set(matrix_world,ghost.mat)
-            //vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
-			   //vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
          }
       }
    }
 }
 
 
-
-matrix_set(matrix_world,matrix_build_identity())
-shader_set_uniform_f(uAquarium,1)
-vertex_submit(tablewater,pr_trianglelist,sprite_get_texture(sprWater,0));
-shader_set_uniform_f(uAquarium,0)
-shader_set_uniform_f_array(
-   uCardCol,
-   [0,255,0]
-);
 var a = [0,0,0]
 worldToScreenIP(
    global.Blender.RadioPos.Position[0],
@@ -85,14 +56,6 @@ worldToScreenIP(
 array_push(a,global.radio)
 ds_list_add(obj3DGUI.clickBuffer,a)
 
-vertex_submit(radio,pr_trianglelist,-1);
-
-shader_set_uniform_f_array(
-   uCardCol,
-   [0,0.3,0]
-);
-
-matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
 var a = [0,0,0]
 worldToScreenIP(
    global.Blender.BottlePos.Position[0],
@@ -101,11 +64,7 @@ worldToScreenIP(
    matrix_get(matrix_view), matrix_get(matrix_projection), a )
 array_push(a,global.bottle)
 ds_list_add(obj3DGUI.clickBuffer,a)
-vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
-
-shader_reset()
-surface_set_target_ext(1,sfDummy)
 
 //#endregion |                                         |
 //#region    | 2.0 Regular Rendering (sha)             |

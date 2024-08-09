@@ -331,8 +331,7 @@ camTransition = false
 
 initialized = false
 objectHover = undefined
-sf = -1
-sfDummy = -1
+
 
 if global.debugMode && false {
    // Start the Blender server

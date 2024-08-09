@@ -40,7 +40,7 @@ switch( guiLocation ) {
             [1,0,0],
             1,  // posizione di partenza
             (mouseHover || cardZoom) ? (cardZoom ? 1.4 : 0.6) : 0,
-            0.4*offs, // offset carta in mano
+            0.6*offs, // offset carta in mano
             targetPos
          )
          targetMat = cardZoom ?
