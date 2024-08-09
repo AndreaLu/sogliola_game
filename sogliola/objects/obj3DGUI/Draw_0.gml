@@ -14,9 +14,11 @@ if !surface_exists(sfDummy)
 //#region    | 1.0 Click Buffer      (shaClickBuffer)  |
 
 
+ds_list_clear(clickBuffer)
+
 // durante il summon, nascondi le carte sogliola in modo da non ostruire
 // l'acquario nel click buffer. 
-var onlyDrawAquarium = false
+onlyDrawAquarium = false
 if !is_undefined(global.pickingTarget) {
    // Filtra le opzioni possibili
    onlyDrawAquarium = !is_undefined(global.options.Filter(
@@ -27,9 +29,6 @@ if !is_undefined(global.pickingTarget) {
       }
    ))
 }
-
-
-
 
 surface_set_target_ext(1,sf)
 shader_set(shaClickBuffer)
@@ -43,16 +42,25 @@ if !onlyDrawAquarium {
             obj3DGUI.uCardCol,
             [(card.index+1)/255,0,0]
          );
-         if is_instanceof(card.location,Aquarium) {
-            matrix_set(matrix_world,mat)
-            vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
-            vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+         if is_instanceof(card.location,Aquarium) || card.location == global.player.hand {
+            //matrix_set(matrix_world,mat)
+            var a = [0,0,0]
+            worldToScreenIP(position[0],position[1],position[2], matrix_get(matrix_view), matrix_get(matrix_projection), a )
+            array_push(a,card)
+            ds_list_add(obj3DGUI.clickBuffer,a)
+            //vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0));
+            //vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
          }
          // draw the ghost card
          if card.location == global.player.hand && !global.zooming {
-            matrix_set(matrix_world,ghost.mat)
-            vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
-			   vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
+            b = [0,0,0]
+            worldToScreenIP(ghost.position[0],ghost.position[1],ghost.position[2], matrix_get(matrix_view), matrix_get(matrix_projection), b )
+            array_push(b,card)
+            ds_list_add(obj3DGUI.clickBuffer,b)
+
+            //matrix_set(matrix_world,ghost.mat)
+            //vertex_submit(meshCard,pr_trianglelist,sprite_get_texture(card.sprite,0))
+			   //vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0))
          }
       }
    }
@@ -68,13 +76,31 @@ shader_set_uniform_f_array(
    uCardCol,
    [0,255,0]
 );
+var a = [0,0,0]
+worldToScreenIP(
+   global.Blender.RadioPos.Position[0],
+   global.Blender.RadioPos.Position[1],
+   global.Blender.RadioPos.Position[2],
+   matrix_get(matrix_view), matrix_get(matrix_projection), a )
+array_push(a,global.radio)
+ds_list_add(obj3DGUI.clickBuffer,a)
+
 vertex_submit(radio,pr_trianglelist,-1);
 
 shader_set_uniform_f_array(
    uCardCol,
    [0,0.3,0]
 );
+
 matrix_set(matrix_world,matBuild(global.Blender.BottlePos.Position,[0,0,global.bottle.rotz],[1,1,1]))
+var a = [0,0,0]
+worldToScreenIP(
+   global.Blender.BottlePos.Position[0],
+   global.Blender.BottlePos.Position[1],
+   global.Blender.BottlePos.Position[2],
+   matrix_get(matrix_view), matrix_get(matrix_projection), a )
+array_push(a,global.bottle)
+ds_list_add(obj3DGUI.clickBuffer,a)
 vertex_submit(bottle,pr_trianglelist,sprite_get_texture(sprBottle,0));
 
 
@@ -119,12 +145,12 @@ vertex_submit(paper,pr_trianglelist,sprite_get_texture(sprDrawing,0));
 if global.xCardVisible {
    if global.turnPlayer == global.player {
       matrix_set(matrix_world, matBuild(global.Blender.DckPl.Position, [0,0,0], [1,1,1] ))
-      vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
-      vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(obj3DGUI.meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(obj3DGUI.meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
    } else {
       matrix_set(matrix_world, matBuild(global.Blender.DckOp.Position, [0,0,0], [1,1,1] ))
-      vertex_submit(meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
-      vertex_submit(meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(obj3DGUI.meshCard, pr_trianglelist, sprite_get_texture(sprCardX,0))
+      vertex_submit(obj3DGUI.meshBack, pr_trianglelist, sprite_get_texture(sprCardX,0))
    }
 }
 
@@ -142,8 +168,8 @@ with( obj3DCard ) {
       );
       matrix_set(matrix_world,mat)
       if surface_exists(surfSprite)
-         vertex_submit(meshCard,pr_trianglelist,surface_get_texture(surfSprite));
-      vertex_submit(meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
+         vertex_submit(obj3DGUI.meshCard,pr_trianglelist,surface_get_texture(surfSprite));
+      vertex_submit(obj3DGUI.meshBack,pr_trianglelist,sprite_get_texture(sprBack,0));
    }
 }
 shader_set_uniform_f(uSel,0.0)

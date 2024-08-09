@@ -1,4 +1,5 @@
 
+/*
 tt += deltaTime()/1000000
 objectHover = undefined
 if surface_exists(sf) && !global.zooming && !camTransition {
@@ -31,3 +32,4 @@ if surface_exists(sf) && !global.zooming && !camTransition {
       objectHover = undefined
    }
 }
+*/

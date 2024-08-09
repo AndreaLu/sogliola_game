@@ -528,6 +528,25 @@ draw_set_alpha(1-truep)
 draw_rectangle_color(0,0,1440,900,c_black,c_black,c_black,c_black,false)
 draw_set_alpha(1)
 
+if onlyDrawAquarium {
+   objectHover = (inputManager.mouse.Y <= getH()/2) ? 
+      global.opponent.aquarium : global.player.aquarium
+}
+else {
+   closest = undefined
+   for( var i=0;i<ds_list_size(clickBuffer);i++) {
+      var a = clickBuffer[|i]
+      var d = point_distance(a[0],a[1],inputManager.mouse.X,inputManager.mouse.Y)
+      if is_undefined(closest) || d < closest.dist
+         closest = { dist:d, object:a[3]}
+      //draw_circle(a[0],a[1],50,true)
+   }
+   if !is_undefined(closest) && closest.dist < 80 {
+      objectHover = closest.object
+   } else {
+      objectHover = undefined
+   }
+}
 
 // restore culling for next 3d rendering
 gpu_set_cullmode(cull_clockwise)

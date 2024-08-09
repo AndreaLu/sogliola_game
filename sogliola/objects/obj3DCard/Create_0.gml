@@ -1,8 +1,6 @@
 zero3=[0,0,0]
 uno3=[1,1,1]
 
-meshCard = mesh3DGLoad("graphics/card.obj.3dg")
-meshBack = mesh3DGLoad("graphics/back.obj.3dg")
 
 locationLock = false
 guiLocation = undefined

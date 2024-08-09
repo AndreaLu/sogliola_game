@@ -320,6 +320,7 @@ radio = mesh3DGLoad("./graphics/radio.obj.3dg")
 paper = mesh3DGLoad("./graphics/paper.obj.3dg")
 
 
+clickBuffer = ds_list_create()
 
 // Queste due variabili servono alla gestione del passaggio
 // tra watching aquarium e playing
